@@ -1,6 +1,8 @@
-﻿using KiwiApp.Contracts;
+﻿using FluentValidation;
+using KiwiApp.Contracts;
 using KiwiApp.Data;
 using KiwiApp.Models;
+using KiwiApp.Validator;
 
 namespace KiwiApp.Endpoints;
 
@@ -23,20 +25,27 @@ public static class FlightEndpoints
 
         app.MapPost("/flights", (Flight flight) =>
         {
+            // тут может добавить валидацию так же на проверку ИД введенего полета?
             flight.FlightId = Guid.NewGuid();
     
             appData.Flights.Add(flight);
             return Results.Created($"/flights/{flight.FlightId}", flight);
         });
 
-        app.MapPut("/flights/{id}", (Guid id, UpdateFlightRequest request) =>
+        app.MapPut("/flights/{id}", async (Guid id, UpdateFlightRequest request, IValidator<UpdateFlightRequest> validator) =>
         {
             var flight = appData.Flights.FirstOrDefault(x => x.FlightId == id);
             if (flight is null)
             {
                 return Results.NotFound();
             }
-
+            
+            var validation = await validator.ValidateAsync(request);
+            if (!validation.IsValid)
+            {
+                return Results.BadRequest(validation.Errors);
+            }
+            
             flight.From = request.From;
             flight.To = request.To;
     

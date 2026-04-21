@@ -1,4 +1,5 @@
-﻿using KiwiApp.Contracts;
+﻿using FluentValidation;
+using KiwiApp.Contracts;
 using KiwiApp.Data;
 using KiwiApp.Models;
 
@@ -21,12 +22,20 @@ public static class BookingEndpoints
             return Results.Ok(bookingId);
         });
 
-        app.MapPost("/bookings", (CreateBookingRequest request) =>
+        app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator) =>
         {
+            var validation = await validator.ValidateAsync(request);
+            if (!validation.IsValid)
+            {
+                return Results.BadRequest(validation.Errors);
+            }
+            
             var flight = appData.Flights.FirstOrDefault(x => x.FlightId == request.FlightId);
             if (flight is null)
                 return Results.NotFound();
-    
+            
+
+            
             var booking = new Booking
             {
                 BookingId = Guid.NewGuid(),
@@ -49,12 +58,18 @@ public static class BookingEndpoints
             return Results.Created($"/bookings/{booking.BookingId}", response);
         });
 
-        app.MapPut("/bookings/{id}", (Guid id, UpdateBookingRequest request) =>
+        app.MapPut("/bookings/{id}", async (Guid id, UpdateBookingRequest request, IValidator<UpdateBookingRequest> validator) =>
         {
             var booking = appData.Bookings.FirstOrDefault(x => x.BookingId == id);
             if (booking is null)
             {
                 return Results.NotFound();
+            }
+            
+            var validation = await validator.ValidateAsync(request);
+            if (!validation.IsValid)
+            {
+                return Results.BadRequest(validation.Errors);
             }
     
             booking.Passengers = request.Passengers;

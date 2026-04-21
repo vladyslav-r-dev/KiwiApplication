@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KiwiApp", "KiwiApp\KiwiApp.csproj", "{5A8B8E2F-0047-4B92-BBE0-34D6492A8998}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KiwiApp", "src\KiwiApp\KiwiApp.csproj", "{5A8B8E2F-0047-4B92-BBE0-34D6492A8998}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
