@@ -2,7 +2,7 @@
 using KiwiApp.Contracts;
 using KiwiApp.Data;
 using KiwiApp.Models;
-using Microsoft.EntityFrameworkCore;
+using KiwiApp.Patterns;
 
 namespace KiwiApp.Endpoints;
 
@@ -10,14 +10,14 @@ public static class BookingEndpoints
 {
     public static void MapBookingsEndpoints(this WebApplication app)
     {
-        app.MapGet("/bookings", async (AppDbContext db) =>
+        app.MapGet("/bookings", async (IBookingRepository bookingRepository) =>
         {
-            return await db.Bookings.ToListAsync();
+            return await bookingRepository.GetAllBookings();
         });
         
-        app.MapGet("/bookings/{id}", async (Guid id, AppDbContext db) =>
+        app.MapGet("/bookings/{id}", async (Guid id, IBookingRepository bookingRepository) =>
         {
-            var bookingId = await db.Bookings.FirstOrDefaultAsync(x => x.BookingId == id);
+            var bookingId = await bookingRepository.GetBooking(id);
             if (bookingId is null)
             {
                 return Results.NotFound();
@@ -26,7 +26,8 @@ public static class BookingEndpoints
             return Results.Ok(bookingId);
         });
 
-        app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator, AppDbContext db) =>
+        app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator, AppDbContext db, 
+            IBookingRepository bookingRepository, IFlightRepository flightRepository) =>
         {
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
@@ -34,11 +35,9 @@ public static class BookingEndpoints
                 return Results.BadRequest(validation.Errors);
             }
             
-            var flight = await db.Flights.FirstOrDefaultAsync(x => x.FlightId == request.FlightId);
+            var flight = await flightRepository.GetFlight(request.FlightId);
             if (flight is null)
                 return Results.NotFound();
-            
-
             
             var booking = new Booking
             {
@@ -50,7 +49,7 @@ public static class BookingEndpoints
                 Status = BookingStatus.Pending
             };
 
-            db.Bookings.Add(booking);
+            await bookingRepository.AddBooking(booking);
     
             var response = new CreateBookingResponse
             {
@@ -63,9 +62,10 @@ public static class BookingEndpoints
             return Results.Created($"/bookings/{booking.BookingId}", response);
         });
 
-        app.MapPut("/bookings/{id}", async (Guid id, UpdateBookingRequest request, IValidator<UpdateBookingRequest> validator, AppDbContext db) =>
+        app.MapPut("/bookings/{id}", async (Guid id, UpdateBookingRequest request, IValidator<UpdateBookingRequest> validator, 
+            IBookingRepository bookingRepository, AppDbContext db) =>
         {
-            var booking = await db.Bookings.FirstOrDefaultAsync(x => x.BookingId == id);
+            var booking = await bookingRepository.GetBooking(id);
             if (booking is null)
             {
                 return Results.NotFound();
@@ -85,16 +85,16 @@ public static class BookingEndpoints
             return Results.Ok(booking);
         });
 
-        app.MapDelete("/bookings/{id}", async (Guid id,  AppDbContext db) =>
+        app.MapDelete("/bookings/{id}", async (Guid id, AppDbContext db, IBookingRepository bookingRepository) =>
         {
-            var booking = await db.Bookings.FirstOrDefaultAsync(x => x.BookingId == id);
+            var booking = await bookingRepository.GetBooking(id);
     
             if (booking is null)
             {
                 return Results.NotFound();
             }
     
-            db.Bookings.Remove(booking);
+            await bookingRepository.RemoveBooking(booking);
             await db.SaveChangesAsync();
     
             return Results.NoContent();

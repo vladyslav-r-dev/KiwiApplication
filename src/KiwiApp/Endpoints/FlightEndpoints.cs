@@ -2,8 +2,7 @@
 using KiwiApp.Contracts;
 using KiwiApp.Data;
 using KiwiApp.Models;
-using KiwiApp.Validator;
-using Microsoft.EntityFrameworkCore;
+using KiwiApp.Patterns;
 
 namespace KiwiApp.Endpoints;
 
@@ -11,35 +10,32 @@ public static class FlightEndpoints
 {
     public static void MapFlightEndpoints(this WebApplication app)
     {
-        app.MapGet("/flights", async (AppDbContext db) =>
+        app.MapGet("/flights", async (IFlightRepository flightRepository) =>
         {
-            return await db.Flights.ToListAsync();
+            return await flightRepository.GetAllFlights();
         });
 
-        app.MapGet("/flights/{id}", async (Guid id, AppDbContext db) =>
+        app.MapGet("/flights/{id}", async (Guid id, IFlightRepository flightRepository) =>
         {
-            var flightId = db.Flights.FirstOrDefault(x => x.FlightId == id);
-            if (flightId is null)
-            {
-                return Results.NotFound();
-            }
-            
+            var flightId = flightRepository.GetFlight(id);
+
             return Results.Ok(flightId);
         });
 
-        app.MapPost("/flights", async (Flight flight, AppDbContext db) =>
+        app.MapPost("/flights", async (Flight flight, IFlightRepository flightRepository, AppDbContext db) =>
         {
             // тут может добавить валидацию так же на проверку ИД введенего полета?
             flight.FlightId = Guid.NewGuid();
     
-            db.Flights.Add(flight);
+            flightRepository.AddFlight(flight);
             await db.SaveChangesAsync();
             return Results.Created($"/flights/{flight.FlightId}", flight);
         });
 
-        app.MapPut("/flights/{id}", async (Guid id, UpdateFlightRequest request, IValidator<UpdateFlightRequest> validator, AppDbContext db) =>
+        app.MapPut("/flights/{id}", async (Guid id, UpdateFlightRequest request, 
+            IValidator<UpdateFlightRequest> validator, AppDbContext db, IFlightRepository flightRepository) =>
         {
-            var flight = await db.Flights.FirstOrDefaultAsync(x => x.FlightId == id);
+            var flight = await flightRepository.GetFlight(id);
             if (flight is null)
             {
                 return Results.NotFound();
@@ -58,14 +54,15 @@ public static class FlightEndpoints
             return Results.Ok(flight);
         });
 
-        app.MapDelete("/flights/{id}", async (Guid id, AppDbContext db) =>
+        app.MapDelete("/flights/{id}", async (Guid id, AppDbContext db, IFlightRepository flightRepository) =>
         {
-            var flightId = await db.Flights.FirstOrDefaultAsync(x => x.FlightId == id);
+            var flightId = await flightRepository.GetFlight(id);
             if (flightId is null)
             {
                 return Results.NotFound();
             }
-            db.Flights.Remove(flightId);
+            
+            await flightRepository.RemoveFlight(flightId);
             await db.SaveChangesAsync();
     
             return Results.NoContent();

@@ -1,6 +1,7 @@
 using FluentValidation;
 using KiwiApp.Data;
 using KiwiApp.Endpoints;
+using KiwiApp.Patterns;
 using KiwiApp.Validator;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,9 @@ builder.Services.AddProblemDetails();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBookingRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateFlightRequestValidator>();
+
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IFlightRepository, FlightRepository>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=app.db"));
