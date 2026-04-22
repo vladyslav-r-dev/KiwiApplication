@@ -2,27 +2,31 @@
 using KiwiApp.Contracts;
 using KiwiApp.Data;
 using KiwiApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace KiwiApp.Endpoints;
 
 public static class BookingEndpoints
 {
-    public static void MapBookingsEndpoints(this WebApplication app, AppData appData)
+    public static void MapBookingsEndpoints(this WebApplication app)
     {
-        app.MapGet("/bookings", () => appData.Bookings);
-        
-        app.MapGet("/bookings/{id}", (Guid id) =>
+        app.MapGet("/bookings", async (AppDbContext db) =>
         {
-            var bookingId = appData.Bookings.FirstOrDefault(x => x.BookingId == id);
+            return await db.Bookings.ToListAsync();
+        });
+        
+        app.MapGet("/bookings/{id}", async (Guid id, AppDbContext db) =>
+        {
+            var bookingId = await db.Bookings.FirstOrDefaultAsync(x => x.BookingId == id);
             if (bookingId is null)
             {
                 return Results.NotFound();
             }
-    
+            
             return Results.Ok(bookingId);
         });
 
-        app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator) =>
+        app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator, AppDbContext db) =>
         {
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
@@ -30,7 +34,7 @@ public static class BookingEndpoints
                 return Results.BadRequest(validation.Errors);
             }
             
-            var flight = appData.Flights.FirstOrDefault(x => x.FlightId == request.FlightId);
+            var flight = await db.Flights.FirstOrDefaultAsync(x => x.FlightId == request.FlightId);
             if (flight is null)
                 return Results.NotFound();
             
@@ -46,7 +50,7 @@ public static class BookingEndpoints
                 Status = BookingStatus.Pending
             };
 
-            appData.Bookings.Add(booking);
+            db.Bookings.Add(booking);
     
             var response = new CreateBookingResponse
             {
@@ -54,13 +58,14 @@ public static class BookingEndpoints
                 Status = booking.Status,
                 Price = booking.Price
             };
-    
+            
+            await db.SaveChangesAsync();
             return Results.Created($"/bookings/{booking.BookingId}", response);
         });
 
-        app.MapPut("/bookings/{id}", async (Guid id, UpdateBookingRequest request, IValidator<UpdateBookingRequest> validator) =>
+        app.MapPut("/bookings/{id}", async (Guid id, UpdateBookingRequest request, IValidator<UpdateBookingRequest> validator, AppDbContext db) =>
         {
-            var booking = appData.Bookings.FirstOrDefault(x => x.BookingId == id);
+            var booking = await db.Bookings.FirstOrDefaultAsync(x => x.BookingId == id);
             if (booking is null)
             {
                 return Results.NotFound();
@@ -75,20 +80,22 @@ public static class BookingEndpoints
             booking.Passengers = request.Passengers;
             booking.Email = request.Email;
             booking.Status = BookingStatus.Updated;
-    
+            
+            await db.SaveChangesAsync();
             return Results.Ok(booking);
         });
 
-        app.MapDelete("/bookings/{id}", (Guid id) =>
+        app.MapDelete("/bookings/{id}", async (Guid id,  AppDbContext db) =>
         {
-            var booking = appData.Bookings.FirstOrDefault(x => x.BookingId == id);
+            var booking = await db.Bookings.FirstOrDefaultAsync(x => x.BookingId == id);
     
             if (booking is null)
             {
                 return Results.NotFound();
             }
     
-            appData.Bookings.Remove(booking);
+            db.Bookings.Remove(booking);
+            await db.SaveChangesAsync();
     
             return Results.NoContent();
         });

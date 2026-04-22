@@ -2,6 +2,8 @@ using FluentValidation;
 using KiwiApp.Data;
 using KiwiApp.Endpoints;
 using KiwiApp.Validator;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,9 +18,11 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidat
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBookingRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateFlightRequestValidator>();
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=app.db"));
+
 
 var app = builder.Build();
-var data = new AppData();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -41,7 +45,7 @@ app.UseExceptionHandler(exceptionApp =>
 });
 
 app.UseHttpsRedirection();
-app.MapBookingsEndpoints(data);
-app.MapFlightEndpoints(data);
+app.MapBookingsEndpoints();
+app.MapFlightEndpoints();
 
 app.Run();
