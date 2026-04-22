@@ -27,7 +27,7 @@ public static class BookingEndpoints
         });
 
         app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator, AppDbContext db, 
-            IBookingRepository bookingRepository, IFlightRepository flightRepository) =>
+            IBookingRepository bookingRepository, IFlightRepository flightRepository, IUnitOfWork unitOfWork) =>
         {
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
@@ -57,13 +57,13 @@ public static class BookingEndpoints
                 Status = booking.Status,
                 Price = booking.Price
             };
-            
-            await db.SaveChangesAsync();
+
+            await unitOfWork.SaveChangesAsync();
             return Results.Created($"/bookings/{booking.BookingId}", response);
         });
 
         app.MapPut("/bookings/{id}", async (Guid id, UpdateBookingRequest request, IValidator<UpdateBookingRequest> validator, 
-            IBookingRepository bookingRepository, AppDbContext db) =>
+            IBookingRepository bookingRepository, IUnitOfWork unitOfWork) =>
         {
             var booking = await bookingRepository.GetBooking(id);
             if (booking is null)
@@ -81,11 +81,12 @@ public static class BookingEndpoints
             booking.Email = request.Email;
             booking.Status = BookingStatus.Updated;
             
-            await db.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
             return Results.Ok(booking);
         });
 
-        app.MapDelete("/bookings/{id}", async (Guid id, AppDbContext db, IBookingRepository bookingRepository) =>
+        app.MapDelete("/bookings/{id}", async (Guid id,
+            IBookingRepository bookingRepository, IUnitOfWork unitOfWork) =>
         {
             var booking = await bookingRepository.GetBooking(id);
     
@@ -95,7 +96,7 @@ public static class BookingEndpoints
             }
     
             await bookingRepository.RemoveBooking(booking);
-            await db.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
     
             return Results.NoContent();
         });
