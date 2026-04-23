@@ -26,7 +26,7 @@ public static class BookingEndpoints
             return Results.Ok(bookingId);
         });
 
-        app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator, AppDbContext db, 
+        app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator, 
             IBookingRepository bookingRepository, IFlightRepository flightRepository, IUnitOfWork unitOfWork) =>
         {
             var validation = await validator.ValidateAsync(request);

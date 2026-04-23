@@ -12,18 +12,19 @@ public static class AuthEndpoints
         app.MapPost("/register", async (RegisterUserDto request, IUnitOfWork unitOfWork, 
             ICheckUserData checkUserData, RegistrationValidator validator) =>
         {
-            var existingUser = await checkUserData.GetUserByEmail(request.Email);
-            if (existingUser is not null)
-            {
-                return Results.BadRequest("User already exists");
-            }
-            
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
             {
                 return Results.BadRequest(validation.Errors);
             }
             
+            var existingUser = await checkUserData.GetUserByEmail(request.Email);
+            if (existingUser is not null)
+            {
+                return Results.BadRequest("User already exists");
+            }
+            
+                
             var newUser = new UserEntity
             {
                 Id =  Guid.NewGuid(),
@@ -31,6 +32,7 @@ public static class AuthEndpoints
                 LastName = request.LastName,
                 Email = request.Email,
                 Password = request.Password,
+                Passport = request.Passport,
             };
             
             await checkUserData.AddUser(newUser);

@@ -16,7 +16,7 @@ public static class FlightEndpoints
 
         app.MapGet("/flights/{id}", async (Guid id, IFlightRepository flightRepository) =>
         {
-            var flightId = flightRepository.GetFlight(id);
+            var flightId = await flightRepository.GetFlight(id);
 
             return Results.Ok(flightId);
         });

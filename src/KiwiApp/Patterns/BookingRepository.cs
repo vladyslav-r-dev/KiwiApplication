@@ -16,12 +16,15 @@ public class BookingRepository : IBookingRepository
     public async Task<Booking?> GetBooking(Guid id)
     {
         return await _db.Bookings
+            .Include(x => x.Passengers)
             .FirstOrDefaultAsync(x => x.BookingId == id);
     }
 
     public Task<List<Booking>> GetAllBookings()
     {
-        return _db.Bookings.ToListAsync();
+        return _db.Bookings
+            .Include(x => x.Passengers)
+            .ToListAsync();
     }
 
     public Task<Booking> AddBooking(Booking booking)
