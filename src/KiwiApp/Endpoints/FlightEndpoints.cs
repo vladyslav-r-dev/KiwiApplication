@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using KiwiApp.Contracts;
-using KiwiApp.Data;
 using KiwiApp.Models;
 using KiwiApp.Patterns;
 
@@ -69,5 +68,4 @@ public static class FlightEndpoints
             return Results.NoContent();
         });
     }
-
 }

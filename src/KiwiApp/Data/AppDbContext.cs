@@ -12,4 +12,5 @@ public class AppDbContext : DbContext
     public DbSet <Booking> Bookings { get; set; } 
     public DbSet <Flight> Flights { get; set; } 
     public DbSet<Passenger> Passengers { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
 }

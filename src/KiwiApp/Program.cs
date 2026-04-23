@@ -18,9 +18,12 @@ builder.Services.AddProblemDetails();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBookingRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateFlightRequestValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<RegistrationValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
 
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IFlightRepository, FlightRepository>();
+builder.Services.AddScoped<ICheckUserData, AuthRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
@@ -53,5 +56,6 @@ app.UseExceptionHandler(exceptionApp =>
 app.UseHttpsRedirection();
 app.MapBookingsEndpoints();
 app.MapFlightEndpoints();
+app.MapAuthEndpoints();
 
 app.Run();
