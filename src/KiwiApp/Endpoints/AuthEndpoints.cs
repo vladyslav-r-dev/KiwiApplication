@@ -1,11 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
 using KiwiApp.DTOs;
 using KiwiApp.Models;
 using KiwiApp.Patterns;
+using KiwiApp.Services;
 using KiwiApp.Validator;
-using Microsoft.IdentityModel.Tokens;
 
 namespace KiwiApp.Endpoints;
 
@@ -13,7 +11,7 @@ public static class AuthEndpoints
 {
     public static void MapAuthEndpoints(this WebApplication app)
     {
-        app.MapGet("/auth/me", async (HttpContext context, ICheckUserData checkUserData) =>
+        app.MapGet("/auth/me", (HttpContext context) =>
         {
             var user = context.User;
 
@@ -45,7 +43,6 @@ public static class AuthEndpoints
                 return Results.BadRequest("User already exists");
             }
             
-                
             var newUser = new UserEntity
             {
                 Id =  Guid.NewGuid(),
@@ -63,7 +60,8 @@ public static class AuthEndpoints
         });
         
         app.MapPost("/auth/login", async (LoginUserDto request,
-            ICheckUserData checkUserData, LoginValidator validator) =>
+            ICheckUserData checkUserData, LoginValidator validator, 
+            TokenService tokenService, IRefreshToken refreshTokenRepository) =>
         {
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
@@ -84,30 +82,15 @@ public static class AuthEndpoints
                 return Results.BadRequest("Wrong password"); 
             }
             
-            var claims = new List<Claim>
-            {
-                new(ClaimTypes.NameIdentifier, existingUser.Id.ToString()),
-                new(ClaimTypes.Email, existingUser.Email)
-            };
+            var accessToken = tokenService.CreateAccesToken(existingUser);
+            var refreshToken = Guid.NewGuid().ToString();
             
-            var key = new SymmetricSecurityKey("9fH3kL8xQ2vPz7A1mN4sD6wR0yT5uB8cE1gJ9hK2L4M6nP8rS0vX3Z5"u8.ToArray());
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
-                signingCredentials: creds
-            );
-            
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-            
-            return Results.Ok(new
-            {
-                accessToken = tokenString
-            });
+            await refreshTokenRepository.AddToken(refreshToken, existingUser.Id);
+
+            return Results.Ok(new { accessToken, refreshToken });
         });
         
-        app.MapPost("/auth/logout", async (RefreshRequest request, UnitOfWork unitOfWork, 
+        app.MapPost("/auth/logout", async (RefreshRequest request, IUnitOfWork unitOfWork, 
             IRefreshToken refreshTokenRepository) =>
         {
             var refreshToken = await refreshTokenRepository.GetToken(request.RefreshToken);
@@ -119,7 +102,20 @@ public static class AuthEndpoints
             
             return Results.Ok();
         });
-        
-        // app.MapPost("/auth/refresh", async ())
+
+        app.MapPost("/auth/refresh", async (RefreshRequest request,
+            IRefreshToken refreshTokenRepository, ICheckUserData checkUserData, TokenService tokenService) =>
+        {
+            var refreshToken = await refreshTokenRepository.GetToken(request.RefreshToken);
+            if (refreshToken is null || refreshToken.IsRevoked || refreshToken.ExpiresAt < DateTime.UtcNow)
+            {
+                return Results.Unauthorized();
+            }
+
+            var existingUser = await checkUserData.GetUserById(refreshToken.UserId);
+            var accessToken = tokenService.CreateAccesToken(existingUser);
+
+            return Results.Ok(new { accessToken });
+        });
     }
 }

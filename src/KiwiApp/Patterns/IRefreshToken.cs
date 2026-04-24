@@ -6,5 +6,6 @@ namespace KiwiApp.Patterns;
 public interface IRefreshToken
 {
     Task<RefreshToken?> GetToken(string refreshToken);
-    Task Revoke(RefreshToken refreshTokenoken);
+    Task<RefreshToken> AddToken(string refreshToken, Guid userId);
+    Task Revoke(RefreshToken refreshToken);
 }

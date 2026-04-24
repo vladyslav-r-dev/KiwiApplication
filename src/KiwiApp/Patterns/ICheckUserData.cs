@@ -4,8 +4,8 @@ namespace KiwiApp.Patterns;
 
 public interface ICheckUserData
 {
-    Task<UserEntity?> GetUserByEmail(string Email);
-    Task<UserEntity?> GetUserById(Guid Id);
+    Task<UserEntity?> GetUserByEmail(string email);
     Task<UserEntity> AddUser(UserEntity user);
-    
+
+    Task<UserEntity> GetUserById(Guid userId);
 }

@@ -11,7 +11,7 @@ public class AuthRepository(AppDbContext db) : ICheckUserData
         return await db.Users.FirstOrDefaultAsync(x => x.Email == email);;
     }
 
-    public async Task<UserEntity?> GetUserById(Guid Id)
+    public async Task<UserEntity> GetUserById(Guid Id)
     {
         return await db.Users.FirstOrDefaultAsync(x => x.Id == Id);;
     }

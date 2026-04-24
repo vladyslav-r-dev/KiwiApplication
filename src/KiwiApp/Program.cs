@@ -3,10 +3,12 @@ using FluentValidation;
 using KiwiApp.Data;
 using KiwiApp.Endpoints;
 using KiwiApp.Patterns;
+using KiwiApp.Services;
 using KiwiApp.Validator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,8 +17,27 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Вставь JWT токен"
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+    });
+});
 builder.Services.AddProblemDetails();
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBookingRequestValidator>();
@@ -29,6 +50,8 @@ builder.Services.AddScoped<IFlightRepository, FlightRepository>();
 builder.Services.AddScoped<ICheckUserData, AuthRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRefreshToken, RefreshTokenRepository>();
+
+builder.Services.AddScoped<TokenService>();
 
 var key = "9fH3kL8xQ2vPz7A1mN4sD6wR0yT5uB8cE1gJ9hK2L4M6nP8rS0vX3Z5";
 

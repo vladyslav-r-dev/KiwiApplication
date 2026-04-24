@@ -7,11 +7,6 @@ public class LoginUserDto
     public string Password { get; set; } = null!;
 }
 
-public record LoginRequest(
-    string Email,
-    string Password
-);
-
 public record RefreshRequest(
     string RefreshToken
 );
