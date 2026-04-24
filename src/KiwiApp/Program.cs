@@ -1,9 +1,12 @@
+using System.Text;
 using FluentValidation;
 using KiwiApp.Data;
 using KiwiApp.Endpoints;
 using KiwiApp.Patterns;
 using KiwiApp.Validator;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,11 +28,28 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IFlightRepository, FlightRepository>();
 builder.Services.AddScoped<ICheckUserData, AuthRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IRefreshToken, RefreshTokenRepository>();
 
+var key = "9fH3kL8xQ2vPz7A1mN4sD6wR0yT5uB8cE1gJ9hK2L4M6nP8rS0vX3Z5";
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+
+            ValidateLifetime = true,
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(key))
+        };
+    });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=app.db"));
-
 
 var app = builder.Build();
 
@@ -57,5 +77,7 @@ app.UseHttpsRedirection();
 app.MapBookingsEndpoints();
 app.MapFlightEndpoints();
 app.MapAuthEndpoints();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();

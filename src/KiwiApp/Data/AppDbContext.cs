@@ -13,4 +13,5 @@ public class AppDbContext : DbContext
     public DbSet <Flight> Flights { get; set; } 
     public DbSet<Passenger> Passengers { get; set; }
     public DbSet<UserEntity> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 }

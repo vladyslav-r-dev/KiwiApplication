@@ -4,23 +4,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KiwiApp.Patterns;
 
-public class AuthRepository : ICheckUserData
+public class AuthRepository(AppDbContext db) : ICheckUserData
 {
-    private readonly AppDbContext _db;
-
-    public AuthRepository(AppDbContext db)
-    {
-        _db = db;
-    }
-
     public async Task<UserEntity?> GetUserByEmail(string email)
     {
-        return await _db.Users.FirstOrDefaultAsync(x => x.Email == email);;
+        return await db.Users.FirstOrDefaultAsync(x => x.Email == email);;
+    }
+
+    public async Task<UserEntity?> GetUserById(Guid Id)
+    {
+        return await db.Users.FirstOrDefaultAsync(x => x.Id == Id);;
     }
 
     public Task<UserEntity> AddUser(UserEntity user)
     {
-        _db.Users.Add(user);
+        db.Users.Add(user);
         return Task.FromResult(user);
     }
 }
