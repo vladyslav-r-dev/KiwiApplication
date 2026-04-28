@@ -17,6 +17,22 @@ public class FlightRepository(AppDbContext db) : IFlightRepository
         return db.Flights.ToListAsync();
     }
 
+    public async Task<List<Flight>> GetFlightFromTo(string from, string to)
+    {
+        var search = db.Flights.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(from))
+        {
+            search = search.Where(x => x.From == from);
+        }
+
+        if (!string.IsNullOrWhiteSpace(to))
+        {
+            search = search.Where(x => x.To == to);
+        }
+        
+        return await search.ToListAsync();
+    }
+
     public Task<Flight> AddFlight(Flight flight)
     {
         db.Flights.Add(flight);

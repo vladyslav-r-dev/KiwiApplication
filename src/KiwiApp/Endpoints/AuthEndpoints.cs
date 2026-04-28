@@ -61,7 +61,7 @@ public static class AuthEndpoints
         
         app.MapPost("/auth/login", async (LoginUserDto request,
             ICheckUserData checkUserData, LoginValidator validator, 
-            TokenService tokenService, IRefreshToken refreshTokenRepository) =>
+            TokenService tokenService, IRefreshToken refreshTokenRepository, IUnitOfWork unitOfWork) =>
         {
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
@@ -86,6 +86,7 @@ public static class AuthEndpoints
             var refreshToken = Guid.NewGuid().ToString();
             
             await refreshTokenRepository.AddToken(refreshToken, existingUser.Id);
+            await unitOfWork.SaveChangesAsync();
 
             return Results.Ok(new { accessToken, refreshToken });
         });

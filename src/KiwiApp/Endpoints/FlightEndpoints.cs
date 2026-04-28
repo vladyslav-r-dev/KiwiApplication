@@ -1,7 +1,10 @@
-﻿using FluentValidation;
+﻿using System.Text.Json;
+using FluentValidation;
 using KiwiApp.Contracts;
+using KiwiApp.Data;
 using KiwiApp.Models;
 using KiwiApp.Patterns;
+using KiwiApp.Services;
 
 namespace KiwiApp.Endpoints;
 
@@ -20,10 +23,52 @@ public static class FlightEndpoints
 
             return Results.Ok(flightId);
         });
+        
+        // app.MapGet("/search/flight/api", async (IHttpClientFactory httpClientFactory, 
+        //     IConfiguration configuration, string departureRequest, string arrivalRequest, IFlightRepository flightRepository) =>
+        // {
+        //     var requestDeparture = departureRequest;
+        //     var requestArrival = arrivalRequest;
+        //     var accessKey = configuration["Aviationstack:AccessKey"];
+        //     var httpClient = httpClientFactory.CreateClient();
+        //     var url = $"http://api.aviationstack.com/v1/flights?access_key={accessKey}&limit=25";
+        //     var response = await httpClient.GetAsync(url);
+        //     var json =  await response.Content.ReadAsStringAsync();
+        //     
+        //     var jsonDocument = JsonDocument.Parse(json);
+        //     var root = jsonDocument.RootElement;
+        //     var flights = root.GetProperty("data");
+        //
+        //     foreach (var flight in flights.EnumerateArray())
+        //     {
+        //         var departure = flight.GetProperty("departure")
+        //             .GetProperty("airport").GetString();
+        //         var arrival = flight.GetProperty("arrival").
+        //             GetProperty("airport").GetString();
+        //         
+        //         if (departure == requestDeparture && arrival == requestArrival)
+        //         {
+        //             return Results.Ok(flight);
+        //         }
+        //     }
+        //     
+        //     return Results.NotFound("Flight not found");
+        // });
+        
+        app.MapGet("/flights/import/api", async (AviationstackImportService importService) =>
+        {
+            await importService.ImportFlightsAsync();
+            return Results.Ok("Flights imported");
+        });
+
+        app.MapGet("/search/flight", async (IFlightRepository flightRepository, string? from, string? to) =>
+        {
+            var search = await flightRepository.GetFlightFromTo(from, to);
+            return Results.Ok(search);
+        });
 
         app.MapPost("/flights", async (Flight flight, IFlightRepository flightRepository, IUnitOfWork unitOfWork) =>
         {
-            // тут может добавить валидацию так же на проверку ИД введенего полета?
             flight.FlightId = Guid.NewGuid();
     
             await flightRepository.AddFlight(flight);
@@ -66,6 +111,14 @@ public static class FlightEndpoints
             await unitOfWork.SaveChangesAsync();
     
             return Results.NoContent();
+        });
+        
+        app.MapDelete("/flights/clear", async (AppDbContext dbContext, IUnitOfWork unitOfWork) =>
+        {
+            dbContext.Flights.RemoveRange(dbContext.Flights);
+            await unitOfWork.SaveChangesAsync();
+
+            return Results.Ok("Flights cleared");
         });
     }
 }
