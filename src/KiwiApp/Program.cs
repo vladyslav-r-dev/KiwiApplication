@@ -36,6 +36,7 @@ builder.Services.AddSwaggerGen(options =>
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });
 });
+
 builder.Services.AddProblemDetails();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
@@ -54,6 +55,7 @@ builder.Services.AddScoped<IRefreshToken, RefreshTokenRepository>();
 
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AviationstackImportService>();
+builder.Services.AddScoped<OpenWeatherService>();
 
 var key = "9fH3kL8xQ2vPz7A1mN4sD6wR0yT5uB8cE1gJ9hK2L4M6nP8rS0vX3Z5";
 
