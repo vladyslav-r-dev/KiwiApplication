@@ -1,8 +1,7 @@
-﻿using System.Text.Json;
-using FluentValidation;
+﻿using FluentValidation;
+using KiwiApp.Application.UseCases.Flights;
 using KiwiApp.Contracts;
 using KiwiApp.Data;
-using KiwiApp.Models;
 using KiwiApp.Patterns;
 using KiwiApp.Services;
 
@@ -44,13 +43,24 @@ public static class FlightEndpoints
             });
         });
 
-        app.MapPost("/flights", async (Flight flight, IFlightRepository flightRepository, IUnitOfWork unitOfWork) =>
+        app.MapPost("/flights", async (CreateFlightUseCase useCase, CreateFlightRequest request) =>
         {
-            flight.FlightId = Guid.NewGuid();
-    
-            await flightRepository.AddFlight(flight);
-            await unitOfWork.SaveChangesAsync();
-            return Results.Created($"/flights/{flight.FlightId}", flight);
+            var command = new CreateFlightCommand
+            {
+                From = request.From,
+                To = request.To
+            };
+            
+            var result = await useCase.Execute(command);
+
+            var response = new CreateFlightResponse
+            {
+                FlightId = result.FlightId,
+                From = result.From,
+                To = result.To
+            };
+            
+            return Results.Created($"/flights/{response.FlightId}", response);
         });
 
         app.MapPut("/flights/{id}", async (Guid id, UpdateFlightRequest request, 

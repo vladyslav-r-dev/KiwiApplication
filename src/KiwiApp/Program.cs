@@ -1,5 +1,7 @@
 using System.Text;
 using FluentValidation;
+using KiwiApp.Application.UseCases.Bookings;
+using KiwiApp.Application.UseCases.Flights;
 using KiwiApp.Data;
 using KiwiApp.Endpoints;
 using KiwiApp.Patterns;
@@ -56,6 +58,8 @@ builder.Services.AddScoped<IRefreshToken, RefreshTokenRepository>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AviationstackImportService>();
 builder.Services.AddScoped<OpenWeatherService>();
+builder.Services.AddScoped<CreateBookingUseCase>();
+builder.Services.AddScoped<CreateFlightUseCase>();
 
 var key = "9fH3kL8xQ2vPz7A1mN4sD6wR0yT5uB8cE1gJ9hK2L4M6nP8rS0vX3Z5";
 

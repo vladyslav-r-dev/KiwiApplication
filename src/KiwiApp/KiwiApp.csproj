@@ -21,4 +21,9 @@
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Api\Contracts\Bookings\" />
+      <Folder Include="Application\Interfaces\DTOs\Flight\" />
+    </ItemGroup>
+
 </Project>

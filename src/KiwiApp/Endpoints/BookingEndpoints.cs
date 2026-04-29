@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
+using KiwiApp.Application.UseCases.Bookings;
 using KiwiApp.Contracts;
-using KiwiApp.Data;
 using KiwiApp.Models;
 using KiwiApp.Patterns;
 
@@ -26,40 +26,35 @@ public static class BookingEndpoints
             return Results.Ok(bookingId);
         });
 
-        app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator, 
-            IBookingRepository bookingRepository, IFlightRepository flightRepository, IUnitOfWork unitOfWork) =>
+        app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator,
+            CreateBookingUseCase useCase) =>
         {
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
             {
                 return Results.BadRequest(validation.Errors);
             }
-            
-            var flight = await flightRepository.GetFlight(request.FlightId);
-            if (flight is null)
-                return Results.NotFound();
-            
-            var booking = new Booking
+
+            var command = new CreateBookingCommand
             {
-                BookingId = Guid.NewGuid(),
                 FlightId = request.FlightId,
                 Passengers = request.Passengers,
-                Email = request.Email,
-                Price = 100,
-                Status = BookingStatus.Pending
+                Email = request.Email
             };
-
-            await bookingRepository.AddBooking(booking);
-    
+            
+            var result = await useCase.Execute(command);
+            
+            if (result is null)
+                return Results.NotFound();
+            
             var response = new CreateBookingResponse
             {
-                BookingId = booking.BookingId,
-                Status = booking.Status,
-                Price = booking.Price
+                BookingId = result.BookingId,
+                Status = result.Status,
+                Price = result.Price
             };
 
-            await unitOfWork.SaveChangesAsync();
-            return Results.Created($"/bookings/{booking.BookingId}", response);
+            return Results.Created($"/bookings/{response.BookingId}", response);
         });
 
         app.MapPut("/bookings/{id}", async (Guid id, UpdateBookingRequest request, IValidator<UpdateBookingRequest> validator, 
