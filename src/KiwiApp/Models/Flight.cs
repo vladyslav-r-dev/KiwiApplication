@@ -15,4 +15,10 @@ public class Flight
             To = to
         };
     }
+
+    public void UpdateFlight(string? from, string? to)
+    {
+        From = from;
+        To = to;
+    }
 }

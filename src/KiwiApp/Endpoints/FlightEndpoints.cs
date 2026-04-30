@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using KiwiApp.Application.UseCases.Flights;
+using KiwiApp.Application.UseCases.Flights.Update;
 using KiwiApp.Contracts;
 using KiwiApp.Data;
 using KiwiApp.Patterns;
-using KiwiApp.Services;
 
 namespace KiwiApp.Endpoints;
 
@@ -11,36 +11,32 @@ public static class FlightEndpoints
 {
     public static void MapFlightEndpoints(this WebApplication app)
     {
-        app.MapGet("/flights", async (IFlightRepository flightRepository) =>
+        app.MapGet("/flights", async (GetAllFlightsUseCase useCase) =>
         {
-            return await flightRepository.GetAllFlights();
+            var result = await useCase.GetAllFlights();
+            return Results.Ok(result);
         });
 
-        app.MapGet("/flights/{id}", async (Guid id, IFlightRepository flightRepository) =>
+        app.MapGet("/flights/{id}", async (GetAllFlightsUseCase useCase, Guid id) =>
         {
-            var flightId = await flightRepository.GetFlight(id);
+            var result = await useCase.GetAllFlightsById(id);
 
-            return Results.Ok(flightId);
+            if (result is null)
+                return Results.NotFound();
+            
+            return Results.Ok(result);
         });
         
-        app.MapGet("/flights/import/api", async (AviationstackImportService importService) =>
+        app.MapGet("/flights/import/api", async (ImportFlightsUseCase useCase) =>
         {
-            await importService.ImportFlightsAsync();
+            await useCase.ImportFlights();
             return Results.Ok("Flights imported");
         });
 
-        app.MapGet("/search/flight", async (IFlightRepository flightRepository, string? from, string? to, 
-            OpenWeatherService openWeatherService) =>
+        app.MapGet("/search/flight", async (SearchFlightUseCase useCase, string from, string to) =>
         {
-            var search = await flightRepository.GetFlightFromTo(from, to);
-            var weatherFrom = await openWeatherService.GetWeather(from);
-            var weatherTo = await openWeatherService.GetWeather(to);
-            return Results.Ok(new
-            {
-                flights = search,
-                to = weatherFrom,
-                from = weatherTo
-            });
+            var result = await useCase.SearchFlight(from, to);
+            return Results.Ok(result);
         });
 
         app.MapPost("/flights", async (CreateFlightUseCase useCase, CreateFlightRequest request) =>
@@ -64,43 +60,39 @@ public static class FlightEndpoints
         });
 
         app.MapPut("/flights/{id}", async (Guid id, UpdateFlightRequest request, 
-            IValidator<UpdateFlightRequest> validator,IFlightRepository flightRepository, IUnitOfWork unitOfWork) =>
+            IValidator<UpdateFlightRequest> validator, UpdateFlightUseCase useCase) =>
         {
-            var flight = await flightRepository.GetFlight(id);
-            if (flight is null)
-            {
-                return Results.NotFound();
-            }
-            
             var validation = await validator.ValidateAsync(request);
+
             if (!validation.IsValid)
-            {
                 return Results.BadRequest(validation.Errors);
-            }
-            
-            flight.From = request.From;
-            flight.To = request.To;
-            await unitOfWork.SaveChangesAsync();
-    
-            return Results.Ok(flight);
+
+            var command = new UpdateFlightCommand
+            {
+                FlightId = id,
+                From = request.From,
+                To = request.To
+            };
+
+            var result = await useCase.UpdateAsync(command);
+
+            if (result is null)
+                return Results.NotFound();
+
+            return Results.Ok(result);
         });
 
-        app.MapDelete("/flights/{id}", async (Guid id,
-            IFlightRepository flightRepository, IUnitOfWork unitOfWork) =>
+        app.MapDelete("/flights/{id}", async (Guid id, DeleteFlightUseCase useCase) =>
         {
-            var flightId = await flightRepository.GetFlight(id);
-            if (flightId is null)
-            {
+            var deleted = await useCase.DeleteFlight(id);
+
+            if (!deleted)
                 return Results.NotFound();
-            }
-            
-            await flightRepository.RemoveFlight(flightId);
-            await unitOfWork.SaveChangesAsync();
-    
+
             return Results.NoContent();
         });
         
-        app.MapDelete("/flights/clear", async (AppDbContext dbContext, IUnitOfWork unitOfWork) =>
+        app.MapDelete("/flights/clear", async (AppDbContext dbContext, IUnitOfWork unitOfWork) => // фича для тестов только, хардкод
         {
             dbContext.Flights.RemoveRange(dbContext.Flights);
             await unitOfWork.SaveChangesAsync();
