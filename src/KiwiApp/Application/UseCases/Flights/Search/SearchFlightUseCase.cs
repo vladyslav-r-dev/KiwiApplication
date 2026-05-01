@@ -1,7 +1,7 @@
-﻿using KiwiApp.Patterns;
-using KiwiApp.Services;
+﻿using KiwiApp.Application.Interfaces;
+using KiwiApp.Infrastructure.Services;
 
-namespace KiwiApp.Application.UseCases.Flights;
+namespace KiwiApp.Application.UseCases.Flights.Search;
 
 public class SearchFlightUseCase(IFlightRepository  flightRepository, OpenWeatherService  openWeatherService)
 {

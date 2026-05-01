@@ -1,4 +1,4 @@
-﻿namespace KiwiApp.Application.UseCases.Flights;
+﻿namespace KiwiApp.Application.UseCases.Flights.Get;
 
 public class GetFlightResult
 {

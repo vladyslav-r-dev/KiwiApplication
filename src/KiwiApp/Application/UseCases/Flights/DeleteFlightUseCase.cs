@@ -1,4 +1,4 @@
-﻿using KiwiApp.Patterns;
+﻿using KiwiApp.Application.Interfaces;
 
 namespace KiwiApp.Application.UseCases.Flights;
 

@@ -1,14 +1,12 @@
 using System.Text;
 using FluentValidation;
 using KiwiApp;
+using KiwiApp.Api.Endpoints;
+using KiwiApp.Api.Validator;
 using KiwiApp.Application.UseCases.Bookings;
 using KiwiApp.Application.UseCases.Flights;
 using KiwiApp.Application.UseCases.Flights.Update;
-using KiwiApp.Data;
-using KiwiApp.Endpoints;
-using KiwiApp.Patterns;
-using KiwiApp.Services;
-using KiwiApp.Validator;
+using KiwiApp.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

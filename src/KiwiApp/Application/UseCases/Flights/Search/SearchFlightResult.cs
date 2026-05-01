@@ -1,6 +1,6 @@
-﻿using KiwiApp.Models;
+﻿using KiwiApp.Domain.Entities;
 
-namespace KiwiApp.Application.UseCases.Flights;
+namespace KiwiApp.Application.UseCases.Flights.Search;
 
 public class SearchFlightResult
 {

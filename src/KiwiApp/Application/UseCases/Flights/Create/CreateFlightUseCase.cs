@@ -1,7 +1,7 @@
-﻿using KiwiApp.Models;
-using KiwiApp.Patterns;
+﻿using KiwiApp.Application.Interfaces;
+using KiwiApp.Domain.Entities;
 
-namespace KiwiApp.Application.UseCases.Flights;
+namespace KiwiApp.Application.UseCases.Flights.Create;
 
 public class CreateFlightUseCase(IFlightRepository flightRepository, IUnitOfWork unitOfWork)
 {

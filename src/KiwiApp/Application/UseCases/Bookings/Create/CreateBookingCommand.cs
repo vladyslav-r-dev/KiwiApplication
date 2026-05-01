@@ -1,6 +1,6 @@
-﻿using KiwiApp.Models;
+﻿using KiwiApp.Domain.Entities;
 
-namespace KiwiApp.Application.UseCases.Bookings;
+namespace KiwiApp.Application.UseCases.Bookings.Create;
 
 public class CreateBookingCommand
 {

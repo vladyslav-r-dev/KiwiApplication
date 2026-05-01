@@ -1,4 +1,4 @@
-﻿using KiwiApp.Services;
+﻿using KiwiApp.Infrastructure.Services;
 
 namespace KiwiApp.Application.UseCases.Flights;
 

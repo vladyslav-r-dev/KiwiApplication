@@ -1,8 +1,13 @@
-﻿using KiwiApp.Application.UseCases.Bookings;
+﻿using KiwiApp.Application.Interfaces;
+using KiwiApp.Application.UseCases.Bookings;
+using KiwiApp.Application.UseCases.Bookings.Create;
 using KiwiApp.Application.UseCases.Flights;
+using KiwiApp.Application.UseCases.Flights.Create;
+using KiwiApp.Application.UseCases.Flights.Get;
+using KiwiApp.Application.UseCases.Flights.Search;
 using KiwiApp.Application.UseCases.Flights.Update;
-using KiwiApp.Patterns;
-using KiwiApp.Services;
+using KiwiApp.Infrastructure.Repositories;
+using KiwiApp.Infrastructure.Services;
 
 namespace KiwiApp;
 
@@ -19,6 +24,7 @@ public static class ServiceBuilder
         builder.Services.AddScoped<ImportFlightsUseCase>();
         builder.Services.AddScoped<UpdateFlightUseCase>();
         builder.Services.AddScoped<DeleteFlightUseCase>();
+        builder.Services.AddScoped<SearchFlightUseCase>();
     }
     
     public static void AddRepositories(WebApplicationBuilder builder)

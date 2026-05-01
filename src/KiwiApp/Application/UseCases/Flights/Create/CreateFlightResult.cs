@@ -1,4 +1,4 @@
-﻿namespace KiwiApp.Application.UseCases.Flights;
+﻿namespace KiwiApp.Application.UseCases.Flights.Create;
 
 public class CreateFlightResult
 {

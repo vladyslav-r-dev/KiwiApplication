@@ -1,7 +1,7 @@
-﻿using KiwiApp.Models;
-using KiwiApp.Patterns;
+﻿using KiwiApp.Application.Interfaces;
+using KiwiApp.Domain.Entities;
 
-namespace KiwiApp.Application.UseCases.Bookings;
+namespace KiwiApp.Application.UseCases.Bookings.Create;
 
 public class CreateBookingUseCase(
     IFlightRepository flightRepository,

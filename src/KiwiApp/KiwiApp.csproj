@@ -22,8 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Api\Contracts\Bookings\" />
-      <Folder Include="Application\Interfaces\DTOs\Flight\" />
+      <Folder Include="Api\" />
     </ItemGroup>
 
 </Project>
