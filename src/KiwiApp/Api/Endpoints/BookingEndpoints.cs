@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
 using KiwiApp.Api.Contracts;
-using KiwiApp.Application.Interfaces;
+using KiwiApp.Application.Services;
+using KiwiApp.Application.UseCases.Bookings;
 using KiwiApp.Application.UseCases.Bookings.Create;
-using KiwiApp.Domain.Enums;
+using KiwiApp.Application.UseCases.Bookings.Create.Update;
+using KiwiApp.Application.UseCases.Bookings.Update;
 
 namespace KiwiApp.Api.Endpoints;
 
@@ -10,26 +12,23 @@ public static class BookingEndpoints
 {
     public static void MapBookingsEndpoints(this WebApplication app)
     {
-        app.MapGet("/bookings", async (IBookingRepository bookingRepository) =>
+        app.MapGet("/bookings", async (BookingService bookingService) =>
         {
-            return await bookingRepository.GetAllBookings();
+            return await bookingService.GetAllBookings();
         });
         
-        app.MapGet("/bookings/{id}", async (Guid id, IBookingRepository bookingRepository) =>
+        app.MapGet("/bookings/{id}", async (int id, BookingService bookingService) =>
         {
-            var bookingId = await bookingRepository.GetBooking(id);
-            if (bookingId is null)
-            {
-                return Results.NotFound();
-            }
+            var result = await bookingService.GetBookingById(id);
             
-            return Results.Ok(bookingId);
+            return Results.Ok(result);
         });
 
         app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator,
-            CreateBookingUseCase useCase) =>
+            BookingService service) =>
         {
             var validation = await validator.ValidateAsync(request);
+            
             if (!validation.IsValid)
             {
                 return Results.BadRequest(validation.Errors);
@@ -42,7 +41,7 @@ public static class BookingEndpoints
                 Email = request.Email
             };
             
-            var result = await useCase.Execute(command);
+            var result = await service.Execute(command);
             
             if (result is null)
                 return Results.NotFound();
@@ -57,42 +56,32 @@ public static class BookingEndpoints
             return Results.Created($"/bookings/{response.BookingId}", response);
         });
 
-        app.MapPut("/bookings/{id}", async (Guid id, UpdateBookingRequest request, IValidator<UpdateBookingRequest> validator, 
-            IBookingRepository bookingRepository, IUnitOfWork unitOfWork) =>
+        app.MapPut("/bookings/{id}", async (int id, UpdateBookingRequest request, IValidator<UpdateBookingRequest> validator,
+            BookingService service) =>
         {
-            var booking = await bookingRepository.GetBooking(id);
-            if (booking is null)
-            {
-                return Results.NotFound();
-            }
-            
             var validation = await validator.ValidateAsync(request);
+            
             if (!validation.IsValid)
             {
                 return Results.BadRequest(validation.Errors);
             }
-    
-            booking.Passengers = request.Passengers;
-            booking.Email = request.Email;
-            booking.Status = BookingStatus.Updated;
-            
-            await unitOfWork.SaveChangesAsync();
-            return Results.Ok(booking);
+
+            var command = new UpdateBookingCommand
+            {
+                Email = request.Email,
+                Passengers = request.Passengers,
+            };
+
+            var result = await service.UpdateBooking(id, command);
+
+            return Results.Ok(result);
         });
 
-        app.MapDelete("/bookings/{id}", async (Guid id,
-            IBookingRepository bookingRepository, IUnitOfWork unitOfWork) =>
+        app.MapDelete("/bookings/{id}", async (int id, 
+            BookingService service) =>
         {
-            var booking = await bookingRepository.GetBooking(id);
-    
-            if (booking is null)
-            {
-                return Results.NotFound();
-            }
-    
-            await bookingRepository.RemoveBooking(booking);
-            await unitOfWork.SaveChangesAsync();
-    
+            await service.DeleteBooking(id);
+            
             return Results.NoContent();
         });
     }

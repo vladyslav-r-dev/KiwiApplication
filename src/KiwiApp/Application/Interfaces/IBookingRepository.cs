@@ -2,10 +2,8 @@
 
 namespace KiwiApp.Application.Interfaces;
 
-public interface IBookingRepository
+public interface IBookingRepository : IGenericRepository<Booking>
 {
-    Task<Booking?> GetBooking(Guid id);
-    Task<List<Booking>> GetAllBookings();
-    Task<Booking> AddBooking(Booking booking);
-    Task<Booking> RemoveBooking(Booking booking);
+    Task<Booking?> GetByIdWithPassengers(int id);
+    Task<List<Booking>> GetAllWithPassengers();
 }

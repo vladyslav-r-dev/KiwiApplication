@@ -1,10 +1,12 @@
-﻿using KiwiApp.Domain.Enums;
+﻿using KiwiApp.Domain.Entities;
 
 namespace KiwiApp.Application.UseCases.Bookings.Create;
 
 public class CreateBookingResult
 {
-    public Guid BookingId { get; set; }
+    public int BookingId { get; set; }
+    
     public BookingStatus Status { get; set; }
-    public int Price { get; set; }
+    
+    public decimal Price { get; set; }
 }

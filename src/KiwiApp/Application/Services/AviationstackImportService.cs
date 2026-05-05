@@ -1,37 +1,40 @@
 ﻿using System.Text.Json;
+using KiwiApp.Api.Contracts;
 using KiwiApp.Application.Interfaces;
 using KiwiApp.Domain.Entities;
 using KiwiApp.Infrastructure.Persistence;
 
-namespace KiwiApp.Infrastructure.Services;
+namespace KiwiApp.Application.Services;
 
 public class AviationstackImportService(
-    IHttpClientFactory httpClientFactory,
+    HttpClient httpClient,
     IConfiguration configuration,
     IUnitOfWork unitOfWork,
     AppDbContext dbContext)
 {
+    private const string AviaUrl = "http://api.aviationstack.com/v1/flights";
     public async Task ImportFlightsAsync()
     {
         var accessKey = configuration["Aviationstack:AccessKey"];
-        var httpClient = httpClientFactory.CreateClient();
-        var url = $"http://api.aviationstack.com/v1/flights?access_key={accessKey}&limit=25";
+        
+        var url = $"{AviaUrl}?access_key={accessKey}&limit=25";
+        
         var response = await httpClient.GetAsync(url);
+        
         var json =  await response.Content.ReadAsStringAsync();
      
-        var jsonDocument = JsonDocument.Parse(json);
-        var root = jsonDocument.RootElement;
-        var data = root.GetProperty("data");
+       var jsonResponse =  JsonSerializer.Deserialize<AviationstackResponse>(json);
+       
+       if (jsonResponse is null)
+       {
+           throw new Exception("Не удалось прочитать ответ от Aviationstack");
+       }
 
-        foreach (var item in data.EnumerateArray())
+        foreach (var item in jsonResponse.Data)
         {
-            var departureAirport = item.GetProperty("departure")
-                .GetProperty("airport")
-                .GetString();
+            var departureAirport = item.Departure.Airport;
 
-            var arrivalAirport = item.GetProperty("arrival")
-                .GetProperty("airport")
-                .GetString();
+            var arrivalAirport = item.Arrival.Airport;
                 
             if (string.IsNullOrWhiteSpace(departureAirport) ||
                 string.IsNullOrWhiteSpace(arrivalAirport))
@@ -41,7 +44,6 @@ public class AviationstackImportService(
 
             var flight = new Flight
             {
-                FlightId = Guid.NewGuid(),
                 From = departureAirport,
                 To = arrivalAirport
             };

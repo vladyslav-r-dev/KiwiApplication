@@ -2,23 +2,22 @@ using System.Text;
 using FluentValidation;
 using KiwiApp;
 using KiwiApp.Api.Endpoints;
+using KiwiApp.Api.ErrorHandling;
 using KiwiApp.Api.Validator;
-using KiwiApp.Application.UseCases.Bookings;
-using KiwiApp.Application.UseCases.Flights;
-using KiwiApp.Application.UseCases.Flights.Update;
 using KiwiApp.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
 
@@ -38,6 +37,17 @@ builder.Services.AddSwaggerGen(options =>
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });
 });
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File(
+        "logs/log-.txt",
+        rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+
+builder.Host.UseSerilog();
 
 builder.Services.AddProblemDetails();
 builder.Services.AddAuthorization();
@@ -71,6 +81,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
+app.UseGlobalExceptionHandler();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -78,24 +90,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseExceptionHandler(exceptionApp =>
-{
-    exceptionApp.Run(async context =>
-    {
-        context.Response.StatusCode = 500;
-
-        await context.Response.WriteAsJsonAsync(new
-        {
-            error = "Internal server error"
-        });
-    });
-});
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapBookingsEndpoints();
 app.MapFlightEndpoints();
 app.MapAuthEndpoints();
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.Run();

@@ -1,35 +1,25 @@
 ﻿using KiwiApp.Application.Interfaces;
+using KiwiApp.Application.UseCases;
 using KiwiApp.Domain.Entities;
 using KiwiApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace KiwiApp.Infrastructure.Repositories;
 
-public class BookingRepository(AppDbContext db) : IBookingRepository
+public class BookingRepository(AppDbContext db)
+    : GenericRepository<Booking>(db), IBookingRepository
 {
-    public async Task<Booking?> GetBooking(Guid id)
+    public Task<Booking?> GetByIdWithPassengers(int id)
     {
-        return await db.Bookings
+        return db.Bookings
             .Include(x => x.Passengers)
             .FirstOrDefaultAsync(x => x.BookingId == id);
     }
 
-    public Task<List<Booking>> GetAllBookings()
+    public Task<List<Booking>> GetAllWithPassengers()
     {
         return db.Bookings
             .Include(x => x.Passengers)
             .ToListAsync();
-    }
-
-    public Task<Booking> AddBooking(Booking booking)
-    {
-        db.Bookings.Add(booking);
-        return Task.FromResult(booking);
-    }
-
-    public Task<Booking> RemoveBooking(Booking booking)
-    {
-        db.Bookings.Remove(booking);
-        return Task.FromResult(booking);
     }
 }

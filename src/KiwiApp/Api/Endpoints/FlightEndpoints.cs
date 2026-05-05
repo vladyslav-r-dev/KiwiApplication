@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 using KiwiApp.Api.Contracts;
 using KiwiApp.Application.Interfaces;
-using KiwiApp.Application.UseCases.Flights;
+using KiwiApp.Application.Services;
 using KiwiApp.Application.UseCases.Flights.Create;
-using KiwiApp.Application.UseCases.Flights.Get;
-using KiwiApp.Application.UseCases.Flights.Search;
 using KiwiApp.Application.UseCases.Flights.Update;
 using KiwiApp.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace KiwiApp.Api.Endpoints;
 
@@ -14,35 +13,38 @@ public static class FlightEndpoints
 {
     public static void MapFlightEndpoints(this WebApplication app)
     {
-        app.MapGet("/flights", async (GetAllFlightsUseCase useCase) =>
+        app.MapGet("/flights", async (FlightService service) =>
         {
-            var result = await useCase.GetAllFlights();
+            var result = await service.GetAllFlights();
+
             return Results.Ok(result);
         });
 
-        app.MapGet("/flights/{id}", async (GetAllFlightsUseCase useCase, Guid id) =>
+        app.MapGet("/flights/{id:int}", async (FlightService service, int id) =>
         {
-            var result = await useCase.GetAllFlightsById(id);
+            var result = await service.GetAllFlightById(id);
 
+            return Results.Ok(result);
+        });
+        
+        app.MapGet("/flights/import/api", async (FlightService service) =>
+        {
+            await service.ImportFlights();
+            
+            return Results.Ok("Flights imported");
+        });
+
+        app.MapGet("/search/flight", async (FlightService service, string from, string to) =>
+        {
+            var result = await service.SearchFlight(from, to);
+            
             if (result is null)
                 return Results.NotFound();
             
             return Results.Ok(result);
         });
-        
-        app.MapGet("/flights/import/api", async (ImportFlightsUseCase useCase) =>
-        {
-            await useCase.ImportFlights();
-            return Results.Ok("Flights imported");
-        });
 
-        app.MapGet("/search/flight", async (SearchFlightUseCase useCase, string from, string to) =>
-        {
-            var result = await useCase.SearchFlight(from, to);
-            return Results.Ok(result);
-        });
-
-        app.MapPost("/flights", async (CreateFlightUseCase useCase, CreateFlightRequest request) =>
+        app.MapPost("/flights", async (FlightService service, CreateFlightRequest request) =>
         {
             var command = new CreateFlightCommand
             {
@@ -50,7 +52,7 @@ public static class FlightEndpoints
                 To = request.To
             };
             
-            var result = await useCase.Execute(command);
+            var result = await service.CreateFlight(command);
 
             var response = new CreateFlightResponse
             {
@@ -62,8 +64,8 @@ public static class FlightEndpoints
             return Results.Created($"/flights/{response.FlightId}", response);
         });
 
-        app.MapPut("/flights/{id}", async (Guid id, UpdateFlightRequest request, 
-            IValidator<UpdateFlightRequest> validator, UpdateFlightUseCase useCase) =>
+        app.MapPut("/flights/{id:int}", async (int id, UpdateFlightRequest request, 
+            IValidator<UpdateFlightRequest> validator, FlightService service) =>
         {
             var validation = await validator.ValidateAsync(request);
 
@@ -77,7 +79,7 @@ public static class FlightEndpoints
                 To = request.To
             };
 
-            var result = await useCase.UpdateAsync(command);
+            var result = await service.UpdateFlight(command);
 
             if (result is null)
                 return Results.NotFound();
@@ -85,9 +87,9 @@ public static class FlightEndpoints
             return Results.Ok(result);
         });
 
-        app.MapDelete("/flights/{id}", async (Guid id, DeleteFlightUseCase useCase) =>
+        app.MapDelete("/flights/{id:int}", async (int id, FlightService service) =>
         {
-            var deleted = await useCase.DeleteFlight(id);
+            var deleted = await service.DeleteFlight(id);
 
             if (!deleted)
                 return Results.NotFound();
@@ -95,10 +97,9 @@ public static class FlightEndpoints
             return Results.NoContent();
         });
         
-        app.MapDelete("/flights/clear", async (AppDbContext dbContext, IUnitOfWork unitOfWork) => // фича для тестов только, хардкод
+        app.MapDelete("/flights/clear", async (AppDbContext dbContext) => // фича для тестов только, хардкод
         {
-            dbContext.Flights.RemoveRange(dbContext.Flights);
-            await unitOfWork.SaveChangesAsync();
+            await dbContext.Flights.ExecuteDeleteAsync();
 
             return Results.Ok("Flights cleared");
         });

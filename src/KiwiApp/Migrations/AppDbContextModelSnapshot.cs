@@ -17,21 +17,20 @@ namespace KiwiApp.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.15");
 
-            modelBuilder.Entity("KiwiApp.Models.Booking", b =>
+            modelBuilder.Entity("KiwiApp.Domain.Entities.Booking", b =>
                 {
-                    b.Property<Guid>("BookingId")
+                    b.Property<int>("BookingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("FlightId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Price")
+                    b.Property<int>("FlightId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
@@ -41,11 +40,11 @@ namespace KiwiApp.Migrations
                     b.ToTable("Bookings");
                 });
 
-            modelBuilder.Entity("KiwiApp.Models.Flight", b =>
+            modelBuilder.Entity("KiwiApp.Domain.Entities.Flight", b =>
                 {
-                    b.Property<Guid>("FlightId")
+                    b.Property<int>("FlightId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("From")
                         .HasColumnType("TEXT");
@@ -58,14 +57,14 @@ namespace KiwiApp.Migrations
                     b.ToTable("Flights");
                 });
 
-            modelBuilder.Entity("KiwiApp.Models.Passenger", b =>
+            modelBuilder.Entity("KiwiApp.Domain.Entities.Passenger", b =>
                 {
                     b.Property<Guid>("PassengerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("BookingId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("BookingId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -82,11 +81,11 @@ namespace KiwiApp.Migrations
                     b.ToTable("Passengers");
                 });
 
-            modelBuilder.Entity("KiwiApp.Models.RefreshToken", b =>
+            modelBuilder.Entity("KiwiApp.Domain.Entities.RefreshToken", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("TEXT");
@@ -98,8 +97,8 @@ namespace KiwiApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -108,11 +107,11 @@ namespace KiwiApp.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("KiwiApp.Models.UserEntity", b =>
+            modelBuilder.Entity("KiwiApp.Domain.Entities.UserEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -139,16 +138,16 @@ namespace KiwiApp.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("KiwiApp.Models.Passenger", b =>
+            modelBuilder.Entity("KiwiApp.Domain.Entities.Passenger", b =>
                 {
-                    b.HasOne("KiwiApp.Models.Booking", null)
+                    b.HasOne("KiwiApp.Domain.Entities.Booking", null)
                         .WithMany("Passengers")
                         .HasForeignKey("BookingId");
                 });
 
-            modelBuilder.Entity("KiwiApp.Models.RefreshToken", b =>
+            modelBuilder.Entity("KiwiApp.Domain.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("KiwiApp.Models.UserEntity", "User")
+                    b.HasOne("KiwiApp.Domain.Entities.UserEntity", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -157,7 +156,7 @@ namespace KiwiApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("KiwiApp.Models.Booking", b =>
+            modelBuilder.Entity("KiwiApp.Domain.Entities.Booking", b =>
                 {
                     b.Navigation("Passengers");
                 });

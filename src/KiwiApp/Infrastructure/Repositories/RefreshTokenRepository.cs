@@ -13,11 +13,11 @@ public class RefreshTokenRepository(AppDbContext db) : IRefreshToken
             .FirstOrDefaultAsync(x => x.Token == refreshToken);
     }
 
-    public Task<RefreshToken> AddToken(string refreshToken, Guid userId)
+    public Task<RefreshToken> AddToken(string refreshToken, int userId)
     {
         var newToken = new RefreshToken
         {
-            Id = Guid.NewGuid(),
+            Id = new Random().Next(),
             Token = refreshToken,
             IsRevoked = false,
             UserId = userId,
@@ -25,12 +25,14 @@ public class RefreshTokenRepository(AppDbContext db) : IRefreshToken
         };
         
         db.RefreshTokens.Add(newToken);
+        
         return Task.FromResult(newToken);
     }
 
     public Task Revoke(RefreshToken refreshToken)
     {
         refreshToken.IsRevoked = true;
+        
         return Task.CompletedTask;
     }
 }

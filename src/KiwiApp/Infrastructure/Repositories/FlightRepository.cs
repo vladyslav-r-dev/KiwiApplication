@@ -1,26 +1,19 @@
 ﻿using KiwiApp.Application.Interfaces;
+using KiwiApp.Application.UseCases;
 using KiwiApp.Domain.Entities;
 using KiwiApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace KiwiApp.Infrastructure.Repositories;
 
-public class FlightRepository(AppDbContext db) : IFlightRepository
+public class FlightRepository(AppDbContext db) : GenericRepository<Flight>(db), IFlightRepository
 {
-    public async Task<Flight?> GetFlight(Guid id)
-    {
-        return await db.Flights
-            .FirstOrDefaultAsync(x => x.FlightId == id);
-    }
-
-    public Task<List<Flight>> GetAllFlights()
-    {
-        return db.Flights.ToListAsync();
-    }
+    private readonly AppDbContext _db = db;
 
     public async Task<List<Flight>> GetFlightFromTo(string from, string to)
     {
-        var search = db.Flights.AsQueryable();
+        var search = _db.Flights.AsQueryable();
+        
         if (!string.IsNullOrWhiteSpace(from))
         {
             search = search.Where(x => x.From == from);
@@ -32,17 +25,5 @@ public class FlightRepository(AppDbContext db) : IFlightRepository
         }
         
         return await search.ToListAsync();
-    }
-
-    public Task<Flight> AddFlight(Flight flight)
-    {
-        db.Flights.Add(flight);
-        return Task.FromResult(flight);
-    }
-
-    public Task<Flight> RemoveFlight(Flight flight)
-    {
-        db.Flights.Remove(flight);
-        return Task.FromResult(flight);
     }
 }

@@ -4,7 +4,7 @@ namespace KiwiApp.Application.UseCases.Flights.Search;
 
 public class SearchFlightResult
 {
-    public IEnumerable<Flight> Flights { get; set; }
+    public IEnumerable<Flight> Flight { get; set; }
 
     public object? WeatherFrom { get; set; }
 

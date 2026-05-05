@@ -2,7 +2,7 @@
 
 public class Flight
 {
-    public Guid FlightId { get; set; }
+    public int FlightId { get; set; }
     public string? From { get; set; }
     public string? To { get; set; }
 
@@ -10,7 +10,7 @@ public class Flight
     {
         return new Flight
         {
-            FlightId = Guid.NewGuid(),
+            FlightId = new Random().Next(),
             From = from,
             To = to
         };

@@ -1,4 +1,4 @@
-﻿namespace KiwiApp.Domain.Enums;
+﻿namespace KiwiApp.Domain.Entities;
 
 public enum BookingStatus
 {

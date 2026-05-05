@@ -1,9 +1,6 @@
-﻿using System.Security.Claims;
-using KiwiApp.Api.Contracts.Auth;
+﻿using KiwiApp.Api.Contracts.Auth;
 using KiwiApp.Api.Validator;
-using KiwiApp.Application.Interfaces;
-using KiwiApp.Domain.Entities;
-using KiwiApp.Infrastructure.Services;
+using KiwiApp.Application.Services;
 
 namespace KiwiApp.Api.Endpoints;
 
@@ -11,112 +8,88 @@ public static class AuthEndpoints
 {
     public static void MapAuthEndpoints(this WebApplication app)
     {
-        app.MapGet("/auth/me", (HttpContext context) =>
+        app.MapGet("/auth/me", (HttpContext context, 
+            AuthService authService) =>
         {
-            var user = context.User;
+            var result = authService.GetMe(context.User);
 
-            var userId = user.Claims
-                .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            var email = user.Claims
-                .FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-
-            return Results.Ok(new
-            {
-                userId,
-                email
-            });
+            return Results.Ok(result);
         }).RequireAuthorization();
-        
-        app.MapPost("/register", async (RegisterUserDto request, IUnitOfWork unitOfWork, 
-            ICheckUserData checkUserData, RegistrationValidator validator) =>
+
+        app.MapPost("/register", async (
+            RegisterUserDto request,
+            RegistrationValidator validator,
+            AuthService authService) =>
         {
             var validation = await validator.ValidateAsync(request);
+
             if (!validation.IsValid)
             {
                 return Results.BadRequest(validation.Errors);
             }
-            
-            var existingUser = await checkUserData.GetUserByEmail(request.Email);
-            if (existingUser is not null)
+
+            try
             {
-                return Results.BadRequest("User already exists");
+                var result = await authService.Register(new RegisterCommand
+                {
+                    Name = request.Name,
+                    LastName = request.LastName,
+                    Email = request.Email,
+                    Password = request.Password,
+                    Passport = request.Passport
+                });
+
+                return Results.Created($"/users/{result.UserId}", result.Email);
             }
-            
-            var newUser = new UserEntity
+            catch (InvalidOperationException exception)
             {
-                Id =  Guid.NewGuid(),
-                FirstName = request.Name,
-                LastName = request.LastName,
+                return Results.BadRequest(exception.Message);
+            }
+        });
+
+        app.MapPost("/auth/login", async (
+            LoginUserDto request,
+            LoginValidator validator,
+            AuthService authService) =>
+        {
+            var validation = await validator.ValidateAsync(request);
+
+            if (!validation.IsValid)
+            {
+                return Results.BadRequest(validation.Errors);
+            }
+
+            var result = await authService.Login(new LoginCommand
+            {
                 Email = request.Email,
-                Password = request.Password,
-                Passport = request.Passport,
-            };
-            
-            await checkUserData.AddUser(newUser);
-            await unitOfWork.SaveChangesAsync();
+                Password = request.Password
+            });
 
-            return Results.Created($"/users/{newUser.Id}", newUser.Email);
+            return Results.Ok(result);
         });
-        
-        app.MapPost("/auth/login", async (LoginUserDto request,
-            ICheckUserData checkUserData, LoginValidator validator, 
-            TokenService tokenService, IRefreshToken refreshTokenRepository, IUnitOfWork unitOfWork) =>
-        {
-            var validation = await validator.ValidateAsync(request);
-            if (!validation.IsValid)
-            {
-                return Results.BadRequest(validation.Errors);
-            }
-            
-            var email = request.Email;
-            var password = request.Password;
-            var existingUser = await checkUserData.GetUserByEmail(email);
-            
-            if (existingUser is null)
-            {
-                return Results.BadRequest("Email doesn't exist"); 
-            }
-            if (password != existingUser.Password)
-            {
-                return Results.BadRequest("Wrong password"); 
-            }
-            
-            var accessToken = tokenService.CreateAccesToken(existingUser);
-            var refreshToken = Guid.NewGuid().ToString();
-            
-            await refreshTokenRepository.AddToken(refreshToken, existingUser.Id);
-            await unitOfWork.SaveChangesAsync();
 
-            return Results.Ok(new { accessToken, refreshToken });
-        });
-        
-        app.MapPost("/auth/logout", async (RefreshRequest request, IUnitOfWork unitOfWork, 
-            IRefreshToken refreshTokenRepository) =>
+        app.MapPost("/auth/logout", async (
+            RefreshRequest request,
+            AuthService authService) =>
         {
-            var refreshToken = await refreshTokenRepository.GetToken(request.RefreshToken);
+            await authService.Logout(new RefreshCommand
+            {
+                RefreshToken = request.RefreshToken
+            });
 
-            if (refreshToken is null) return Results.Ok();
-            
-            await refreshTokenRepository.Revoke(refreshToken);
-            await unitOfWork.SaveChangesAsync();
-            
             return Results.Ok();
         });
 
-        app.MapPost("/auth/refresh", async (RefreshRequest request,
-            IRefreshToken refreshTokenRepository, ICheckUserData checkUserData, TokenService tokenService) =>
+        app.MapPost("/auth/refresh", async (
+            RefreshRequest request,
+            AuthService authService) =>
         {
-            var refreshToken = await refreshTokenRepository.GetToken(request.RefreshToken);
-            if (refreshToken is null || refreshToken.IsRevoked || refreshToken.ExpiresAt < DateTime.UtcNow)
+            var result = await authService.Refresh(new RefreshCommand 
             {
-                return Results.Unauthorized();
-            }
+                RefreshToken = request.RefreshToken 
+            });
 
-            var existingUser = await checkUserData.GetUserById(refreshToken.UserId);
-            var accessToken = tokenService.CreateAccesToken(existingUser);
-
-            return Results.Ok(new { accessToken });
+            return Results.Ok(result);
         });
     }
 }
