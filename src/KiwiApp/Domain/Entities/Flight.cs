@@ -3,8 +3,12 @@
 public class Flight
 {
     public int FlightId { get; set; }
+    
     public string? From { get; set; }
+    
     public string? To { get; set; }
+    
+    public List<Booking> Bookings { get; set; } = [];
 
     public static Flight CreateFlight(string? from, string? to)
     {

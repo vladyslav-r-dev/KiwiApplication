@@ -37,6 +37,8 @@ namespace KiwiApp.Migrations
 
                     b.HasKey("BookingId");
 
+                    b.HasIndex("FlightId");
+
                     b.ToTable("Bookings");
                 });
 
@@ -133,9 +135,27 @@ namespace KiwiApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("KiwiApp.Domain.Entities.Booking", b =>
+                {
+                    b.HasOne("KiwiApp.Domain.Entities.Flight", "Flight")
+                        .WithMany("Bookings")
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Flight");
                 });
 
             modelBuilder.Entity("KiwiApp.Domain.Entities.Passenger", b =>
@@ -148,7 +168,7 @@ namespace KiwiApp.Migrations
             modelBuilder.Entity("KiwiApp.Domain.Entities.RefreshToken", b =>
                 {
                     b.HasOne("KiwiApp.Domain.Entities.UserEntity", "User")
-                        .WithMany()
+                        .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -159,6 +179,16 @@ namespace KiwiApp.Migrations
             modelBuilder.Entity("KiwiApp.Domain.Entities.Booking", b =>
                 {
                     b.Navigation("Passengers");
+                });
+
+            modelBuilder.Entity("KiwiApp.Domain.Entities.Flight", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("KiwiApp.Domain.Entities.UserEntity", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

@@ -52,7 +52,8 @@ builder.Host.UseSerilog();
 builder.Services.AddProblemDetails();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
-
+var dbPath = Path.GetFullPath("app.db");
+Console.WriteLine($"SQLite DB path: {dbPath}");
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidator>();
 
 ServiceBuilder.AddRepositories(builder);

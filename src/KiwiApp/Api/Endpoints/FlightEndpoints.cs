@@ -32,7 +32,8 @@ public static class FlightEndpoints
             await service.ImportFlights();
             
             return Results.Ok("Flights imported");
-        });
+            
+        }).RequireAuthorization(policy => policy.RequireRole("Admin"));
 
         app.MapGet("/search/flight", async (FlightService service, string from, string to) =>
         {
@@ -62,7 +63,7 @@ public static class FlightEndpoints
             };
             
             return Results.Created($"/flights/{response.FlightId}", response);
-        });
+        }).RequireAuthorization(policy => policy.RequireRole("Admin"));
 
         app.MapPut("/flights/{id:int}", async (int id, UpdateFlightRequest request, 
             IValidator<UpdateFlightRequest> validator, FlightService service) =>
@@ -85,17 +86,16 @@ public static class FlightEndpoints
                 return Results.NotFound();
 
             return Results.Ok(result);
-        });
+            
+        }).RequireAuthorization(policy => policy.RequireRole("Admin"));
 
         app.MapDelete("/flights/{id:int}", async (int id, FlightService service) =>
         {
-            var deleted = await service.DeleteFlight(id);
-
-            if (!deleted)
-                return Results.NotFound();
+            await service.DeleteFlight(id);
 
             return Results.NoContent();
-        });
+            
+        }).RequireAuthorization(policy => policy.RequireRole("Admin"));
         
         app.MapDelete("/flights/clear", async (AppDbContext dbContext) => // фича для тестов только, хардкод
         {

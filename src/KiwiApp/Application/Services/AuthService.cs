@@ -20,11 +20,14 @@ public class AuthService(
 
         var email = user.Claims
             .FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+        
+        var role = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
 
         return new MeResult
         {
             UserId = userId,
-            Email = email
+            Email = email,
+            Role = role
         };
     }
 
@@ -39,15 +42,17 @@ public class AuthService(
             throw new InvalidOperationException("User already exists");
         }
 
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
+        
         var newUser = new UserEntity
         {
             FirstName = command.Name,
             LastName = command.LastName,
             Email = command.Email,
-            Password = command.Password,
+            Password = hashedPassword,
             Passport = command.Passport,
         };
-
+        
         await userRepository.Add(newUser);
 
         await unitOfWork.SaveChangesAsync();
@@ -70,11 +75,11 @@ public class AuthService(
             throw new KeyNotFoundException("Email doesn't exist");
         }
 
-        if (command.Password != existingUser.Password)
-        {
-            logger.LogWarning("Login failed. Wrong password for email {Email}", command.Email);
+        var isPasswordValid = BCrypt.Net.BCrypt.Verify(command.Password, existingUser.Password);
 
-            throw new UnauthorizedAccessException("Wrong password");
+        if (!isPasswordValid)
+        {
+            throw new KeyNotFoundException("Invalid email or password");
         }
 
         var accessToken = tokenService.CreateAccesToken(existingUser);
