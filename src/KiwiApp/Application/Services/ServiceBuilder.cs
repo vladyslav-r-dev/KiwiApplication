@@ -1,12 +1,8 @@
 ﻿using KiwiApp.Application.Interfaces;
-using KiwiApp.Application.Services;
 using KiwiApp.Application.UseCases;
-using KiwiApp.Application.UseCases.Bookings;
-using KiwiApp.Application.UseCases.Bookings.Create;
-using KiwiApp.Application.UseCases.Flights;
 using KiwiApp.Infrastructure.Repositories;
 
-namespace KiwiApp;
+namespace KiwiApp.Application.Services;
 
 public static class ServiceBuilder
 {
@@ -20,6 +16,8 @@ public static class ServiceBuilder
         builder.Services.AddScoped<BookingService>();
         builder.Services.AddScoped<FlightService>();
         builder.Services.AddScoped<AuthService>();
+        builder.Services.AddScoped<PdfService>();
+        builder.Services.AddScoped<IEmailService, EmailService>();
     }
     
     public static void AddRepositories(WebApplicationBuilder builder)

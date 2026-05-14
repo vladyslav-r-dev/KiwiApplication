@@ -63,7 +63,7 @@ public static class FlightEndpoints
             };
             
             return Results.Created($"/flights/{response.FlightId}", response);
-        }).RequireAuthorization(policy => policy.RequireRole("Admin"));
+        }).RequireAuthorization("Flight.Create");
 
         app.MapPut("/flights/{id:int}", async (int id, UpdateFlightRequest request, 
             IValidator<UpdateFlightRequest> validator, FlightService service) =>

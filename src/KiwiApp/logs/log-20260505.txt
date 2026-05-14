@@ -1,0 +1,191 @@
+2026-05-05 10:46:39.613 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-05 10:46:40.084 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-05 10:46:40.096 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-05 10:46:40.102 +02:00 [INF] Hosting environment: Development
+2026-05-05 10:46:40.110 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-05 10:46:40.482 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger - null null
+2026-05-05 10:46:40.664 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger - 301 0 null 184.484ms
+2026-05-05 10:46:40.703 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-05 10:46:40.858 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 304 null null 156.0082ms
+2026-05-05 10:46:40.868 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-05 10:46:40.869 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-05 10:46:40.873 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-05 10:46:40.928 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 304 null null 55.3405ms
+2026-05-05 10:46:40.928 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 304 null null 59.9369ms
+2026-05-05 10:46:40.929 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 304 null null 59.6293ms
+2026-05-05 10:46:40.986 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-05 10:46:41.003 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 304 null null 17.6855ms
+2026-05-05 10:46:41.016 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-05 10:46:41.029 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 304 null null 13.2758ms
+2026-05-05 10:46:41.144 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-05 10:46:41.177 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-05 10:46:41.430 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 285.7735ms
+2026-05-05 10:46:48.072 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/bookings - null null
+2026-05-05 10:46:48.088 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-05 10:46:48.155 +02:00 [INF] Executing endpoint 'HTTP: GET /bookings'
+2026-05-05 10:46:50.178 +02:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "b"."BookingId", "b"."Email", "b"."FlightId", "b"."Price", "b"."Status", "p"."PassengerId", "p"."BookingId", "p"."FirstName", "p"."LastName"
+FROM "Bookings" AS "b"
+LEFT JOIN "Passengers" AS "p" ON "b"."BookingId" = "p"."BookingId"
+ORDER BY "b"."BookingId"
+2026-05-05 10:46:50.363 +02:00 [INF] Executed endpoint 'HTTP: GET /bookings'
+2026-05-05 10:46:50.382 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/bookings - 200 null application/json; charset=utf-8 2309.3261ms
+2026-05-05 10:47:11.592 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-05 10:47:11.689 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '24.04.2026 13:36:43', Current time (UTC): '05.05.2026 8:47:11'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-05-05 10:47:11.728 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '24.04.2026 13:36:43', Current time (UTC): '05.05.2026 8:47:11'.
+2026-05-05 10:47:11.744 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-05-05 10:47:11.760 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-05-05 10:47:11.768 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 401 0 null 176.1279ms
+2026-05-05 10:48:12.005 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/auth/refresh - application/json 88
+2026-05-05 10:48:12.030 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(ReadOnlyMemory`1 encodedTokenMemory)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString, TryReadJwtClaim tryReadJwtClaim)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+2026-05-05 10:48:12.046 +02:00 [INF] Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2026-05-05 10:48:12.056 +02:00 [INF] Executing endpoint 'HTTP: POST /auth/refresh'
+2026-05-05 10:48:12.254 +02:00 [INF] Executed DbCommand (7ms) [Parameters=[@__refreshToken_0='?' (Size = 64)], CommandType='"Text"', CommandTimeout='30']
+SELECT "r"."Id", "r"."ExpiresAt", "r"."IsRevoked", "r"."Token", "r"."UserId"
+FROM "RefreshTokens" AS "r"
+WHERE "r"."Token" = @__refreshToken_0
+LIMIT 1
+2026-05-05 10:48:12.268 +02:00 [WRN] Refresh token was not found
+2026-05-05 10:48:12.277 +02:00 [INF] Executed endpoint 'HTTP: POST /auth/refresh'
+2026-05-05 10:48:12.285 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.UnauthorizedAccessException: Invalid refresh token
+   at KiwiApp.Application.Services.AuthService.Refresh(RefreshCommand command) in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Application\Services\AuthService.cs:line 119
+   at KiwiApp.Api.Endpoints.AuthEndpoints.<>c.<<MapAuthEndpoints>b__0_4>d.MoveNext() in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Api\Endpoints\AuthEndpoints.cs:line 87
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<>c__DisplayClass101_2.<<HandleRequestBodyAndCompileRequestDelegateForJson>b__2>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-05 10:48:12.329 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/auth/refresh - 500 null application/json; charset=utf-8 324.0174ms
+2026-05-05 10:48:26.640 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/auth/logout - application/json 88
+2026-05-05 10:48:26.661 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(ReadOnlyMemory`1 encodedTokenMemory)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString, TryReadJwtClaim tryReadJwtClaim)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+2026-05-05 10:48:26.674 +02:00 [INF] Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2026-05-05 10:48:26.683 +02:00 [INF] Executing endpoint 'HTTP: POST /auth/logout'
+2026-05-05 10:48:26.714 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__refreshToken_0='?' (Size = 64)], CommandType='"Text"', CommandTimeout='30']
+SELECT "r"."Id", "r"."ExpiresAt", "r"."IsRevoked", "r"."Token", "r"."UserId"
+FROM "RefreshTokens" AS "r"
+WHERE "r"."Token" = @__refreshToken_0
+LIMIT 1
+2026-05-05 10:48:26.733 +02:00 [WRN] Logout requested with non-existing refresh token
+2026-05-05 10:48:26.744 +02:00 [INF] Setting HTTP status code 200.
+2026-05-05 10:48:26.753 +02:00 [INF] Executed endpoint 'HTTP: POST /auth/logout'
+2026-05-05 10:48:26.761 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/auth/logout - 200 0 null 120.2564ms
+2026-05-05 10:48:40.566 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-05 10:48:40.579 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(ReadOnlyMemory`1 encodedTokenMemory)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString, TryReadJwtClaim tryReadJwtClaim)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+2026-05-05 10:48:40.589 +02:00 [INF] Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2026-05-05 10:48:40.600 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-05-05 10:48:40.612 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-05-05 10:48:40.620 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 401 0 null 54.7765ms
+2026-05-05 10:49:12.760 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/register - application/json 115
+2026-05-05 10:49:12.774 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(ReadOnlyMemory`1 encodedTokenMemory)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString, TryReadJwtClaim tryReadJwtClaim)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+2026-05-05 10:49:12.786 +02:00 [INF] Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2026-05-05 10:49:12.797 +02:00 [INF] Executing endpoint 'HTTP: POST /register'
+2026-05-05 10:49:12.873 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__email_0='?' (Size = 14)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."Id", "u"."Email", "u"."FirstName", "u"."LastName", "u"."Passport", "u"."Password"
+FROM "Users" AS "u"
+WHERE "u"."Email" = @__email_0
+LIMIT 1
+2026-05-05 10:49:13.072 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 14), @p1='?' (Size = 4), @p2='?' (Size = 4), @p3='?' (Size = 4), @p4='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FirstName", "LastName", "Passport", "Password")
+VALUES (@p0, @p1, @p2, @p3, @p4)
+RETURNING "Id";
+2026-05-05 10:49:13.125 +02:00 [INF] Setting HTTP status code 201.
+2026-05-05 10:49:13.133 +02:00 [INF] Writing value of type 'String' as Json.
+2026-05-05 10:49:13.140 +02:00 [INF] Executed endpoint 'HTTP: POST /register'
+2026-05-05 10:49:13.148 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/register - 201 null application/json; charset=utf-8 387.9535ms
+2026-05-05 10:49:29.697 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/auth/login - application/json 53
+2026-05-05 10:49:29.715 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(ReadOnlyMemory`1 encodedTokenMemory)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString, TryReadJwtClaim tryReadJwtClaim)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+2026-05-05 10:49:29.729 +02:00 [INF] Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2026-05-05 10:49:29.738 +02:00 [INF] Executing endpoint 'HTTP: POST /auth/login'
+2026-05-05 10:49:29.758 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__email_0='?' (Size = 14)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."Id", "u"."Email", "u"."FirstName", "u"."LastName", "u"."Passport", "u"."Password"
+FROM "Users" AS "u"
+WHERE "u"."Email" = @__email_0
+LIMIT 1
+2026-05-05 10:49:29.833 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (Size = 36), @p4='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "RefreshTokens" ("Id", "ExpiresAt", "IsRevoked", "Token", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2026-05-05 10:49:29.856 +02:00 [INF] Setting HTTP status code 200.
+2026-05-05 10:49:29.866 +02:00 [INF] Writing value of type 'LoginResult' as Json.
+2026-05-05 10:49:29.877 +02:00 [INF] Executed endpoint 'HTTP: POST /auth/login'
+2026-05-05 10:49:29.886 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/auth/login - 200 null application/json; charset=utf-8 188.5601ms
+2026-05-05 10:49:52.060 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/auth/refresh - application/json 60
+2026-05-05 10:49:52.086 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(ReadOnlyMemory`1 encodedTokenMemory)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString, TryReadJwtClaim tryReadJwtClaim)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+2026-05-05 10:49:52.100 +02:00 [INF] Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2026-05-05 10:49:52.108 +02:00 [INF] Executing endpoint 'HTTP: POST /auth/refresh'
+2026-05-05 10:49:52.119 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__refreshToken_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "r"."Id", "r"."ExpiresAt", "r"."IsRevoked", "r"."Token", "r"."UserId"
+FROM "RefreshTokens" AS "r"
+WHERE "r"."Token" = @__refreshToken_0
+LIMIT 1
+2026-05-05 10:49:52.167 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."Id", "u"."Email", "u"."FirstName", "u"."LastName", "u"."Passport", "u"."Password"
+FROM "Users" AS "u"
+WHERE "u"."Id" = @__p_0
+LIMIT 1
+2026-05-05 10:49:52.193 +02:00 [INF] Setting HTTP status code 200.
+2026-05-05 10:49:52.203 +02:00 [INF] Writing value of type 'RefreshResult' as Json.
+2026-05-05 10:49:52.213 +02:00 [INF] Executed endpoint 'HTTP: POST /auth/refresh'
+2026-05-05 10:49:52.221 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/auth/refresh - 200 null application/json; charset=utf-8 161.1251ms
+2026-05-05 10:50:01.807 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-05 10:50:01.818 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(ReadOnlyMemory`1 encodedTokenMemory)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString, TryReadJwtClaim tryReadJwtClaim)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+2026-05-05 10:50:01.831 +02:00 [INF] Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EncodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2026-05-05 10:50:01.842 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-05-05 10:50:01.852 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-05-05 10:50:01.859 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 401 0 null 51.7799ms
+2026-05-05 10:50:57.591 +02:00 [INF] Application is shutting down...

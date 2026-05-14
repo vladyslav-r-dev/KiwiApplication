@@ -1,9 +1,9 @@
 using System.Text;
 using FluentValidation;
-using KiwiApp;
 using KiwiApp.Api.Endpoints;
 using KiwiApp.Api.ErrorHandling;
 using KiwiApp.Api.Validator;
+using KiwiApp.Application.Services;
 using KiwiApp.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +13,8 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+var ironPdfLicenseKey = builder.Configuration["IronPdf:LicenseKey"];
+License.LicenseKey = ironPdfLicenseKey;
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -41,9 +42,6 @@ builder.Services.AddSwaggerGen(options =>
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .WriteTo.Console()
-    .WriteTo.File(
-        "logs/log-.txt",
-        rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
 

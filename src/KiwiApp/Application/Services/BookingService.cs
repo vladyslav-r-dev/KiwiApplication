@@ -10,7 +10,8 @@ namespace KiwiApp.Application.Services;
 public class BookingService(
     IGenericRepository<Flight> repository,
     IBookingRepository bookingRepository,
-    IUnitOfWork unitOfWork, ILogger<BookingService> logger)
+    IUnitOfWork unitOfWork, ILogger<BookingService> logger, 
+    IEmailService emailService, PdfService pdfService)
 {
     public async Task<CreateBookingResult?> Execute(CreateBookingCommand command)
     {
@@ -25,11 +26,25 @@ public class BookingService(
             
 
         var booking = Booking.CreateBooking(command.FlightId, command.Passengers, command.Email);
-
-        await bookingRepository.Add(booking);
+        var firstPassenger = command.Passengers.First();
+        var clientName = firstPassenger.FirstName;
         
+        await bookingRepository.Add(booking);
         await unitOfWork.SaveChangesAsync();
-    
+        
+        var pdfBytes = pdfService.GenerateBookingPdf(
+            clientName,
+            booking.Email,
+            booking.FlightId
+        );
+
+        await emailService.SendBookingConfirmationAsync(
+            booking.Email,
+            clientName,
+            booking.FlightId,
+            pdfBytes
+        );
+        
         return new CreateBookingResult
         {
             BookingId = booking.BookingId,
