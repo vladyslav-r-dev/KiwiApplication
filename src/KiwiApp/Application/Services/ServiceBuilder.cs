@@ -1,4 +1,7 @@
-﻿using KiwiApp.Application.Interfaces;
+﻿using Hangfire;
+using Hangfire.MemoryStorage;
+using KiwiApp.Application.Interfaces;
+using KiwiApp.Application.Jobs;
 using KiwiApp.Application.UseCases;
 using KiwiApp.Infrastructure.Repositories;
 
@@ -18,6 +21,15 @@ public static class ServiceBuilder
         builder.Services.AddScoped<AuthService>();
         builder.Services.AddScoped<PdfService>();
         builder.Services.AddScoped<IEmailService, EmailService>();
+        builder.Services.AddScoped<StripeWebhookService>();
+        builder.Services.AddScoped<StripeCheckoutService>();
+        builder.Services.AddHangfire(config =>
+        {
+            config.UseMemoryStorage();
+        });
+
+        builder.Services.AddHangfireServer();
+        builder.Services.AddScoped<StripeReconciliationJob>();
     }
     
     public static void AddRepositories(WebApplicationBuilder builder)
@@ -28,5 +40,6 @@ public static class ServiceBuilder
         builder.Services.AddScoped<ICheckUserData, AuthRepository>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<IRefreshToken, RefreshTokenRepository>();
+        builder.Services.AddScoped<BookingEmailJob>();
     }
 }

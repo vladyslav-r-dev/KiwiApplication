@@ -22,4 +22,12 @@ public class BookingRepository(AppDbContext db)
             .Include(x => x.Passengers)
             .ToListAsync();
     }
+
+    public Task<List<Booking>> GetPendingBookingsWithStripeSession()
+    {
+        return db.Bookings
+            .Where(b => b.Status == BookingStatus.Pending)
+            .Where(b => b.StripeCheckoutSessionId != null)
+            .ToListAsync();
+    }
 }

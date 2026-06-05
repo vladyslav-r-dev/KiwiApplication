@@ -1,8 +1,10 @@
 using System.Text;
 using FluentValidation;
+using Hangfire;
 using KiwiApp.Api.Endpoints;
 using KiwiApp.Api.ErrorHandling;
 using KiwiApp.Api.Validator;
+using KiwiApp.Application.Jobs;
 using KiwiApp.Application.Services;
 using KiwiApp.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -81,6 +83,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var app = builder.Build();
 
 app.UseGlobalExceptionHandler();
+
+app.UseHangfireDashboard("/hangfire");
+
+RecurringJob.AddOrUpdate<StripeReconciliationJob>(
+    "stripe-reconciliation",
+    job => job.ExecuteAsync(),
+    Cron.MinuteInterval(15)
+);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

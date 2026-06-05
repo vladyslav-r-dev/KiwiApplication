@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using KiwiApp.Api.Contracts;
+using KiwiApp.Api.Contracts.Booking;
 using KiwiApp.Application.Services;
-using KiwiApp.Application.UseCases.Bookings;
 using KiwiApp.Application.UseCases.Bookings.Create;
-using KiwiApp.Application.UseCases.Bookings.Create.Update;
 using KiwiApp.Application.UseCases.Bookings.Update;
+using KiwiApp.Domain.Entities;
 
 namespace KiwiApp.Api.Endpoints;
 
@@ -25,7 +25,7 @@ public static class BookingEndpoints
         });
 
         app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator,
-            BookingService service) =>
+            BookingService service, StripeCheckoutService stripeCheckoutService) =>
         {
             var validation = await validator.ValidateAsync(request);
             
@@ -46,14 +46,31 @@ public static class BookingEndpoints
             if (result is null)
                 return Results.NotFound();
             
+            var checkoutSession = await stripeCheckoutService.CreateCheckoutSessionAsync(
+                result.BookingId,
+                request.Email,
+                result.Price
+            );
+
+            await service.SetStripeCheckoutSessionId(
+                result.BookingId,
+                checkoutSession.SessionId
+            );
+            
             var response = new CreateBookingResponse
             {
                 BookingId = result.BookingId,
-                Status = result.Status,
-                Price = result.Price
+                Status = BookingStatus.Pending,
+                Price = result.Price,
+                CheckoutUrl = checkoutSession.CheckoutUrl
             };
 
             return Results.Created($"/bookings/{response.BookingId}", response);
+        });
+        
+        app.MapPost("/stripe/webhook", async (StripeWebhookService stripeWebhookService, HttpRequest request) =>
+        {
+            return await stripeWebhookService.HandleWebhookAsync(request);
         });
 
         app.MapPut("/bookings/{id}", async (int id, UpdateBookingRequest request, IValidator<UpdateBookingRequest> validator,

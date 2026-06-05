@@ -10,8 +10,7 @@ namespace KiwiApp.Application.Services;
 public class BookingService(
     IGenericRepository<Flight> repository,
     IBookingRepository bookingRepository,
-    IUnitOfWork unitOfWork, ILogger<BookingService> logger, 
-    IEmailService emailService, PdfService pdfService)
+    IUnitOfWork unitOfWork, ILogger<BookingService> logger)
 {
     public async Task<CreateBookingResult?> Execute(CreateBookingCommand command)
     {
@@ -23,27 +22,12 @@ public class BookingService(
 
             throw new KeyNotFoundException($"Flight with id {command.FlightId} was not found");
         }
-            
-
+        
         var booking = Booking.CreateBooking(command.FlightId, command.Passengers, command.Email);
-        var firstPassenger = command.Passengers.First();
-        var clientName = firstPassenger.FirstName;
         
         await bookingRepository.Add(booking);
-        await unitOfWork.SaveChangesAsync();
         
-        var pdfBytes = pdfService.GenerateBookingPdf(
-            clientName,
-            booking.Email,
-            booking.FlightId
-        );
-
-        await emailService.SendBookingConfirmationAsync(
-            booking.Email,
-            clientName,
-            booking.FlightId,
-            pdfBytes
-        );
+        await unitOfWork.SaveChangesAsync();
         
         return new CreateBookingResult
         {
@@ -116,5 +100,40 @@ public class BookingService(
             Email = booking.Email,
             Passengers = booking.Passengers
         };
+    }
+
+    public async Task MarkAsPaid(int id)
+    {
+        var booking = await bookingRepository.GetByIdWithPassengers(id);
+        
+        if (booking is null)
+            return;
+
+        if (booking.Status == BookingStatus.Paid)
+            return;
+
+        booking.Status = BookingStatus.Paid;
+        
+        await unitOfWork.SaveChangesAsync();
+    }
+    
+    public async Task SetStripeCheckoutSessionId(int bookingId, string sessionId)
+    {
+        var booking = await bookingRepository.GetById(bookingId);
+
+        if (booking is null)
+        {
+            logger.LogWarning("Booking with id {BookingId} was not found", bookingId);
+            throw new KeyNotFoundException($"Booking with id {bookingId} was not found");
+        }
+
+        booking.StripeCheckoutSessionId = sessionId;
+
+        await unitOfWork.SaveChangesAsync();
+    }
+    
+    public async Task<List<Booking>> GetPendingBookingsWithStripeSession()
+    {
+        return await bookingRepository.GetPendingBookingsWithStripeSession();
     }
 }

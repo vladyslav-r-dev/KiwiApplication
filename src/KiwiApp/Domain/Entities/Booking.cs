@@ -12,6 +12,8 @@ public class Booking
     
     public BookingStatus Status { get; set; }
     
+    public string? StripeCheckoutSessionId { get; set; }
+    
     public decimal Price { get; set; }
     
     public string? Email { get; set; }
