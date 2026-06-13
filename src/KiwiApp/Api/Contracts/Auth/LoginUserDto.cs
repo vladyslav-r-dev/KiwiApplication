@@ -10,3 +10,8 @@ public class LoginUserDto
 public record RefreshRequest(
     string RefreshToken
 );
+
+public class GoogleUserDto
+{
+    public string IdToken { get; set; } = string.Empty;
+}

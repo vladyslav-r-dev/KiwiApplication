@@ -11,7 +11,7 @@ public class AuthService(
     IGenericRepository<UserEntity> userRepository,
     IRefreshToken refreshTokenRepository,
     TokenService tokenService,
-    ILogger<AuthService> logger)
+    ILogger<AuthService> logger, GoogleAuthService googleAuthService)
 {
     public MeResult GetMe(ClaimsPrincipal user)
     {
@@ -31,6 +31,77 @@ public class AuthService(
         };
     }
 
+    public async Task<LoginResult> LoginWithGoogle(GoogleLoginCommand command) // разобраться подробнее 
+    {
+        var payload = await googleAuthService.ValidateGoogleTokenAsync(command.IdToken);
+
+        if (payload is null)
+        {
+            logger.LogWarning("Google login failed. Invalid Google token");
+
+            throw new UnauthorizedAccessException("Invalid Google token");
+        }
+
+        if (!payload.EmailVerified)
+        {
+            logger.LogWarning("Google login failed. Email {Email} is not verified", payload.Email);
+
+            throw new UnauthorizedAccessException("Google email is not verified");
+        }
+
+        var user = await checkUserData.GetUserByGoogleId(payload.Subject);
+
+        if (user is null)
+        {
+            user = await checkUserData.GetUserByEmail(payload.Email);
+        }
+
+        if (user is null)
+        {
+            user = new UserEntity
+            {
+                FirstName = payload.GivenName ?? payload.Name ?? string.Empty,
+                LastName = payload.FamilyName ?? string.Empty,
+                Email = payload.Email,
+                Password = null,
+                Passport = string.Empty,
+                AuthProvider = "Google",
+                EmailConfirmed = true,
+                GoogleId = payload.Subject,
+                Role = "User"
+            };
+
+            await userRepository.Add(user);
+            await unitOfWork.SaveChangesAsync();
+        }
+        else if (string.IsNullOrWhiteSpace(user.GoogleId))
+        {
+            user.GoogleId = payload.Subject;
+            user.EmailConfirmed = true;
+
+            if (user.AuthProvider != "Google")
+            {
+                user.AuthProvider = "Local";
+            }
+
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        var accessToken = tokenService.CreateAccesToken(user);
+
+        var refreshToken = Guid.NewGuid().ToString();
+
+        await refreshTokenRepository.AddToken(refreshToken, user.Id);
+
+        await unitOfWork.SaveChangesAsync();
+
+        return new LoginResult
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken
+        };
+    }
+    
     public async Task<RegisterResult> Register(RegisterCommand command)
     {
         var existingUser = await checkUserData.GetUserByEmail(command.Email);
@@ -42,6 +113,11 @@ public class AuthService(
             throw new InvalidOperationException("User already exists");
         }
 
+        if (existingUser?.Password is null)
+        {
+            throw new KeyNotFoundException("Invalid email or password");
+        }
+        
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
         
         var newUser = new UserEntity
@@ -51,6 +127,9 @@ public class AuthService(
             Email = command.Email,
             Password = hashedPassword,
             Passport = command.Passport,
+            AuthProvider = "Local",
+            EmailConfirmed = false,
+            GoogleId = null
         };
         
         await userRepository.Add(newUser);
@@ -154,4 +233,5 @@ public class AuthService(
             AccessToken = accessToken
         };
     }
+
 }

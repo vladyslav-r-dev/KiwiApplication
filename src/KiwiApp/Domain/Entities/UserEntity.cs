@@ -12,7 +12,13 @@ public class UserEntity
     
     public string Email { get; set; }
     
-    public string Password { get; set; }
+    public string? Password { get; set; }
+    
+    public string? GoogleId { get; set; }
+
+    public bool EmailConfirmed { get; set; }
+
+    public string AuthProvider { get; set; } = "Local";
     
     public List<RefreshToken> RefreshTokens { get; set; } = [];
     

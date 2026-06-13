@@ -10,9 +10,9 @@ namespace KiwiApp.Application.Services;
 public class BookingService(
     IGenericRepository<Flight> repository,
     IBookingRepository bookingRepository,
-    IUnitOfWork unitOfWork, ILogger<BookingService> logger)
+    IUnitOfWork unitOfWork, ILogger<BookingService> logger, CacheService cacheService)
 {
-    public async Task<CreateBookingResult?> Execute(CreateBookingCommand command)
+    public async Task<CreateBookingResult?> CreateBooking(CreateBookingCommand command)
     {
         var flight = await repository.GetById(command.FlightId);
 
@@ -28,6 +28,8 @@ public class BookingService(
         await bookingRepository.Add(booking);
         
         await unitOfWork.SaveChangesAsync();
+        
+        await cacheService.RemoveAsync("bookings:all");
         
         return new CreateBookingResult
         {
@@ -51,6 +53,9 @@ public class BookingService(
         await bookingRepository.Remove(booking);
             
         await unitOfWork.SaveChangesAsync();
+        
+        await cacheService.RemoveAsync("bookings:all");
+        await cacheService.RemoveAsync($"bookings:id:{id}");
     }
     
     public async Task <UpdateBookingResult> UpdateBooking (int id, UpdateBookingCommand command)
@@ -68,6 +73,9 @@ public class BookingService(
         
         await unitOfWork.SaveChangesAsync();
         
+        await cacheService.RemoveAsync("bookings:all");
+        await cacheService.RemoveAsync($"bookings:id:{booking.BookingId}");
+        
         return new UpdateBookingResult
         {
             Passengers = command.Passengers,
@@ -77,11 +85,41 @@ public class BookingService(
 
     public async Task<List<Booking>> GetAllBookings()
     {
-        return await bookingRepository.GetAllWithPassengers();
+        const string cacheKey = "bookings:all";
+
+        var cachedBookings = await cacheService.GetAsync<List<Booking>>(cacheKey);
+        
+        if (cachedBookings is not null)
+        {
+            return cachedBookings;
+        }
+        
+        var bookings = await bookingRepository.GetAllWithPassengers();
+
+        await cacheService.SetAsync(cacheKey, bookings, TimeSpan.FromMinutes(1));
+
+        return bookings;
     }
 
     public async Task<GetBookingResult> GetBookingById(int id)
     {
+        var cacheKey = $"bookings:id:{id}";
+
+        var cachedBooking = await cacheService.GetAsync<Booking>(cacheKey);
+        
+        if (cachedBooking is not null)
+        {
+            return new GetBookingResult
+            {
+                BookingId = cachedBooking.BookingId,
+                FlightId = cachedBooking.FlightId,
+                Status = cachedBooking.Status,
+                Price = cachedBooking.Price,
+                Email = cachedBooking.Email,
+                Passengers = cachedBooking.Passengers
+            };
+        }
+        
         var booking = await bookingRepository.GetByIdWithPassengers(id);
 
         if (booking is null)
@@ -90,6 +128,8 @@ public class BookingService(
 
             throw new KeyNotFoundException($"Booking with id {id} was not found");
         }
+
+        await cacheService.SetAsync(cacheKey, booking, TimeSpan.FromMinutes(1));
 
         return new GetBookingResult
         {
@@ -115,6 +155,8 @@ public class BookingService(
         booking.Status = BookingStatus.Paid;
         
         await unitOfWork.SaveChangesAsync();
+        
+        await cacheService.RemoveAsync("bookings:all");
     }
     
     public async Task SetStripeCheckoutSessionId(int bookingId, string sessionId)
@@ -130,6 +172,9 @@ public class BookingService(
         booking.StripeCheckoutSessionId = sessionId;
 
         await unitOfWork.SaveChangesAsync();
+        
+        await cacheService.RemoveAsync("bookings:all");
+        await cacheService.RemoveAsync($"bookings:id:{bookingId}");
     }
     
     public async Task<List<Booking>> GetPendingBookingsWithStripeSession()

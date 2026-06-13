@@ -41,7 +41,7 @@ public static class BookingEndpoints
                 Email = request.Email
             };
             
-            var result = await service.Execute(command);
+            var result = await service.CreateBooking(command);
             
             if (result is null)
                 return Results.NotFound();

@@ -30,6 +30,13 @@ public static class ServiceBuilder
 
         builder.Services.AddHangfireServer();
         builder.Services.AddScoped<StripeReconciliationJob>();
+        builder.Services.AddScoped<GoogleAuthService>();
+        builder.Services.AddScoped<CacheService>();
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = builder.Configuration.GetConnectionString("Redis");
+            options.InstanceName = "KiwiApp:";
+        });
     }
     
     public static void AddRepositories(WebApplicationBuilder builder)

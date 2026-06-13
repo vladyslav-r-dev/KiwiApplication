@@ -91,5 +91,17 @@ public static class AuthEndpoints
 
             return Results.Ok(result);
         });
+        
+        app.MapPost("/auth/google", async (
+            GoogleUserDto request,
+            AuthService authService) =>
+        {
+            var result = await authService.LoginWithGoogle(new GoogleLoginCommand
+            {
+                IdToken = request.IdToken
+            });
+
+            return Results.Ok(result);
+        });
     }
 }

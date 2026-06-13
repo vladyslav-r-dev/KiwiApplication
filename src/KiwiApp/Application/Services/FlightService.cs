@@ -11,7 +11,7 @@ public class FlightService(IGenericRepository<Flight> repository,
     IUnitOfWork unitOfWork, ILogger<FlightService> logger, 
     OpenWeatherApiClient  openWeatherApiClient, 
     IFlightRepository flightRepository,
-    AviationstackImportService importService)
+    AviationstackImportService importService, CacheService cacheService)
 {
     public async Task<CreateFlightResult> CreateFlight(CreateFlightCommand command)
     {
@@ -21,6 +21,8 @@ public class FlightService(IGenericRepository<Flight> repository,
         
         await unitOfWork.SaveChangesAsync();
 
+        await cacheService.RemoveAsync("flights:all");
+        
         return new CreateFlightResult
         {
             FlightId = flight.FlightId,
@@ -42,6 +44,9 @@ public class FlightService(IGenericRepository<Flight> repository,
 
         await unitOfWork.SaveChangesAsync();
         
+        await cacheService.RemoveAsync("flights:all");
+        await cacheService.RemoveAsync($"flights:id:{command.FlightId}");
+        
         return new UpdateFlightResult
         {
             FlightId = flight.FlightId,
@@ -51,20 +56,49 @@ public class FlightService(IGenericRepository<Flight> repository,
     }
     
     public async Task<IEnumerable<Flight>> GetAllFlights()
-    {
-        return await repository.GetAll();
+    {   
+        const string cacheKey = "flights:all";
+        
+        var cachedFlights = await cacheService.GetAsync<Flight[]>(cacheKey);
+        
+        if (cachedFlights is not null)
+        {
+            return cachedFlights;
+        }
+        
+        var flights = (await repository.GetAll()).ToArray();
+
+        await cacheService.SetAsync(cacheKey, flights, TimeSpan.FromMinutes(5));
+        
+        return flights;
     }
 
     public async Task<GetFlightResult> GetAllFlightById(int id)
     {
-        var flight = await repository.GetById(id);
+        var cacheKey = $"flights:id:{id}";
+        
+        var cachedFlight = await cacheService.GetAsync<Flight>(cacheKey);
+        
+        if (cachedFlight is not null)
+        {
+            return new GetFlightResult
+            {
+                FlightId = cachedFlight.FlightId,
+                From = cachedFlight.From,
+                To = cachedFlight.To
+            };
+        }
 
+        var flight = await repository.GetById(id);
+        
         if (flight is null)
         {
             logger.LogWarning("Flight with id {FlightId} was not found", id);
 
             throw new KeyNotFoundException($"Flight with id {id} was not found");
         }
+        
+        await cacheService.SetAsync(cacheKey, flight, TimeSpan.FromMinutes(5));
 
         return new GetFlightResult
         {
@@ -89,6 +123,9 @@ public class FlightService(IGenericRepository<Flight> repository,
         
         await unitOfWork.SaveChangesAsync();
         
+        await cacheService.RemoveAsync("flights:all");
+        await cacheService.RemoveAsync($"flights:id:{flightId}");
+        
         return true;
     }
     
@@ -111,5 +148,7 @@ public class FlightService(IGenericRepository<Flight> repository,
     public async Task ImportFlights()
     {
         await importService.ImportFlightsAsync();
+        
+        await cacheService.RemoveAsync("flights:all");
     }
 }
