@@ -19,3 +19,51 @@
   <p>{{ weather.city }} — {{ weather.temp }}°C — {{ weather.description }}</p>
 }
 }
+
+<form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+  <label for="email">Email:</label>
+  <input
+    id="email"
+    type="email"
+    formControlName="email"
+  />
+
+  <div formArrayName="passengers">
+    @for (
+      passenger of bookingForm.controls.passengers.controls;
+      track $index;
+      let i = $index
+    ) {
+      <div [formGroupName]="i">
+        <label [for]="'firstName-' + i">First Name:</label>
+        <input
+          [id]="'firstName-' + i"
+          type="text"
+          formControlName="firstName"
+        />
+
+        <label [for]="'lastName-' + i">Last Name:</label>
+        <input
+          [id]="'lastName-' + i"
+          type="text"
+          formControlName="lastName"
+        />
+      </div>
+    }
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="bookingForm.invalid || bookingLoading()"
+  >
+    @if (bookingLoading()) {
+      Creating booking...
+    } @else {
+      Book Flight
+    }
+  </button>
+
+  @if (bookingError()) {
+    <p>{{ bookingError() }}</p>
+  }
+</form>
