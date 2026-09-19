@@ -1,0 +1,46 @@
+<form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+  <label for="from">From:</label>
+  <select id="from" formControlName="from">
+    <option value="">All</option>
+    @for (option of fromOptions(); track option) {
+      <option [value]="option">{{ option }}</option>
+    }
+  </select>
+
+  <label for="to">To:</label>
+  <select id="to" formControlName="to">
+    <option value="">All</option>
+    @for (option of toOptions(); track option) {
+      <option [value]="option">{{ option }}</option>
+    }
+  </select>
+
+  <button type="submit">Search</button>
+  <button type="button" (click)="onReset()">Reset</button>
+</form>
+
+@if (loading()) {
+  <p>Loading...</p>
+}
+@else if (error()) {
+  <p>{{ error() }}</p>
+}
+@else if (filteredFlights().length === 0) {
+  <p>No flights found.</p>
+}
+@else {
+  @for (item of filteredFlights(); track item.flightId) {
+    <a [routerLink]="['/flights', item.flightId]">
+      <p>{{ item.from }} - {{ item.to }}</p>
+    </a>
+  }
+  @if (weatherFrom(); as weather) {
+  <p>From weather:</p>
+  <p>{{ weather.city }} — {{ weather.temp }}°C — {{ weather.description }}</p>
+}
+
+@if (weatherTo(); as weather) {
+  <p>To weather:</p>
+  <p>{{ weather.city }} — {{ weather.temp }}°C — {{ weather.description }}</p>
+}
+}

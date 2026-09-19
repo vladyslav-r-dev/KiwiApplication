@@ -1,0 +1,378 @@
+2026-05-07 18:21:33.648 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-05-07 18:21:33.697 +02:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-05-07 18:21:33.704 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-05-07 16:21:33.7015916+00:00');
+SELECT changes();
+2026-05-07 18:21:33.738 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-05-07 18:21:33.745 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-05-07 18:21:33.747 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-05-07 18:21:33.754 +02:00 [INF] Applying migration '20260507162128_ConfigureEntityRelationships'.
+2026-05-07 18:21:33.764 +02:00 [WRN] The migration operation 'PRAGMA foreign_keys = 0;
+' from migration 'ConfigureEntityRelationships' cannot be executed in a transaction. If the app is terminated or an unrecoverable error occurs while this operation is being executed then the migration will be left in a partially applied state and would need to be reverted manually before it can be applied again. Create a separate migration that contains just this operation.
+2026-05-07 18:21:33.765 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Bookings_FlightId" ON "Bookings" ("FlightId");
+2026-05-07 18:21:33.767 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_Bookings" (
+    "BookingId" INTEGER NOT NULL CONSTRAINT "PK_Bookings" PRIMARY KEY AUTOINCREMENT,
+    "Email" TEXT NULL,
+    "FlightId" INTEGER NOT NULL,
+    "Price" TEXT NOT NULL,
+    "Status" INTEGER NOT NULL,
+    CONSTRAINT "FK_Bookings_Flights_FlightId" FOREIGN KEY ("FlightId") REFERENCES "Flights" ("FlightId") ON DELETE CASCADE
+);
+2026-05-07 18:21:33.768 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Bookings" ("BookingId", "Email", "FlightId", "Price", "Status")
+SELECT "BookingId", "Email", "FlightId", "Price", "Status"
+FROM "Bookings";
+2026-05-07 18:21:33.770 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA foreign_keys = 0;
+2026-05-07 18:21:33.771 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE "Bookings";
+2026-05-07 18:21:33.773 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "ef_temp_Bookings" RENAME TO "Bookings";
+2026-05-07 18:21:33.774 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA foreign_keys = 1;
+2026-05-07 18:21:33.776 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Bookings_FlightId" ON "Bookings" ("FlightId");
+2026-05-07 18:21:33.779 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260507162128_ConfigureEntityRelationships', '9.0.15');
+2026-05-07 18:21:33.781 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-05-07 18:46:23.650 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-07 18:46:23.948 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-07 18:46:23.953 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-07 18:46:23.956 +02:00 [INF] Hosting environment: Development
+2026-05-07 18:46:23.958 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-07 18:46:42.443 +02:00 [INF] Application is shutting down...
+2026-05-07 18:48:36.396 +02:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-05-07 18:48:36.433 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-05-07 18:50:05.888 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-05-07 18:50:05.928 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-05-07 18:50:05.939 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-05-07 16:50:05.9352292+00:00');
+SELECT changes();
+2026-05-07 18:50:05.975 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-05-07 18:50:05.981 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-05-07 18:50:05.984 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-05-07 18:50:05.991 +02:00 [INF] Applying migration '20260507164951_SyncCurrentModel'.
+2026-05-07 18:50:05.996 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Users" ADD "Role" TEXT NOT NULL DEFAULT '';
+2026-05-07 18:50:05.998 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260507164951_SyncCurrentModel', '9.0.15');
+2026-05-07 18:50:06.001 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-05-07 18:51:31.591 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-07 18:51:31.851 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-07 18:51:31.858 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-07 18:51:31.861 +02:00 [INF] Hosting environment: Development
+2026-05-07 18:51:31.864 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-07 18:51:36.631 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger - null null
+2026-05-07 18:51:36.716 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger - 301 0 null 87.216ms
+2026-05-07 18:51:36.731 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-07 18:51:36.823 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 304 null null 83.7447ms
+2026-05-07 18:51:36.832 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-07 18:51:36.833 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-07 18:51:36.833 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-07 18:51:36.854 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 304 null null 21.9837ms
+2026-05-07 18:51:36.854 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 304 null null 21.8174ms
+2026-05-07 18:51:36.855 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 304 null null 22.2239ms
+2026-05-07 18:51:36.908 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-07 18:51:36.910 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-07 18:51:36.923 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 304 null null 14.769ms
+2026-05-07 18:51:36.927 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 304 null null 16.1854ms
+2026-05-07 18:51:37.032 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-07 18:51:37.045 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-07 18:51:37.211 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 178.5764ms
+2026-05-07 18:54:18.516 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/register - application/json 125
+2026-05-07 18:54:18.522 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-07 18:54:18.567 +02:00 [INF] Executing endpoint 'HTTP: POST /register'
+2026-05-07 18:54:19.934 +02:00 [INF] Executed DbCommand (18ms) [Parameters=[@__email_0='?' (Size = 18)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."Id", "u"."Email", "u"."FirstName", "u"."LastName", "u"."Passport", "u"."Password", "u"."Role"
+FROM "Users" AS "u"
+WHERE "u"."Email" = @__email_0
+LIMIT 1
+2026-05-07 18:54:20.374 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 18), @p1='?' (Size = 8), @p2='?' (Size = 8), @p3='?' (Size = 3), @p4='?' (Size = 60), @p5='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FirstName", "LastName", "Passport", "Password", "Role")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-05-07 18:54:20.412 +02:00 [INF] Setting HTTP status code 201.
+2026-05-07 18:54:20.415 +02:00 [INF] Writing value of type 'String' as Json.
+2026-05-07 18:54:20.422 +02:00 [INF] Executed endpoint 'HTTP: POST /register'
+2026-05-07 18:54:20.431 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/register - 201 null application/json; charset=utf-8 1914.9728ms
+2026-05-07 18:54:46.601 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/auth/login - application/json 56
+2026-05-07 18:54:46.610 +02:00 [INF] Executing endpoint 'HTTP: POST /auth/login'
+2026-05-07 18:54:46.673 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__email_0='?' (Size = 18)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."Id", "u"."Email", "u"."FirstName", "u"."LastName", "u"."Passport", "u"."Password", "u"."Role"
+FROM "Users" AS "u"
+WHERE "u"."Email" = @__email_0
+LIMIT 1
+2026-05-07 18:54:46.957 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (Size = 36), @p4='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "RefreshTokens" ("Id", "ExpiresAt", "IsRevoked", "Token", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2026-05-07 18:54:46.963 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 18:54:46.965 +02:00 [INF] Writing value of type 'LoginResult' as Json.
+2026-05-07 18:54:46.967 +02:00 [INF] Executed endpoint 'HTTP: POST /auth/login'
+2026-05-07 18:54:46.970 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/auth/login - 200 null application/json; charset=utf-8 369.2999ms
+2026-05-07 18:55:32.356 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/flights - application/json 38
+2026-05-07 18:55:32.423 +02:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Admin)
+2026-05-07 18:55:32.428 +02:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-05-07 18:55:32.430 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/flights - 403 0 null 73.9427ms
+2026-05-07 18:57:01.019 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/bookings - null null
+2026-05-07 18:57:01.024 +02:00 [INF] Executing endpoint 'HTTP: GET /bookings'
+2026-05-07 18:57:01.124 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "b"."BookingId", "b"."Email", "b"."FlightId", "b"."Price", "b"."Status", "p"."PassengerId", "p"."BookingId", "p"."FirstName", "p"."LastName"
+FROM "Bookings" AS "b"
+LEFT JOIN "Passengers" AS "p" ON "b"."BookingId" = "p"."BookingId"
+ORDER BY "b"."BookingId"
+2026-05-07 18:57:01.185 +02:00 [INF] Executed endpoint 'HTTP: GET /bookings'
+2026-05-07 18:57:01.187 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/bookings - 200 null application/json; charset=utf-8 168.4934ms
+2026-05-07 18:57:12.741 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/import/api - null null
+2026-05-07 18:57:12.748 +02:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Admin)
+2026-05-07 18:57:12.750 +02:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-05-07 18:57:12.752 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/import/api - 403 0 null 11.4337ms
+2026-05-07 18:58:52.539 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/auth/login - application/json 56
+2026-05-07 18:58:52.544 +02:00 [INF] Executing endpoint 'HTTP: POST /auth/login'
+2026-05-07 18:58:52.553 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__email_0='?' (Size = 18)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."Id", "u"."Email", "u"."FirstName", "u"."LastName", "u"."Passport", "u"."Password", "u"."Role"
+FROM "Users" AS "u"
+WHERE "u"."Email" = @__email_0
+LIMIT 1
+2026-05-07 18:58:52.687 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (Size = 36), @p4='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "RefreshTokens" ("Id", "ExpiresAt", "IsRevoked", "Token", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2026-05-07 18:58:52.691 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 18:58:52.692 +02:00 [INF] Writing value of type 'LoginResult' as Json.
+2026-05-07 18:58:52.694 +02:00 [INF] Executed endpoint 'HTTP: POST /auth/login'
+2026-05-07 18:58:52.696 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/auth/login - 200 null application/json; charset=utf-8 156.9266ms
+2026-05-07 18:59:28.326 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/flights - application/json 36
+2026-05-07 18:59:28.338 +02:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Admin)
+2026-05-07 18:59:28.344 +02:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-05-07 18:59:28.347 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/flights - 403 0 null 20.7106ms
+2026-05-07 18:59:30.146 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/flights - application/json 36
+2026-05-07 18:59:30.151 +02:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Admin)
+2026-05-07 18:59:30.153 +02:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-05-07 18:59:30.154 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/flights - 403 0 null 8.1546ms
+2026-05-07 18:59:30.373 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/flights - application/json 36
+2026-05-07 18:59:30.378 +02:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Admin)
+2026-05-07 18:59:30.380 +02:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-05-07 18:59:30.382 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/flights - 403 0 null 8.5842ms
+2026-05-07 18:59:38.071 +02:00 [INF] Application is shutting down...
+2026-05-07 19:00:43.651 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-07 19:00:43.868 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-07 19:00:43.873 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-07 19:00:43.875 +02:00 [INF] Hosting environment: Development
+2026-05-07 19:00:43.876 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-07 19:00:59.471 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-07 19:00:59.639 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 304 null null 169.0737ms
+2026-05-07 19:00:59.675 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-07 19:00:59.675 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-07 19:00:59.676 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-07 19:00:59.676 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-07 19:00:59.676 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-07 19:00:59.700 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 304 null null 26.2041ms
+2026-05-07 19:00:59.700 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 304 null null 25.5405ms
+2026-05-07 19:00:59.700 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 304 null null 25.8776ms
+2026-05-07 19:00:59.700 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 304 null null 34.1717ms
+2026-05-07 19:00:59.703 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 304 null null 27.0564ms
+2026-05-07 19:00:59.851 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-07 19:00:59.855 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - null null
+2026-05-07 19:00:59.865 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - 200 628 image/png 10.4883ms
+2026-05-07 19:00:59.869 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-07 19:01:00.036 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 185.3851ms
+2026-05-07 19:01:04.682 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-07 19:01:04.689 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-07 19:01:04.717 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-05-07 19:01:04.724 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-05-07 19:01:04.726 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 401 0 null 44.1091ms
+2026-05-07 19:01:19.810 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/auth/login - application/json 56
+2026-05-07 19:01:19.820 +02:00 [INF] Executing endpoint 'HTTP: POST /auth/login'
+2026-05-07 19:01:21.110 +02:00 [INF] Executed DbCommand (18ms) [Parameters=[@__email_0='?' (Size = 18)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."Id", "u"."Email", "u"."FirstName", "u"."LastName", "u"."Passport", "u"."Password", "u"."Role"
+FROM "Users" AS "u"
+WHERE "u"."Email" = @__email_0
+LIMIT 1
+2026-05-07 19:01:21.596 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (Size = 36), @p4='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "RefreshTokens" ("Id", "ExpiresAt", "IsRevoked", "Token", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2026-05-07 19:01:21.614 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:01:21.616 +02:00 [INF] Writing value of type 'LoginResult' as Json.
+2026-05-07 19:01:21.626 +02:00 [INF] Executed endpoint 'HTTP: POST /auth/login'
+2026-05-07 19:01:21.634 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/auth/login - 200 null application/json; charset=utf-8 1823.404ms
+2026-05-07 19:01:42.145 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/auth/refresh - application/json 60
+2026-05-07 19:01:42.152 +02:00 [INF] Executing endpoint 'HTTP: POST /auth/refresh'
+2026-05-07 19:01:42.216 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__refreshToken_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "r"."Id", "r"."ExpiresAt", "r"."IsRevoked", "r"."Token", "r"."UserId"
+FROM "RefreshTokens" AS "r"
+WHERE "r"."Token" = @__refreshToken_0
+LIMIT 1
+2026-05-07 19:01:42.248 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."Id", "u"."Email", "u"."FirstName", "u"."LastName", "u"."Passport", "u"."Password", "u"."Role"
+FROM "Users" AS "u"
+WHERE "u"."Id" = @__p_0
+LIMIT 1
+2026-05-07 19:01:42.258 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:01:42.260 +02:00 [INF] Writing value of type 'RefreshResult' as Json.
+2026-05-07 19:01:42.262 +02:00 [INF] Executed endpoint 'HTTP: POST /auth/refresh'
+2026-05-07 19:01:42.264 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/auth/refresh - 200 null application/json; charset=utf-8 118.845ms
+2026-05-07 19:01:57.697 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-07 19:01:57.765 +02:00 [INF] Executing endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:01:57.790 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:01:57.792 +02:00 [INF] Writing value of type 'MeResult' as Json.
+2026-05-07 19:01:57.794 +02:00 [INF] Executed endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:01:57.796 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 200 null application/json; charset=utf-8 98.7087ms
+2026-05-07 19:02:25.874 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/flights - application/json 39
+2026-05-07 19:02:25.882 +02:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Admin)
+2026-05-07 19:02:25.885 +02:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-05-07 19:02:25.887 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/flights - 403 0 null 13.0298ms
+2026-05-07 19:03:09.652 +02:00 [INF] Application is shutting down...
+2026-05-07 19:04:21.002 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-07 19:04:21.238 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-07 19:04:21.242 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-07 19:04:21.244 +02:00 [INF] Hosting environment: Development
+2026-05-07 19:04:21.245 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-07 19:04:24.725 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-07 19:04:24.910 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 304 null null 186.8863ms
+2026-05-07 19:04:24.942 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-07 19:04:24.942 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-07 19:04:24.942 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-07 19:04:24.942 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-07 19:04:24.942 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-07 19:04:24.959 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 304 null null 18.4426ms
+2026-05-07 19:04:24.962 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 304 null null 20.5716ms
+2026-05-07 19:04:24.962 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 304 null null 21.1502ms
+2026-05-07 19:04:24.963 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 304 null null 21.6107ms
+2026-05-07 19:04:24.969 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 304 null null 26.3013ms
+2026-05-07 19:04:25.047 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-07 19:04:25.050 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - null null
+2026-05-07 19:04:25.057 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - 304 null null 7.3865ms
+2026-05-07 19:04:25.065 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-07 19:04:25.231 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 184.1992ms
+2026-05-07 19:04:37.827 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-07 19:04:37.834 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-07 19:04:37.924 +02:00 [INF] Executing endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:04:38.734 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:04:38.736 +02:00 [INF] Writing value of type 'MeResult' as Json.
+2026-05-07 19:04:38.744 +02:00 [INF] Executed endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:04:38.751 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 200 null application/json; charset=utf-8 924.3257ms
+2026-05-07 19:07:33.031 +02:00 [INF] Application is shutting down...
+2026-05-07 19:07:35.790 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-07 19:07:36.004 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-07 19:07:36.010 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-07 19:07:36.011 +02:00 [INF] Hosting environment: Development
+2026-05-07 19:07:36.013 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-07 19:07:42.747 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-07 19:07:42.829 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-07 19:07:42.943 +02:00 [INF] Executing endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:07:43.793 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:07:43.799 +02:00 [INF] Writing value of type 'MeResult' as Json.
+2026-05-07 19:07:43.818 +02:00 [INF] Executed endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:07:43.827 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 200 null application/json; charset=utf-8 1082.6527ms
+2026-05-07 19:07:45.752 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-07 19:07:45.764 +02:00 [INF] Executing endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:07:45.818 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:07:45.820 +02:00 [INF] Writing value of type 'MeResult' as Json.
+2026-05-07 19:07:45.822 +02:00 [INF] Executed endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:07:45.824 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 200 null application/json; charset=utf-8 72.7893ms
+2026-05-07 19:10:18.654 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-07 19:10:18.663 +02:00 [INF] Executing endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:10:18.683 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:10:18.684 +02:00 [INF] Writing value of type 'MeResult' as Json.
+2026-05-07 19:10:18.686 +02:00 [INF] Executed endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:10:18.689 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 200 null application/json; charset=utf-8 34.5817ms
+2026-05-07 19:10:19.906 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-07 19:10:19.912 +02:00 [INF] Executing endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:10:19.914 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:10:19.916 +02:00 [INF] Writing value of type 'MeResult' as Json.
+2026-05-07 19:10:19.917 +02:00 [INF] Executed endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:10:19.919 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 200 null application/json; charset=utf-8 13.1076ms
+2026-05-07 19:10:20.788 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-07 19:10:20.794 +02:00 [INF] Executing endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:10:20.797 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:10:20.799 +02:00 [INF] Writing value of type 'MeResult' as Json.
+2026-05-07 19:10:20.803 +02:00 [INF] Executed endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:10:20.807 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 200 null application/json; charset=utf-8 19.2956ms
+2026-05-07 19:10:24.521 +02:00 [INF] Application is shutting down...
+2026-05-07 19:10:27.379 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-07 19:10:27.609 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-07 19:10:27.614 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-07 19:10:27.615 +02:00 [INF] Hosting environment: Development
+2026-05-07 19:10:27.617 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-07 19:10:27.730 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-07 19:10:27.851 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 304 null null 122.3447ms
+2026-05-07 19:10:27.877 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-07 19:10:27.877 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-07 19:10:27.877 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-07 19:10:27.877 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-07 19:10:27.877 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-07 19:10:27.894 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 304 null null 16.4205ms
+2026-05-07 19:10:27.894 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 304 null null 22.5623ms
+2026-05-07 19:10:27.894 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 304 null null 22.63ms
+2026-05-07 19:10:27.896 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 304 null null 18.8125ms
+2026-05-07 19:10:27.904 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 304 null null 26.6567ms
+2026-05-07 19:10:27.977 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-07 19:10:27.979 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - null null
+2026-05-07 19:10:27.993 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - 304 null null 13.2986ms
+2026-05-07 19:10:27.996 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-07 19:10:28.125 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 147.3875ms
+2026-05-07 19:10:41.917 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/auth/login - application/json 56
+2026-05-07 19:10:41.924 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-07 19:10:41.953 +02:00 [INF] Executing endpoint 'HTTP: POST /auth/login'
+2026-05-07 19:10:43.263 +02:00 [INF] Executed DbCommand (23ms) [Parameters=[@__email_0='?' (Size = 18)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."Id", "u"."Email", "u"."FirstName", "u"."LastName", "u"."Passport", "u"."Password", "u"."Role"
+FROM "Users" AS "u"
+WHERE "u"."Email" = @__email_0
+LIMIT 1
+2026-05-07 19:10:43.783 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (Size = 36), @p4='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "RefreshTokens" ("Id", "ExpiresAt", "IsRevoked", "Token", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2026-05-07 19:10:43.797 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:10:43.800 +02:00 [INF] Writing value of type 'LoginResult' as Json.
+2026-05-07 19:10:43.808 +02:00 [INF] Executed endpoint 'HTTP: POST /auth/login'
+2026-05-07 19:10:43.817 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/auth/login - 200 null application/json; charset=utf-8 1899.1385ms
+2026-05-07 19:10:58.308 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/auth/me - null null
+2026-05-07 19:10:58.370 +02:00 [INF] Executing endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:10:58.426 +02:00 [INF] Setting HTTP status code 200.
+2026-05-07 19:10:58.429 +02:00 [INF] Writing value of type 'MeResult' as Json.
+2026-05-07 19:10:58.431 +02:00 [INF] Executed endpoint 'HTTP: GET /auth/me'
+2026-05-07 19:10:58.433 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/auth/me - 200 null application/json; charset=utf-8 125.0349ms
+2026-05-07 19:11:13.563 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/flights - application/json 38
+2026-05-07 19:11:13.575 +02:00 [INF] Executing endpoint 'HTTP: POST /flights'
+2026-05-07 19:11:13.621 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (Size = 4), @p2='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("FlightId", "From", "To")
+VALUES (@p0, @p1, @p2);
+2026-05-07 19:11:13.628 +02:00 [INF] Setting HTTP status code 201.
+2026-05-07 19:11:13.630 +02:00 [INF] Writing value of type 'CreateFlightResponse' as Json.
+2026-05-07 19:11:13.633 +02:00 [INF] Executed endpoint 'HTTP: POST /flights'
+2026-05-07 19:11:13.635 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/flights - 201 null application/json; charset=utf-8 72.4851ms
+2026-05-07 19:12:13.554 +02:00 [INF] Application is shutting down...

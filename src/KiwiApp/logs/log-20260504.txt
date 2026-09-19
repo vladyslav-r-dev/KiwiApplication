@@ -1,0 +1,978 @@
+2026-05-04 19:41:27.568 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-04 19:41:27.895 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-04 19:41:27.902 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-04 19:41:27.905 +02:00 [INF] Hosting environment: Development
+2026-05-04 19:41:27.908 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-04 19:42:00.738 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger - null null
+2026-05-04 19:42:00.821 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger - 301 0 null 85.2145ms
+2026-05-04 19:42:00.839 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-04 19:42:00.947 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 200 null text/html;charset=utf-8 109.282ms
+2026-05-04 19:42:00.956 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-04 19:42:00.956 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-04 19:42:00.957 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-04 19:42:00.990 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 200 152 text/css 26.3804ms
+2026-05-04 19:42:00.990 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 200 26479 text/css 33.117ms
+2026-05-04 19:42:01.008 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 200 418181 text/javascript 52.4194ms
+2026-05-04 19:42:01.034 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-04 19:42:01.034 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-04 19:42:01.041 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 200 76613 text/javascript 7.2776ms
+2026-05-04 19:42:01.047 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 200 null application/javascript;charset=utf-8 13.1133ms
+2026-05-04 19:42:01.158 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-04 19:42:01.171 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-04 19:42:01.332 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 173.9291ms
+2026-05-04 19:42:14.165 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5086/flights/clear - null null
+2026-05-04 19:42:14.172 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-04 19:42:14.216 +02:00 [INF] Executing endpoint 'HTTP: DELETE /flights/clear'
+2026-05-04 19:42:15.436 +02:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+2026-05-04 19:42:15.636 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "Flights"
+WHERE "FlightId" = @p0
+RETURNING 1;
+2026-05-04 19:42:15.658 +02:00 [INF] Executed endpoint 'HTTP: DELETE /flights/clear'
+2026-05-04 19:42:15.662 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException: The database operation was expected to affect 1 row(s), but actually affected 0 row(s); data may have been modified or deleted since entities were loaded. See https://go.microsoft.com/fwlink/?LinkId=527962 for information on understanding and handling optimistic concurrency exceptions.
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ThrowAggregateUpdateConcurrencyExceptionAsync(RelationalDataReader reader, Int32 commandIndex, Int32 expectedRowsAffected, Int32 rowsAffected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetWithRowsAffectedOnlyAsync(Int32 commandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at KiwiApp.Api.Endpoints.FlightEndpoints.<>c.<<MapFlightEndpoints>b__0_7>d.MoveNext() in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Api\Endpoints\FlightEndpoints.cs:line 104
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 19:42:15.704 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5086/flights/clear - 500 null application/json; charset=utf-8 1538.3665ms
+2026-05-04 19:43:27.080 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights - null null
+2026-05-04 19:43:27.087 +02:00 [INF] Executing endpoint 'HTTP: GET /flights'
+2026-05-04 19:43:27.165 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+2026-05-04 19:43:27.174 +02:00 [INF] Setting HTTP status code 200.
+2026-05-04 19:43:27.178 +02:00 [INF] Writing value of type 'List`1' as Json.
+2026-05-04 19:43:27.186 +02:00 [INF] Executed endpoint 'HTTP: GET /flights'
+2026-05-04 19:43:27.189 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights - 200 null application/json; charset=utf-8 108.955ms
+2026-05-04 19:43:55.170 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/105 - null null
+2026-05-04 19:43:55.179 +02:00 [INF] Executing endpoint 'HTTP: GET /flights/{id}'
+2026-05-04 19:43:55.204 +02:00 [INF] Executed endpoint 'HTTP: GET /flights/{id}'
+2026-05-04 19:43:55.206 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentException: Entity type 'Flight' is defined with a single key property, but 0 values were passed to the 'Find' method.
+   at Microsoft.EntityFrameworkCore.Internal.EntityFinder`1.ValidateKeyPropertiesAndExtractCancellationToken(Object[] keyValues, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Internal.EntityFinder`1.FindAsync(Object[] keyValues, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.FindAsync(Object[] keyValues)
+   at KiwiApp.Application.UseCases.GenericRepository`1.GetById(Int32 id) in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Application\UseCases\GenericRepository.cs:line 13
+   at KiwiApp.Application.Services.FlightService.GetAllFlightById(Int32 id) in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Application\Services\FlightService.cs:line 60
+   at KiwiApp.Api.Endpoints.FlightEndpoints.<>c.<<MapFlightEndpoints>b__0_1>d.MoveNext() in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Api\Endpoints\FlightEndpoints.cs:line 25
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 19:43:55.215 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/105 - 500 null application/json; charset=utf-8 44.4556ms
+2026-05-04 19:46:10.492 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/105 - null null
+2026-05-04 19:46:10.497 +02:00 [INF] Executing endpoint 'HTTP: GET /flights/{id}'
+2026-05-04 19:46:10.506 +02:00 [INF] Executed endpoint 'HTTP: GET /flights/{id}'
+2026-05-04 19:46:10.508 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentException: Entity type 'Flight' is defined with a single key property, but 0 values were passed to the 'Find' method.
+   at Microsoft.EntityFrameworkCore.Internal.EntityFinder`1.ValidateKeyPropertiesAndExtractCancellationToken(Object[] keyValues, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Internal.EntityFinder`1.FindAsync(Object[] keyValues, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.FindAsync(Object[] keyValues)
+   at KiwiApp.Application.UseCases.GenericRepository`1.GetById(Int32 id)
+   at KiwiApp.Application.Services.FlightService.GetAllFlightById(Int32 id)
+   at KiwiApp.Api.Endpoints.FlightEndpoints.<>c.<<MapFlightEndpoints>b__0_1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 19:46:10.514 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/105 - 500 null application/json; charset=utf-8 21.3836ms
+2026-05-04 19:46:13.368 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/105 - null null
+2026-05-04 19:46:13.373 +02:00 [INF] Executing endpoint 'HTTP: GET /flights/{id}'
+2026-05-04 19:46:13.376 +02:00 [INF] Executed endpoint 'HTTP: GET /flights/{id}'
+2026-05-04 19:46:13.378 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentException: Entity type 'Flight' is defined with a single key property, but 0 values were passed to the 'Find' method.
+   at Microsoft.EntityFrameworkCore.Internal.EntityFinder`1.ValidateKeyPropertiesAndExtractCancellationToken(Object[] keyValues, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Internal.EntityFinder`1.FindAsync(Object[] keyValues, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.FindAsync(Object[] keyValues)
+   at KiwiApp.Application.UseCases.GenericRepository`1.GetById(Int32 id)
+   at KiwiApp.Application.Services.FlightService.GetAllFlightById(Int32 id)
+   at KiwiApp.Api.Endpoints.FlightEndpoints.<>c.<<MapFlightEndpoints>b__0_1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 19:46:13.382 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/105 - 500 null application/json; charset=utf-8 13.5972ms
+2026-05-04 19:47:14.904 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/105 - null null
+2026-05-04 19:47:14.916 +02:00 [INF] Executing endpoint 'HTTP: GET /flights/{id}'
+2026-05-04 19:47:15.010 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+WHERE "f"."FlightId" = @__p_0
+LIMIT 1
+2026-05-04 19:47:15.016 +02:00 [WRN] Flight with id 105 was not found
+2026-05-04 19:47:15.018 +02:00 [INF] Executed endpoint 'HTTP: GET /flights/{id}'
+2026-05-04 19:47:15.020 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Collections.Generic.KeyNotFoundException: Flight with id 105 was not found
+   at KiwiApp.Application.Services.FlightService.GetAllFlightById(Int32 id)
+   at KiwiApp.Api.Endpoints.FlightEndpoints.<>c.<<MapFlightEndpoints>b__0_1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 19:47:15.024 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/105 - 500 null application/json; charset=utf-8 120.7168ms
+2026-05-04 19:47:43.208 +02:00 [INF] Application is shutting down...
+2026-05-04 19:47:47.106 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-04 19:47:47.377 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-04 19:47:47.381 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-04 19:47:47.383 +02:00 [INF] Hosting environment: Development
+2026-05-04 19:47:47.384 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-04 19:47:49.863 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-04 19:47:50.054 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 304 null null 192.447ms
+2026-05-04 19:47:50.081 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-04 19:47:50.082 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-04 19:47:50.084 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-04 19:47:50.084 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-04 19:47:50.084 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-04 19:47:50.107 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 304 null null 23.211ms
+2026-05-04 19:47:50.107 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 304 null null 25.2677ms
+2026-05-04 19:47:50.107 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 304 null null 26.416ms
+2026-05-04 19:47:50.115 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 304 null null 31.4439ms
+2026-05-04 19:47:50.128 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 304 null null 43.4651ms
+2026-05-04 19:47:50.291 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-04 19:47:50.293 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - null null
+2026-05-04 19:47:50.308 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - 200 628 image/png 15.0931ms
+2026-05-04 19:47:50.313 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-04 19:47:50.535 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 243.8233ms
+2026-05-04 19:47:59.883 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/{id }?id=105 - null null
+2026-05-04 19:47:59.899 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-04 19:47:59.929 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/{id }?id=105 - 404 0 null 45.9101ms
+2026-05-04 19:47:59.937 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5086/flights/%7Bid%20%7D, Response status code: 404
+2026-05-04 19:49:01.060 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/{id }?id=105 - null null
+2026-05-04 19:49:01.067 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/{id }?id=105 - 404 0 null 6.8348ms
+2026-05-04 19:49:01.073 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5086/flights/%7Bid%20%7D, Response status code: 404
+2026-05-04 19:49:01.631 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/{id }?id=105 - null null
+2026-05-04 19:49:01.639 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/{id }?id=105 - 404 0 null 7.7869ms
+2026-05-04 19:49:01.644 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5086/flights/%7Bid%20%7D, Response status code: 404
+2026-05-04 19:49:05.155 +02:00 [INF] Application is shutting down...
+2026-05-04 19:49:08.667 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-04 19:49:08.936 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-04 19:49:08.941 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-04 19:49:08.943 +02:00 [INF] Hosting environment: Development
+2026-05-04 19:49:08.944 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-04 19:49:11.833 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-04 19:49:12.029 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 304 null null 197.5623ms
+2026-05-04 19:49:12.055 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-04 19:49:12.056 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-04 19:49:12.057 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-04 19:49:12.057 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-04 19:49:12.057 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-04 19:49:12.076 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 304 null null 18.9839ms
+2026-05-04 19:49:12.092 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 304 null null 37.7635ms
+2026-05-04 19:49:12.092 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 304 null null 36.1863ms
+2026-05-04 19:49:12.097 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 304 null null 39.8534ms
+2026-05-04 19:49:12.106 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 304 null null 49.0362ms
+2026-05-04 19:49:12.191 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-04 19:49:12.193 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - null null
+2026-05-04 19:49:12.206 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - 304 null null 12.9686ms
+2026-05-04 19:49:12.215 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-04 19:49:12.467 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 275.969ms
+2026-05-04 19:49:18.086 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/105 - null null
+2026-05-04 19:49:18.097 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-04 19:49:18.124 +02:00 [INF] Executing endpoint 'HTTP: GET /flights/{id:int}'
+2026-05-04 19:49:19.363 +02:00 [INF] Executed DbCommand (16ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+WHERE "f"."FlightId" = @__p_0
+LIMIT 1
+2026-05-04 19:49:19.392 +02:00 [WRN] Flight with id 105 was not found
+2026-05-04 19:49:19.395 +02:00 [INF] Executed endpoint 'HTTP: GET /flights/{id:int}'
+2026-05-04 19:49:19.399 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Collections.Generic.KeyNotFoundException: Flight with id 105 was not found
+   at KiwiApp.Application.Services.FlightService.GetAllFlightById(Int32 id) in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Application\Services\FlightService.cs:line 66
+   at KiwiApp.Api.Endpoints.FlightEndpoints.<>c.<<MapFlightEndpoints>b__0_1>d.MoveNext() in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Api\Endpoints\FlightEndpoints.cs:line 25
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 19:49:19.431 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/105 - 500 null application/json; charset=utf-8 1345.3975ms
+2026-05-04 19:50:09.432 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights - null null
+2026-05-04 19:50:09.440 +02:00 [INF] Executing endpoint 'HTTP: GET /flights'
+2026-05-04 19:50:09.506 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+2026-05-04 19:50:09.581 +02:00 [INF] Setting HTTP status code 200.
+2026-05-04 19:50:09.584 +02:00 [INF] Writing value of type 'List`1' as Json.
+2026-05-04 19:50:09.591 +02:00 [INF] Executed endpoint 'HTTP: GET /flights'
+2026-05-04 19:50:09.594 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights - 200 null application/json; charset=utf-8 161.1611ms
+2026-05-04 19:52:08.481 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5086/flights/clear - null null
+2026-05-04 19:52:08.488 +02:00 [INF] Executing endpoint 'HTTP: DELETE /flights/clear'
+2026-05-04 19:52:08.517 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+2026-05-04 19:52:08.633 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "Flights"
+WHERE "FlightId" = @p0
+RETURNING 1;
+2026-05-04 19:52:08.652 +02:00 [INF] Executed endpoint 'HTTP: DELETE /flights/clear'
+2026-05-04 19:52:08.654 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException: The database operation was expected to affect 1 row(s), but actually affected 0 row(s); data may have been modified or deleted since entities were loaded. See https://go.microsoft.com/fwlink/?LinkId=527962 for information on understanding and handling optimistic concurrency exceptions.
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ThrowAggregateUpdateConcurrencyExceptionAsync(RelationalDataReader reader, Int32 commandIndex, Int32 expectedRowsAffected, Int32 rowsAffected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetWithRowsAffectedOnlyAsync(Int32 commandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at KiwiApp.Api.Endpoints.FlightEndpoints.<>c.<<MapFlightEndpoints>b__0_7>d.MoveNext() in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Api\Endpoints\FlightEndpoints.cs:line 104
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 19:52:08.663 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5086/flights/clear - 500 null application/json; charset=utf-8 181.806ms
+2026-05-04 19:52:38.093 +02:00 [INF] Application is shutting down...
+2026-05-04 19:53:18.071 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-04 19:53:18.319 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-04 19:53:18.324 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-04 19:53:18.326 +02:00 [INF] Hosting environment: Development
+2026-05-04 19:53:18.327 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-04 19:53:21.472 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-04 19:53:21.648 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 304 null null 177.8097ms
+2026-05-04 19:53:21.671 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-04 19:53:21.671 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-04 19:53:21.671 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-04 19:53:21.671 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-04 19:53:21.671 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-04 19:53:21.700 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 304 null null 28.6535ms
+2026-05-04 19:53:21.700 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 304 null null 29.7589ms
+2026-05-04 19:53:21.700 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 304 null null 29.9273ms
+2026-05-04 19:53:21.700 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 304 null null 29.3136ms
+2026-05-04 19:53:21.705 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 304 null null 33.2904ms
+2026-05-04 19:53:21.782 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-04 19:53:21.782 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - null null
+2026-05-04 19:53:21.794 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - 304 null null 11.2613ms
+2026-05-04 19:53:21.802 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-04 19:53:21.967 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 184.6062ms
+2026-05-04 19:53:27.423 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5086/flights/clear - null null
+2026-05-04 19:53:27.437 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-04 19:53:27.464 +02:00 [INF] Executing endpoint 'HTTP: DELETE /flights/clear'
+2026-05-04 19:53:28.570 +02:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "Flights" AS "f"
+2026-05-04 19:53:28.588 +02:00 [INF] Setting HTTP status code 200.
+2026-05-04 19:53:28.590 +02:00 [INF] Writing value of type 'String' as Json.
+2026-05-04 19:53:28.597 +02:00 [INF] Executed endpoint 'HTTP: DELETE /flights/clear'
+2026-05-04 19:53:28.608 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5086/flights/clear - 200 null application/json; charset=utf-8 1185.0342ms
+2026-05-04 19:53:35.116 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/import/api - null null
+2026-05-04 19:53:35.133 +02:00 [INF] Executing endpoint 'HTTP: GET /flights/import/api'
+2026-05-04 19:53:35.188 +02:00 [INF] Start processing HTTP request GET http://api.aviationstack.com/v1/flights?*
+2026-05-04 19:53:35.197 +02:00 [INF] Sending HTTP request GET http://api.aviationstack.com/v1/flights?*
+2026-05-04 19:53:36.002 +02:00 [INF] Received HTTP response headers after 796.4027ms - 200
+2026-05-04 19:53:36.005 +02:00 [INF] End processing HTTP request after 823.4433ms - 200
+2026-05-04 19:53:36.342 +02:00 [ERR] Failed executing DbCommand (11ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:53:36.367 +02:00 [ERR] An exception occurred in the database while saving changes for context type 'KiwiApp.Infrastructure.Persistence.AppDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'NOT NULL constraint failed: Flights.FlightId'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'NOT NULL constraint failed: Flights.FlightId'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-05-04 19:53:36.380 +02:00 [INF] Executed endpoint 'HTTP: GET /flights/import/api'
+2026-05-04 19:53:36.387 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'NOT NULL constraint failed: Flights.FlightId'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at KiwiApp.Application.Services.AviationstackImportService.ImportFlightsAsync() in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Application\Services\AviationstackImportService.cs:line 54
+   at KiwiApp.Application.Services.FlightService.ImportFlights() in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Application\Services\FlightService.cs:line 113
+   at KiwiApp.Api.Endpoints.FlightEndpoints.<>c.<<MapFlightEndpoints>b__0_2>d.MoveNext() in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Api\Endpoints\FlightEndpoints.cs:line 32
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 19:53:36.411 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/import/api - 500 null application/json; charset=utf-8 1295.6418ms
+2026-05-04 19:56:04.327 +02:00 [INF] Application is shutting down...
+2026-05-04 19:57:08.780 +02:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA journal_mode = 'wal';
+2026-05-04 19:57:08.812 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-05-04 19:57:08.819 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-05-04 19:57:08.823 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsLock" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK___EFMigrationsLock" PRIMARY KEY,
+    "Timestamp" TEXT NOT NULL
+);
+2026-05-04 19:57:08.826 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-05-04 17:57:08.8259268+00:00');
+SELECT changes();
+2026-05-04 19:57:08.870 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-05-04 19:57:08.878 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-05-04 19:57:08.882 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-05-04 19:57:08.890 +02:00 [INF] Applying migration '20260422125522_InitialCreate'.
+2026-05-04 19:57:08.900 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Bookings" (
+    "BookingId" TEXT NOT NULL CONSTRAINT "PK_Bookings" PRIMARY KEY,
+    "FlightId" TEXT NOT NULL,
+    "Status" INTEGER NOT NULL,
+    "Price" INTEGER NOT NULL,
+    "Email" TEXT NOT NULL
+);
+2026-05-04 19:57:08.903 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Flights" (
+    "FlightId" TEXT NOT NULL CONSTRAINT "PK_Flights" PRIMARY KEY,
+    "From" TEXT NOT NULL,
+    "To" TEXT NOT NULL
+);
+2026-05-04 19:57:08.904 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Passengers" (
+    "PassengerId" TEXT NOT NULL CONSTRAINT "PK_Passengers" PRIMARY KEY,
+    "FirstName" TEXT NOT NULL,
+    "LastName" TEXT NOT NULL,
+    "BookingId" TEXT NULL,
+    CONSTRAINT "FK_Passengers_Bookings_BookingId" FOREIGN KEY ("BookingId") REFERENCES "Bookings" ("BookingId")
+);
+2026-05-04 19:57:08.906 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Passengers_BookingId" ON "Passengers" ("BookingId");
+2026-05-04 19:57:08.908 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260422125522_InitialCreate', '9.0.15');
+2026-05-04 19:57:08.910 +02:00 [INF] Applying migration '20260423184857_AddUsersTable'.
+2026-05-04 19:57:08.915 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Users" (
+    "Id" TEXT NOT NULL CONSTRAINT "PK_Users" PRIMARY KEY,
+    "Passport" TEXT NOT NULL,
+    "FirstName" TEXT NOT NULL,
+    "LastName" TEXT NOT NULL,
+    "Email" TEXT NOT NULL,
+    "Password" TEXT NOT NULL
+);
+2026-05-04 19:57:08.917 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260423184857_AddUsersTable', '9.0.15');
+2026-05-04 19:57:08.919 +02:00 [INF] Applying migration '20260423185214_PassportField'.
+2026-05-04 19:57:08.921 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260423185214_PassportField', '9.0.15');
+2026-05-04 19:57:08.923 +02:00 [INF] Applying migration '20260424091729_AddRefreshToken'.
+2026-05-04 19:57:08.927 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "RefreshTokens" (
+    "Id" TEXT NOT NULL CONSTRAINT "PK_RefreshTokens" PRIMARY KEY,
+    "UserId" TEXT NOT NULL,
+    "Token" TEXT NOT NULL,
+    "ExpiresAt" TEXT NOT NULL,
+    "IsRevoked" INTEGER NOT NULL,
+    CONSTRAINT "FK_RefreshTokens_Users_UserId" FOREIGN KEY ("UserId") REFERENCES "Users" ("Id") ON DELETE CASCADE
+);
+2026-05-04 19:57:08.931 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_RefreshTokens_UserId" ON "RefreshTokens" ("UserId");
+2026-05-04 19:57:08.933 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260424091729_AddRefreshToken', '9.0.15');
+2026-05-04 19:57:08.935 +02:00 [INF] Applying migration '20260424131421_AddRefreshTokens'.
+2026-05-04 19:57:08.939 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260424131421_AddRefreshTokens', '9.0.15');
+2026-05-04 19:57:08.941 +02:00 [INF] Applying migration '20260428090702_AddNullableFields'.
+2026-05-04 19:57:08.951 +02:00 [WRN] The migration operation 'PRAGMA foreign_keys = 0;
+' from migration 'AddNullableFields' cannot be executed in a transaction. If the app is terminated or an unrecoverable error occurs while this operation is being executed then the migration will be left in a partially applied state and would need to be reverted manually before it can be applied again. Create a separate migration that contains just this operation.
+2026-05-04 19:57:08.953 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_Flights" (
+    "FlightId" TEXT NOT NULL CONSTRAINT "PK_Flights" PRIMARY KEY,
+    "From" TEXT NULL,
+    "To" TEXT NULL
+);
+2026-05-04 19:57:08.955 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Flights" ("FlightId", "From", "To")
+SELECT "FlightId", "From", "To"
+FROM "Flights";
+2026-05-04 19:57:08.958 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA foreign_keys = 0;
+2026-05-04 19:57:08.960 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE "Flights";
+2026-05-04 19:57:08.964 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "ef_temp_Flights" RENAME TO "Flights";
+2026-05-04 19:57:08.967 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA foreign_keys = 1;
+2026-05-04 19:57:08.970 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260428090702_AddNullableFields', '9.0.15');
+2026-05-04 19:57:08.972 +02:00 [INF] Applying migration '20260504175625_FixFlightSchema'.
+2026-05-04 19:57:08.978 +02:00 [WRN] The migration operation 'PRAGMA foreign_keys = 0;
+' from migration 'FixFlightSchema' cannot be executed in a transaction. If the app is terminated or an unrecoverable error occurs while this operation is being executed then the migration will be left in a partially applied state and would need to be reverted manually before it can be applied again. Create a separate migration that contains just this operation.
+2026-05-04 19:57:08.980 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_Users" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_Users" PRIMARY KEY AUTOINCREMENT,
+    "Email" TEXT NOT NULL,
+    "FirstName" TEXT NOT NULL,
+    "LastName" TEXT NOT NULL,
+    "Passport" TEXT NOT NULL,
+    "Password" TEXT NOT NULL
+);
+2026-05-04 19:57:08.983 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Users" ("Id", "Email", "FirstName", "LastName", "Passport", "Password")
+SELECT "Id", "Email", "FirstName", "LastName", "Passport", "Password"
+FROM "Users";
+2026-05-04 19:57:08.985 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_RefreshTokens" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_RefreshTokens" PRIMARY KEY AUTOINCREMENT,
+    "ExpiresAt" TEXT NOT NULL,
+    "IsRevoked" INTEGER NOT NULL,
+    "Token" TEXT NOT NULL,
+    "UserId" INTEGER NOT NULL,
+    CONSTRAINT "FK_RefreshTokens_Users_UserId" FOREIGN KEY ("UserId") REFERENCES "Users" ("Id") ON DELETE CASCADE
+);
+2026-05-04 19:57:08.987 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_RefreshTokens" ("Id", "ExpiresAt", "IsRevoked", "Token", "UserId")
+SELECT "Id", "ExpiresAt", "IsRevoked", "Token", "UserId"
+FROM "RefreshTokens";
+2026-05-04 19:57:08.989 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_Passengers" (
+    "PassengerId" TEXT NOT NULL CONSTRAINT "PK_Passengers" PRIMARY KEY,
+    "BookingId" INTEGER NULL,
+    "FirstName" TEXT NOT NULL,
+    "LastName" TEXT NOT NULL,
+    CONSTRAINT "FK_Passengers_Bookings_BookingId" FOREIGN KEY ("BookingId") REFERENCES "Bookings" ("BookingId")
+);
+2026-05-04 19:57:08.991 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Passengers" ("PassengerId", "BookingId", "FirstName", "LastName")
+SELECT "PassengerId", "BookingId", "FirstName", "LastName"
+FROM "Passengers";
+2026-05-04 19:57:08.993 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_Flights" (
+    "FlightId" INTEGER NOT NULL CONSTRAINT "PK_Flights" PRIMARY KEY AUTOINCREMENT,
+    "From" TEXT NULL,
+    "To" TEXT NULL
+);
+2026-05-04 19:57:08.995 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Flights" ("FlightId", "From", "To")
+SELECT "FlightId", "From", "To"
+FROM "Flights";
+2026-05-04 19:57:08.998 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_Bookings" (
+    "BookingId" INTEGER NOT NULL CONSTRAINT "PK_Bookings" PRIMARY KEY AUTOINCREMENT,
+    "Email" TEXT NULL,
+    "FlightId" INTEGER NOT NULL,
+    "Price" TEXT NOT NULL,
+    "Status" INTEGER NOT NULL
+);
+2026-05-04 19:57:09.000 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Bookings" ("BookingId", "Email", "FlightId", "Price", "Status")
+SELECT "BookingId", "Email", "FlightId", "Price", "Status"
+FROM "Bookings";
+2026-05-04 19:57:09.003 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA foreign_keys = 0;
+2026-05-04 19:57:09.005 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE "Users";
+2026-05-04 19:57:09.007 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "ef_temp_Users" RENAME TO "Users";
+2026-05-04 19:57:09.009 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE "RefreshTokens";
+2026-05-04 19:57:09.011 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "ef_temp_RefreshTokens" RENAME TO "RefreshTokens";
+2026-05-04 19:57:09.014 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE "Passengers";
+2026-05-04 19:57:09.017 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "ef_temp_Passengers" RENAME TO "Passengers";
+2026-05-04 19:57:09.019 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE "Flights";
+2026-05-04 19:57:09.021 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "ef_temp_Flights" RENAME TO "Flights";
+2026-05-04 19:57:09.023 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE "Bookings";
+2026-05-04 19:57:09.024 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "ef_temp_Bookings" RENAME TO "Bookings";
+2026-05-04 19:57:09.027 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA foreign_keys = 1;
+2026-05-04 19:57:09.031 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_RefreshTokens_UserId" ON "RefreshTokens" ("UserId");
+2026-05-04 19:57:09.033 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Passengers_BookingId" ON "Passengers" ("BookingId");
+2026-05-04 19:57:09.036 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260504175625_FixFlightSchema', '9.0.15');
+2026-05-04 19:57:09.039 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-05-04 19:57:32.096 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-04 19:57:32.335 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-04 19:57:32.339 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-04 19:57:32.341 +02:00 [INF] Hosting environment: Development
+2026-05-04 19:57:32.343 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-04 19:57:35.229 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-04 19:57:35.402 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 304 null null 174.7417ms
+2026-05-04 19:57:35.424 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-04 19:57:35.425 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-04 19:57:35.426 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-04 19:57:35.426 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-04 19:57:35.427 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-04 19:57:35.448 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 304 null null 24.686ms
+2026-05-04 19:57:35.448 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 304 null null 22.9243ms
+2026-05-04 19:57:35.448 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 304 null null 22.0059ms
+2026-05-04 19:57:35.450 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 304 null null 23.4339ms
+2026-05-04 19:57:35.451 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 304 null null 24.4043ms
+2026-05-04 19:57:35.543 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-04 19:57:35.547 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - null null
+2026-05-04 19:57:35.558 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - 304 null null 10.5978ms
+2026-05-04 19:57:35.568 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-04 19:57:35.738 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 194.9796ms
+2026-05-04 19:57:40.130 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/import/api - null null
+2026-05-04 19:57:40.151 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-04 19:57:40.182 +02:00 [INF] Executing endpoint 'HTTP: GET /flights/import/api'
+2026-05-04 19:57:40.998 +02:00 [INF] Start processing HTTP request GET http://api.aviationstack.com/v1/flights?*
+2026-05-04 19:57:41.003 +02:00 [INF] Sending HTTP request GET http://api.aviationstack.com/v1/flights?*
+2026-05-04 19:57:41.660 +02:00 [INF] Received HTTP response headers after 651.0772ms - 200
+2026-05-04 19:57:41.664 +02:00 [INF] End processing HTTP request after 669.5423ms - 200
+2026-05-04 19:57:42.188 +02:00 [INF] Executed DbCommand (9ms) [Parameters=[@p0='?' (Size = 6), @p1='?' (Size = 59)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.266 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 9), @p1='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.272 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 9), @p1='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.279 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 9), @p1='?' (Size = 7)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.285 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 9), @p1='?' (Size = 7)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.292 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.300 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.306 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.312 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.319 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.324 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.331 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.338 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 8)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.344 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.351 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.357 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.363 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 5)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.369 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.375 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.382 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.387 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.392 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.400 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.405 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Flights" ("From", "To")
+VALUES (@p0, @p1)
+RETURNING "FlightId";
+2026-05-04 19:57:42.453 +02:00 [INF] Setting HTTP status code 200.
+2026-05-04 19:57:42.458 +02:00 [INF] Writing value of type 'String' as Json.
+2026-05-04 19:57:42.470 +02:00 [INF] Executed endpoint 'HTTP: GET /flights/import/api'
+2026-05-04 19:57:42.490 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/import/api - 200 null application/json; charset=utf-8 2359.6557ms
+2026-05-04 19:57:49.432 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights - null null
+2026-05-04 19:57:49.439 +02:00 [INF] Executing endpoint 'HTTP: GET /flights'
+2026-05-04 19:57:49.689 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+2026-05-04 19:57:49.699 +02:00 [INF] Setting HTTP status code 200.
+2026-05-04 19:57:49.702 +02:00 [INF] Writing value of type 'List`1' as Json.
+2026-05-04 19:57:49.710 +02:00 [INF] Executed endpoint 'HTTP: GET /flights'
+2026-05-04 19:57:49.713 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights - 200 null application/json; charset=utf-8 280.7876ms
+2026-05-04 19:57:58.584 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/flights/1 - null null
+2026-05-04 19:57:58.591 +02:00 [INF] Executing endpoint 'HTTP: GET /flights/{id:int}'
+2026-05-04 19:57:58.736 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+WHERE "f"."FlightId" = @__p_0
+LIMIT 1
+2026-05-04 19:57:58.741 +02:00 [INF] Setting HTTP status code 200.
+2026-05-04 19:57:58.746 +02:00 [INF] Writing value of type 'GetFlightResult' as Json.
+2026-05-04 19:57:58.750 +02:00 [INF] Executed endpoint 'HTTP: GET /flights/{id:int}'
+2026-05-04 19:57:58.771 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/flights/1 - 200 null application/json; charset=utf-8 186.3197ms
+2026-05-04 19:58:04.958 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5086/flights/1 - null null
+2026-05-04 19:58:04.963 +02:00 [INF] Executing endpoint 'HTTP: DELETE /flights/{id:int}'
+2026-05-04 19:58:04.972 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+WHERE "f"."FlightId" = @__p_0
+LIMIT 1
+2026-05-04 19:58:04.986 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "Flights"
+WHERE "FlightId" = @p0
+RETURNING 1;
+2026-05-04 19:58:04.994 +02:00 [INF] Setting HTTP status code 204.
+2026-05-04 19:58:04.996 +02:00 [INF] Executed endpoint 'HTTP: DELETE /flights/{id:int}'
+2026-05-04 19:58:04.997 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5086/flights/1 - 204 null null 39.2202ms
+2026-05-04 19:58:52.032 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/search/flight?from=Hasanudin&to=Sentani - null null
+2026-05-04 19:58:52.046 +02:00 [INF] Executing endpoint 'HTTP: GET /search/flight'
+2026-05-04 19:58:52.080 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__from_0='?' (Size = 9), @__to_1='?' (Size = 7)], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+WHERE "f"."From" = @__from_0 AND "f"."To" = @__to_1
+2026-05-04 19:58:52.086 +02:00 [INF] Start processing HTTP request GET https://api.openweathermap.org/data/2.5/weather?*
+2026-05-04 19:58:52.088 +02:00 [INF] Sending HTTP request GET https://api.openweathermap.org/data/2.5/weather?*
+2026-05-04 19:58:52.263 +02:00 [INF] Received HTTP response headers after 173.6874ms - 404
+2026-05-04 19:58:52.265 +02:00 [INF] End processing HTTP request after 179.0333ms - 404
+2026-05-04 19:58:52.271 +02:00 [INF] Executed endpoint 'HTTP: GET /search/flight'
+2026-05-04 19:58:52.276 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Net.Http.HttpRequestException: Response status code does not indicate success: 404 (Not Found).
+   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at KiwiApp.Application.Services.OpenWeatherApiClient.GetWeather(String city) in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Application\Services\OpenWeatherApiClient.cs:line 22
+   at KiwiApp.Application.Services.FlightService.SearchFlight(String from, String to) in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Application\Services\FlightService.cs:line 99
+   at KiwiApp.Api.Endpoints.FlightEndpoints.<>c.<<MapFlightEndpoints>b__0_3>d.MoveNext() in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Api\Endpoints\FlightEndpoints.cs:line 39
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 19:58:52.303 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/search/flight?from=Hasanudin&to=Sentani - 500 null application/json; charset=utf-8 270.7703ms
+2026-05-04 20:00:30.491 +02:00 [INF] Request starting HTTP/1.1 PUT http://localhost:5086/flights/4 - application/json 38
+2026-05-04 20:00:30.495 +02:00 [INF] Executing endpoint 'HTTP: PUT /flights/{id:int}'
+2026-05-04 20:00:30.544 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+WHERE "f"."FlightId" = @__p_0
+LIMIT 1
+2026-05-04 20:00:30.552 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 4), @p1='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Flights" SET "From" = @p0, "To" = @p1
+WHERE "FlightId" = @p2
+RETURNING 1;
+2026-05-04 20:00:30.558 +02:00 [INF] Setting HTTP status code 200.
+2026-05-04 20:00:30.560 +02:00 [INF] Writing value of type 'UpdateFlightResult' as Json.
+2026-05-04 20:00:30.563 +02:00 [INF] Executed endpoint 'HTTP: PUT /flights/{id:int}'
+2026-05-04 20:00:30.564 +02:00 [INF] Request finished HTTP/1.1 PUT http://localhost:5086/flights/4 - 200 null application/json; charset=utf-8 73.1732ms
+2026-05-04 20:00:42.805 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/search/flight?from=Oslo&to=Berlin - null null
+2026-05-04 20:00:42.809 +02:00 [INF] Executing endpoint 'HTTP: GET /search/flight'
+2026-05-04 20:00:42.812 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__from_0='?' (Size = 4), @__to_1='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+WHERE "f"."From" = @__from_0 AND "f"."To" = @__to_1
+2026-05-04 20:00:42.815 +02:00 [INF] Start processing HTTP request GET https://api.openweathermap.org/data/2.5/weather?*
+2026-05-04 20:00:42.818 +02:00 [INF] Sending HTTP request GET https://api.openweathermap.org/data/2.5/weather?*
+2026-05-04 20:00:42.954 +02:00 [INF] Received HTTP response headers after 134.6245ms - 200
+2026-05-04 20:00:42.957 +02:00 [INF] End processing HTTP request after 141.52ms - 200
+2026-05-04 20:00:42.969 +02:00 [INF] Executed endpoint 'HTTP: GET /search/flight'
+2026-05-04 20:00:42.973 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at KiwiApp.Application.Services.OpenWeatherApiClient.GetWeather(String city) in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Application\Services\OpenWeatherApiClient.cs:line 28
+   at KiwiApp.Application.Services.FlightService.SearchFlight(String from, String to) in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Application\Services\FlightService.cs:line 99
+   at KiwiApp.Api.Endpoints.FlightEndpoints.<>c.<<MapFlightEndpoints>b__0_3>d.MoveNext() in C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp\Api\Endpoints\FlightEndpoints.cs:line 39
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 20:00:42.979 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/search/flight?from=Oslo&to=Berlin - 500 null application/json; charset=utf-8 174.5522ms
+2026-05-04 20:03:48.278 +02:00 [INF] Application is shutting down...
+2026-05-04 20:04:21.762 +02:00 [INF] User profile is available. Using 'C:\Users\unity\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-04 20:04:22.035 +02:00 [INF] Now listening on: http://localhost:5086
+2026-05-04 20:04:22.041 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-04 20:04:22.043 +02:00 [INF] Hosting environment: Development
+2026-05-04 20:04:22.044 +02:00 [INF] Content root path: C:\Users\unity\Repositories\KiwiApplication\App\src\KiwiApp
+2026-05-04 20:04:24.865 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.html - null null
+2026-05-04 20:04:25.030 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.html - 304 null null 167.0884ms
+2026-05-04 20:04:25.054 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.js - null null
+2026-05-04 20:04:25.054 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - null null
+2026-05-04 20:04:25.054 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - null null
+2026-05-04 20:04:25.054 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/index.css - null null
+2026-05-04 20:04:25.054 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-04 20:04:25.067 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.js - 304 null null 14.2701ms
+2026-05-04 20:04:25.093 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/index.css - 304 null null 40.3192ms
+2026-05-04 20:04:25.093 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui.css - 304 null null 40.3192ms
+2026-05-04 20:04:25.093 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-standalone-preset.js - 304 null null 40.2758ms
+2026-05-04 20:04:25.093 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/swagger-ui-bundle.js - 304 null null 40.2428ms
+2026-05-04 20:04:25.200 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - null null
+2026-05-04 20:04:25.200 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - null null
+2026-05-04 20:04:25.216 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/favicon-32x32.png - 304 null null 16.4094ms
+2026-05-04 20:04:25.222 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-05-04 20:04:25.439 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 239.1635ms
+2026-05-04 20:04:34.514 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/search/flight?from=Oslo&to=Berlin - null null
+2026-05-04 20:04:34.520 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-05-04 20:04:34.556 +02:00 [INF] Executing endpoint 'HTTP: GET /search/flight'
+2026-05-04 20:04:36.198 +02:00 [INF] Executed DbCommand (21ms) [Parameters=[@__from_0='?' (Size = 4), @__to_1='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+WHERE "f"."From" = @__from_0 AND "f"."To" = @__to_1
+2026-05-04 20:04:36.296 +02:00 [INF] Start processing HTTP request GET https://api.openweathermap.org/data/2.5/weather?*
+2026-05-04 20:04:36.303 +02:00 [INF] Sending HTTP request GET https://api.openweathermap.org/data/2.5/weather?*
+2026-05-04 20:04:36.589 +02:00 [INF] Received HTTP response headers after 279.4106ms - 200
+2026-05-04 20:04:36.597 +02:00 [INF] End processing HTTP request after 306.001ms - 200
+2026-05-04 20:04:36.645 +02:00 [INF] Start processing HTTP request GET https://api.openweathermap.org/data/2.5/weather?*
+2026-05-04 20:04:36.649 +02:00 [INF] Sending HTTP request GET https://api.openweathermap.org/data/2.5/weather?*
+2026-05-04 20:04:36.692 +02:00 [INF] Received HTTP response headers after 39.5557ms - 200
+2026-05-04 20:04:36.698 +02:00 [INF] End processing HTTP request after 52.8757ms - 200
+2026-05-04 20:04:36.707 +02:00 [INF] Setting HTTP status code 200.
+2026-05-04 20:04:36.713 +02:00 [INF] Writing value of type 'SearchFlightResult' as Json.
+2026-05-04 20:04:36.738 +02:00 [INF] Executed endpoint 'HTTP: GET /search/flight'
+2026-05-04 20:04:36.756 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/search/flight?from=Oslo&to=Berlin - 200 null application/json; charset=utf-8 2241.1159ms
+2026-05-04 20:04:59.070 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/bookings - null null
+2026-05-04 20:04:59.085 +02:00 [INF] Executing endpoint 'HTTP: GET /bookings'
+2026-05-04 20:04:59.229 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "b"."BookingId", "b"."Email", "b"."FlightId", "b"."Price", "b"."Status", "p"."PassengerId", "p"."BookingId", "p"."FirstName", "p"."LastName"
+FROM "Bookings" AS "b"
+LEFT JOIN "Passengers" AS "p" ON "b"."BookingId" = "p"."BookingId"
+ORDER BY "b"."BookingId"
+2026-05-04 20:04:59.233 +02:00 [INF] Executed endpoint 'HTTP: GET /bookings'
+2026-05-04 20:04:59.235 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/bookings - 200 null application/json; charset=utf-8 164.4107ms
+2026-05-04 20:06:30.696 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/bookings - application/json 339
+2026-05-04 20:06:30.712 +02:00 [INF] Executing endpoint 'HTTP: POST /bookings'
+2026-05-04 20:06:30.736 +02:00 [INF] Executed endpoint 'HTTP: POST /bookings'
+2026-05-04 20:06:30.738 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Http.BadHttpRequestException: Failed to read parameter "CreateBookingRequest request" from the request body as JSON.
+ ---> System.Text.Json.JsonException: The JSON value could not be converted to System.Guid. Path: $.passengers[1].passengerId | LineNumber: 8 | BytePositionInLine: 60.
+ ---> System.FormatException: The JSON value is not in a supported Guid format.
+   at System.Text.Json.ThrowHelper.ThrowFormatException(DataType dataType)
+   at System.Text.Json.Utf8JsonReader.GetGuid()
+   at System.Text.Json.Serialization.Converters.GuidConverter.Read(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options)
+   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.ReadJsonAndSetMember(Object obj, ReadStack& state, Utf8JsonReader& reader)
+   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, TCollection& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.ReadJsonAndSetMember(Object obj, ReadStack& state, Utf8JsonReader& reader)
+   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   --- End of inner exception stack trace ---
+   at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, Utf8JsonReader& reader, Exception ex)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize[TReadBufferState,TStream](TReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync[TReadBufferState,TStream](TStream utf8Json, TReadBufferState bufferState, CancellationToken cancellationToken)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsObjectAsync(Stream utf8Json, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.HttpRequestJsonExtensions.ReadFromJsonAsync(HttpRequest request, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.HttpRequestJsonExtensions.ReadFromJsonAsync(HttpRequest request, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<HandleRequestBodyAndCompileRequestDelegateForJson>g__TryReadBodyAsync|101_0(HttpContext httpContext, Type bodyType, String parameterTypeName, String parameterName, Boolean allowEmptyRequestBody, Boolean throwOnBadRequest, JsonTypeInfo jsonTypeInfo)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.Log.InvalidJsonRequestBody(HttpContext httpContext, String parameterTypeName, String parameterName, Exception exception, Boolean shouldThrow)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<HandleRequestBodyAndCompileRequestDelegateForJson>g__TryReadBodyAsync|101_0(HttpContext httpContext, Type bodyType, String parameterTypeName, String parameterName, Boolean allowEmptyRequestBody, Boolean throwOnBadRequest, JsonTypeInfo jsonTypeInfo)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<>c__DisplayClass101_2.<<HandleRequestBodyAndCompileRequestDelegateForJson>b__2>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 20:06:30.764 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/bookings - 500 null application/json; charset=utf-8 68.3209ms
+2026-05-04 20:07:50.877 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/bookings - application/json 272
+2026-05-04 20:07:50.881 +02:00 [INF] Executing endpoint 'HTTP: POST /bookings'
+2026-05-04 20:07:50.883 +02:00 [INF] Executed endpoint 'HTTP: POST /bookings'
+2026-05-04 20:07:50.885 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Http.BadHttpRequestException: Failed to read parameter "CreateBookingRequest request" from the request body as JSON.
+ ---> System.Text.Json.JsonException: The JSON value could not be converted to System.Guid. Path: $.passengers[0].passengerId | LineNumber: 3 | BytePositionInLine: 26.
+ ---> System.FormatException: The JSON value is not in a supported Guid format.
+   at System.Text.Json.ThrowHelper.ThrowFormatException(DataType dataType)
+   at System.Text.Json.Utf8JsonReader.GetGuid()
+   at System.Text.Json.Serialization.Converters.GuidConverter.Read(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options)
+   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.ReadJsonAndSetMember(Object obj, ReadStack& state, Utf8JsonReader& reader)
+   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, TCollection& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.ReadJsonAndSetMember(Object obj, ReadStack& state, Utf8JsonReader& reader)
+   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   --- End of inner exception stack trace ---
+   at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, Utf8JsonReader& reader, Exception ex)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize[TReadBufferState,TStream](TReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync[TReadBufferState,TStream](TStream utf8Json, TReadBufferState bufferState, CancellationToken cancellationToken)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsObjectAsync(Stream utf8Json, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.HttpRequestJsonExtensions.ReadFromJsonAsync(HttpRequest request, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.HttpRequestJsonExtensions.ReadFromJsonAsync(HttpRequest request, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<HandleRequestBodyAndCompileRequestDelegateForJson>g__TryReadBodyAsync|101_0(HttpContext httpContext, Type bodyType, String parameterTypeName, String parameterName, Boolean allowEmptyRequestBody, Boolean throwOnBadRequest, JsonTypeInfo jsonTypeInfo)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.Log.InvalidJsonRequestBody(HttpContext httpContext, String parameterTypeName, String parameterName, Exception exception, Boolean shouldThrow)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<HandleRequestBodyAndCompileRequestDelegateForJson>g__TryReadBodyAsync|101_0(HttpContext httpContext, Type bodyType, String parameterTypeName, String parameterName, Boolean allowEmptyRequestBody, Boolean throwOnBadRequest, JsonTypeInfo jsonTypeInfo)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<>c__DisplayClass101_2.<<HandleRequestBodyAndCompileRequestDelegateForJson>b__2>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-05-04 20:07:50.899 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/bookings - 500 null application/json; charset=utf-8 22.2508ms
+2026-05-04 20:08:44.060 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5086/bookings - application/json 216
+2026-05-04 20:08:44.065 +02:00 [INF] Executing endpoint 'HTTP: POST /bookings'
+2026-05-04 20:08:44.135 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "f"."FlightId", "f"."From", "f"."To"
+FROM "Flights" AS "f"
+WHERE "f"."FlightId" = @__p_0
+LIMIT 1
+2026-05-04 20:08:44.361 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (Size = 24), @p2='?' (DbType = Int32), @p3='?' (DbType = Decimal), @p4='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Bookings" ("BookingId", "Email", "FlightId", "Price", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2026-05-04 20:08:44.368 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (Size = 4), @p3='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Passengers" ("PassengerId", "BookingId", "FirstName", "LastName")
+VALUES (@p0, @p1, @p2, @p3);
+2026-05-04 20:08:44.373 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (Size = 4), @p3='?' (Size = 8)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Passengers" ("PassengerId", "BookingId", "FirstName", "LastName")
+VALUES (@p0, @p1, @p2, @p3);
+2026-05-04 20:08:44.392 +02:00 [INF] Setting HTTP status code 201.
+2026-05-04 20:08:44.395 +02:00 [INF] Writing value of type 'CreateBookingResponse' as Json.
+2026-05-04 20:08:44.400 +02:00 [INF] Executed endpoint 'HTTP: POST /bookings'
+2026-05-04 20:08:44.403 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5086/bookings - 201 null application/json; charset=utf-8 342.3884ms
+2026-05-04 20:09:35.477 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/bookings/1778400741 - null null
+2026-05-04 20:09:35.484 +02:00 [INF] Executing endpoint 'HTTP: GET /bookings/{id}'
+2026-05-04 20:09:35.499 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "b"."BookingId", "b"."Email", "b"."FlightId", "b"."Price", "b"."Status"
+FROM "Bookings" AS "b"
+WHERE "b"."BookingId" = @__p_0
+LIMIT 1
+2026-05-04 20:09:35.507 +02:00 [INF] Setting HTTP status code 200.
+2026-05-04 20:09:35.509 +02:00 [INF] Writing value of type 'GetBookingResult' as Json.
+2026-05-04 20:09:35.513 +02:00 [INF] Executed endpoint 'HTTP: GET /bookings/{id}'
+2026-05-04 20:09:35.515 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/bookings/1778400741 - 200 null application/json; charset=utf-8 38.006ms
+2026-05-04 20:11:34.215 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5086/bookings/1778400741 - null null
+2026-05-04 20:11:34.219 +02:00 [INF] Executing endpoint 'HTTP: GET /bookings/{id}'
+2026-05-04 20:11:34.249 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "b0"."BookingId", "b0"."Email", "b0"."FlightId", "b0"."Price", "b0"."Status", "p"."PassengerId", "p"."BookingId", "p"."FirstName", "p"."LastName"
+FROM (
+    SELECT "b"."BookingId", "b"."Email", "b"."FlightId", "b"."Price", "b"."Status"
+    FROM "Bookings" AS "b"
+    WHERE "b"."BookingId" = @__id_0
+    LIMIT 1
+) AS "b0"
+LEFT JOIN "Passengers" AS "p" ON "b0"."BookingId" = "p"."BookingId"
+ORDER BY "b0"."BookingId"
+2026-05-04 20:11:34.260 +02:00 [INF] Setting HTTP status code 200.
+2026-05-04 20:11:34.262 +02:00 [INF] Writing value of type 'GetBookingResult' as Json.
+2026-05-04 20:11:34.268 +02:00 [INF] Executed endpoint 'HTTP: GET /bookings/{id}'
+2026-05-04 20:11:34.270 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5086/bookings/1778400741 - 200 null application/json; charset=utf-8 54.7219ms
+2026-05-04 20:40:47.043 +02:00 [INF] Application is shutting down...
