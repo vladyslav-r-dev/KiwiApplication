@@ -18,10 +18,12 @@ public class Booking
     
     public string? Email { get; set; }
 
+    public int UserId { get; set; }    
+
     public static Booking CreateBooking(
         int flightId,
         List<Passenger> passengers,
-        string email)
+        string email, int userId)
     {
         return new Booking
         {
@@ -30,7 +32,8 @@ public class Booking
             Passengers = passengers,
             Price = 100,
             Email = email,
-            Status = BookingStatus.Pending
+            Status = BookingStatus.Pending,
+            UserId = userId
         };
     }
     

@@ -1,0 +1,21 @@
+<p>Flight Details</p>
+
+@if (loading()) {
+  <p>Loading...</p>
+}
+@else if (error()) {
+  <p>{{ error() }}</p>
+}
+@else if (flight(); as currentFlight) {
+  <p>{{ currentFlight.from }} - {{ currentFlight.to }}</p>
+  
+  @if (weatherFrom(); as weather) {
+  <p>From weather:</p>
+  <p>{{ weather.city }} — {{ weather.temp }}°C — {{ weather.description }}</p>
+}
+
+@if (weatherTo(); as weather) {
+  <p>To weather:</p>
+  <p>{{ weather.city }} — {{ weather.temp }}°C — {{ weather.description }}</p>
+}
+}

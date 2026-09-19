@@ -129,13 +129,13 @@ public class FlightService(IGenericRepository<Flight> repository,
         return true;
     }
     
-    public async Task<SearchFlightResult?> SearchFlight(string from, string to)
+    public async Task<SearchFlightResult?> SearchFlight(string? from, string? to)
     {
         var search = await flightRepository.GetFlightFromTo(from, to);
         
-        var weatherFrom = await openWeatherApiClient.GetWeather(from);
+        var weatherFrom = from is not null ? await openWeatherApiClient.GetWeather(from) : null;
         
-        var weatherTo = await openWeatherApiClient.GetWeather(to);
+        var weatherTo = to is not null ? await openWeatherApiClient.GetWeather(to) : null;
 
         return new SearchFlightResult
         {

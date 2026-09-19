@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Security.Claims;
+using FluentValidation;
 using KiwiApp.Api.Contracts;
 using KiwiApp.Api.Contracts.Booking;
 using KiwiApp.Application.Services;
@@ -12,10 +13,19 @@ public static class BookingEndpoints
 {
     public static void MapBookingsEndpoints(this WebApplication app)
     {
-        app.MapGet("/bookings", async (BookingService bookingService) =>
+        app.MapGet("/bookings", async (BookingService bookingService, ClaimsPrincipal user) =>
         {
-            return await bookingService.GetAllBookings();
-        });
+            var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+            if(userIdClaim is null || !int.TryParse(userIdClaim.Value, out var userId))
+            {
+                return Results.Unauthorized();
+            }
+
+            var result = await bookingService.GetBookingByUserId(userId); 
+
+            return Results.Ok(result);
+        })
+        .RequireAuthorization();
         
         app.MapGet("/bookings/{id}", async (int id, BookingService bookingService) =>
         {
@@ -25,48 +35,56 @@ public static class BookingEndpoints
         });
 
         app.MapPost("/bookings", async (CreateBookingRequest request, IValidator<CreateBookingRequest> validator,
-            BookingService service, StripeCheckoutService stripeCheckoutService) =>
+            BookingService service, StripeCheckoutService stripeCheckoutService, ClaimsPrincipal user) =>
         {
             var validation = await validator.ValidateAsync(request);
-            
+
             if (!validation.IsValid)
             {
                 return Results.BadRequest(validation.Errors);
             }
 
-            var command = new CreateBookingCommand
-            {
-                FlightId = request.FlightId,
-                Passengers = request.Passengers,
-                Email = request.Email
-            };
-            
-            var result = await service.CreateBooking(command);
-            
-            if (result is null)
-                return Results.NotFound();
-            
-            var checkoutSession = await stripeCheckoutService.CreateCheckoutSessionAsync(
-                result.BookingId,
-                request.Email,
-                result.Price
-            );
+            var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
 
-            await service.SetStripeCheckoutSessionId(
-                result.BookingId,
-                checkoutSession.SessionId
-            );
-            
-            var response = new CreateBookingResponse
+            if (userIdClaim is not null && int.TryParse(userIdClaim.Value, out var userId))
             {
-                BookingId = result.BookingId,
-                Status = BookingStatus.Pending,
-                Price = result.Price,
-                CheckoutUrl = checkoutSession.CheckoutUrl
-            };
+                var command = new CreateBookingCommand
+                {
+                    FlightId = request.FlightId,
+                    Passengers = request.Passengers,
+                    Email = request.Email,
+                    UserId = userId
+                };
 
-            return Results.Created($"/bookings/{response.BookingId}", response);
-        });
+                var result = await service.CreateBooking(command);
+
+                if (result is null)
+                    return Results.NotFound();
+
+                var checkoutSession = await stripeCheckoutService.CreateCheckoutSessionAsync(
+                    result.BookingId,
+                    request.Email,
+                    result.Price
+                );
+
+                await service.SetStripeCheckoutSessionId(
+                    result.BookingId,
+                    checkoutSession.SessionId
+                );
+
+                var response = new CreateBookingResponse
+                {
+                    BookingId = result.BookingId,
+                    Status = BookingStatus.Pending,
+                    Price = result.Price,
+                    CheckoutUrl = checkoutSession.CheckoutUrl
+                };
+
+                return Results.Created($"/bookings/{response.BookingId}", response);
+            }
+            return Results.Unauthorized();
+        })
+        .RequireAuthorization();
         
         app.MapPost("/stripe/webhook", async (StripeWebhookService stripeWebhookService, HttpRequest request) =>
         {

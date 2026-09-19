@@ -47,50 +47,87 @@ public static class AuthEndpoints
             }
         });
 
-        app.MapPost("/auth/login", async (
-            LoginUserDto request,
-            LoginValidator validator,
-            AuthService authService) =>
-        {
-            var validation = await validator.ValidateAsync(request);
-
-            if (!validation.IsValid)
+        app.MapPost("/auth/login",
+            async (
+                LoginUserDto request,
+                LoginValidator validator,
+                AuthService authService,
+                HttpContext context) =>
             {
-                return Results.BadRequest(validation.Errors);
-            }
+                var validation = await validator.ValidateAsync(request);
 
-            var result = await authService.Login(new LoginCommand
-            {
-                Email = request.Email,
-                Password = request.Password
+                if (!validation.IsValid)
+                {
+                    return Results.BadRequest(validation.Errors);
+                }
+
+                var result = await authService.Login(new LoginCommand
+                {
+                    Email = request.Email,
+                    Password = request.Password
+                });
+
+                context.Response.Cookies.Append(
+                    "refreshToken",
+                    result.RefreshToken,
+                    new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = false,
+                        SameSite = SameSiteMode.Strict,
+                        Expires = DateTimeOffset.UtcNow.AddDays(7)
+                    });
+
+                return Results.Ok(new
+                {
+                    accessToken = result.AccessToken
+                });
             });
-
-            return Results.Ok(result);
-        });
 
         app.MapPost("/auth/logout", async (
             RefreshRequest request,
-            AuthService authService) =>
+            AuthService authService, HttpContext context) =>
         {
+            var refreshToken = context.Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrWhiteSpace(refreshToken))
+            {
+                 return Results.Unauthorized();
+            }
+
             await authService.Logout(new RefreshCommand
             {
-                RefreshToken = request.RefreshToken
+                RefreshToken = refreshToken
             });
+
+            context.Response.Cookies.Delete("refreshToken");
 
             return Results.Ok();
-        });
-
-        app.MapPost("/auth/refresh", async (
-            RefreshRequest request,
-            AuthService authService) =>
-        {
-            var result = await authService.Refresh(new RefreshCommand 
-            {
-                RefreshToken = request.RefreshToken 
             });
 
-            return Results.Ok(result);
-        });
+        app.MapPost("/auth/refresh",
+            async (
+                RefreshRequest request,
+                AuthService authService,
+                HttpContext context) =>
+            {
+                var refreshToken = context.Request.Cookies["refreshToken"];
+
+                if (string.IsNullOrWhiteSpace(refreshToken))
+                {
+                    return Results.Unauthorized();
+                }
+
+                var result = await authService.Refresh(new RefreshCommand
+                {
+                    RefreshToken = refreshToken
+                });
+
+                return Results.Ok(new
+                {
+                    accessToken = result.AccessToken
+                });
+            });
         
         app.MapPost("/auth/google", async (
             GoogleUserDto request,

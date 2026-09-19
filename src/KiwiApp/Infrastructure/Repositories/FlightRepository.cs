@@ -10,7 +10,7 @@ public class FlightRepository(AppDbContext db) : GenericRepository<Flight>(db), 
 {
     private readonly AppDbContext _db = db;
 
-    public async Task<List<Flight>> GetFlightFromTo(string from, string to)
+    public async Task<List<Flight>> GetFlightFromTo(string? from, string? to)
     {
         var search = _db.Flights.AsQueryable();
         

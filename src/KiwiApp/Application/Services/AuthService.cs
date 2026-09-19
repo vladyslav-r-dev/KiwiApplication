@@ -112,11 +112,6 @@ public class AuthService(
 
             throw new InvalidOperationException("User already exists");
         }
-
-        if (existingUser?.Password is null)
-        {
-            throw new KeyNotFoundException("Invalid email or password");
-        }
         
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
         

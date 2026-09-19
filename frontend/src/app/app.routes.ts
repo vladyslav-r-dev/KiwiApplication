@@ -1,0 +1,41 @@
+import { Routes } from '@angular/router';
+import { Flights } from "./pages/flights/flights";
+import { Home } from "./pages/home/home";
+import { FlightDetails } from "./pages/flight-details/flight-details";
+import { Register } from './pages/register/register';
+import { Login } from './pages/login/login';
+import { authGuard } from './guards/auth-guard';
+import { MyBookings } from './pages/my-bookings/my-bookings';
+
+export const routes: Routes = [
+  {
+    path: 'home',
+    component: Home,
+    title: 'Home Page',
+  },
+  {
+    path: 'flights',
+    component: Flights,
+    title: 'Flights Page',
+  },
+  {
+    path: 'flights/:id',
+    component: FlightDetails,
+    title: 'Flight Details',
+  },
+  {
+    path: 'register',
+    component: Register,
+    title: 'Register Page',
+  },
+  {
+    path: 'login',
+    component: Login,
+    title: 'Login Page',
+  },
+  {
+  path: 'bookings',
+  component: MyBookings,
+  canActivate: [authGuard]
+},
+];

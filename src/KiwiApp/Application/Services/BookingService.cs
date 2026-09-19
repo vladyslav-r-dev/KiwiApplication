@@ -23,7 +23,7 @@ public class BookingService(
             throw new KeyNotFoundException($"Flight with id {command.FlightId} was not found");
         }
         
-        var booking = Booking.CreateBooking(command.FlightId, command.Passengers, command.Email);
+        var booking = Booking.CreateBooking(command.FlightId, command.Passengers, command.Email, command.UserId);
         
         await bookingRepository.Add(booking);
         
@@ -180,5 +180,10 @@ public class BookingService(
     public async Task<List<Booking>> GetPendingBookingsWithStripeSession()
     {
         return await bookingRepository.GetPendingBookingsWithStripeSession();
+    }
+
+    public async Task<List<Booking>> GetBookingByUserId(int userId)
+    {
+         return await bookingRepository.GetBookingsByID(userId);
     }
 }

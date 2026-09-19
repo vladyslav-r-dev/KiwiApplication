@@ -30,4 +30,11 @@ public class BookingRepository(AppDbContext db)
             .Where(b => b.StripeCheckoutSessionId != null)
             .ToListAsync();
     }
+
+    public Task<List<Booking>> GetBookingsByID(int userId)
+    {
+        return db.Bookings
+        .Where(booking => booking.UserId == userId)
+        .ToListAsync();
+    }
 }

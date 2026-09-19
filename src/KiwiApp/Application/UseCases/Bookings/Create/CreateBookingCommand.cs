@@ -9,4 +9,6 @@ public class CreateBookingCommand
     public List<Passenger> Passengers { get; set; } = [];
     
     public string Email { get; set; }
+
+    public int UserId { get; set; }
 }

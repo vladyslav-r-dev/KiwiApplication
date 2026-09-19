@@ -35,7 +35,7 @@ public static class FlightEndpoints
             
         }).RequireAuthorization(policy => policy.RequireRole("Admin"));
 
-        app.MapGet("/search/flight", async (FlightService service, string from, string to) =>
+        app.MapGet("/search/flight", async (FlightService service, string? from, string? to) =>
         {
             var result = await service.SearchFlight(from, to);
             
