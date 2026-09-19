@@ -17,7 +17,19 @@ export enum Status {
 }
 
 export interface Passenger{
-    id: string;
-    name: string;
-    lastname: string;
+    firstName: string;
+    lastName: string;
+}
+
+export interface CreateBookingRequest {
+  flightId: number;
+  email: string;
+  passengers: Passenger[];
+}
+
+export interface CreateBookingResponse {
+  bookingId: number;
+  status: Status;
+  price: number;
+  checkoutUrl: string;
 }
