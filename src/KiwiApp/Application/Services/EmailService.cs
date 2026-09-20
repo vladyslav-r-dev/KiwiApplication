@@ -1,6 +1,6 @@
 ﻿using KiwiApp.Application.Interfaces;
-using SendGrid;
-using SendGrid.Helpers.Mail;
+using MailKit.Net.Smtp;
+using MimeKit;
 
 namespace KiwiApp.Application.Services;
 
@@ -12,60 +12,63 @@ public class EmailService(IConfiguration configuration) : IEmailService
         int flightId,
         byte[] pdfBytes)
     {
-        var apiKey = configuration["SendGrid:SendGridKey"];
+        var host = configuration["Email:SmtpHost"] ?? "localhost";
+        var port = int.TryParse(configuration["Email:SmtpPort"], out var parsedPort)
+            ? parsedPort
+            : 1025;
 
-        var client = new SendGridClient(apiKey);
+        var fromAddress = configuration["Email:From"] ?? "noreply@kiwiapp.local";
 
-        var from = new EmailAddress("unitydiee@gmail.com", "KiwiApp");
-        
-        var to = new EmailAddress(clientEmail, clientName);
+        var message = new MimeMessage();
 
-        var subject = "Your KiwiApp booking confirmation";
+        message.From.Add(new MailboxAddress("KiwiApp", fromAddress));
+        message.To.Add(new MailboxAddress(clientName, clientEmail));
+        message.Subject = "Your KiwiApp booking confirmation";
 
-        var plainTextContent = $"""
-                                Hello, {clientName}!
-
-                                Your booking has been paid successfully.
-
-                                Flight ID: {flightId}
-
-                                Your booking confirmation PDF is attached.
-
-                                Thank you for choosing KiwiApp.
-                                """;
-
-        var htmlContent = $"""
-                           <p>Hello, <strong>{clientName}</strong>!</p>
-
-                           <p>Your booking has been paid successfully.</p>
-
-                           <p><strong>Flight ID:</strong> {flightId}</p>
-
-                           <p>Your booking confirmation PDF is attached.</p>
-
-                           <p>Thank you for choosing KiwiApp.</p>
-                           """;
-
-        var msg = MailHelper.CreateSingleEmail(
-            from,
-            to,
-            subject,
-            plainTextContent,
-            htmlContent
-        );
-
-        msg.AddAttachment(
-            "booking-confirmation.pdf",
-            Convert.ToBase64String(pdfBytes),
-            "application/pdf"
-        );
-
-        var response = await client.SendEmailAsync(msg);
-
-        if (!response.IsSuccessStatusCode)
+        var bodyBuilder = new BodyBuilder
         {
-            var body = await response.Body.ReadAsStringAsync();
-            throw new InvalidOperationException($"SendGrid email failed: {response.StatusCode}. {body}");
-        }
+            TextBody = $"""
+                        Hello, {clientName}!
+
+                        Your booking has been paid successfully.
+
+                        Flight ID: {flightId}
+
+                        Your booking confirmation PDF is attached.
+
+                        Thank you for choosing KiwiApp.
+                        """,
+
+            HtmlBody = $"""
+                        <p>Hello, <strong>{clientName}</strong>!</p>
+
+                        <p>Your booking has been paid successfully.</p>
+
+                        <p><strong>Flight ID:</strong> {flightId}</p>
+
+                        <p>Your booking confirmation PDF is attached.</p>
+
+                        <p>Thank you for choosing KiwiApp.</p>
+                        """
+        };
+
+        bodyBuilder.Attachments.Add(
+            "booking-confirmation.pdf",
+            pdfBytes,
+            ContentType.Parse("application/pdf")
+        );
+
+        message.Body = bodyBuilder.ToMessageBody();
+
+        using var smtpClient = new SmtpClient();
+
+        await smtpClient.ConnectAsync(
+            host,
+            port,
+            MailKit.Security.SecureSocketOptions.None
+        );
+
+        await smtpClient.SendAsync(message);
+        await smtpClient.DisconnectAsync(true);
     }
 }

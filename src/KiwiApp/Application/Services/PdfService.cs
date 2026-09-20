@@ -1,4 +1,6 @@
-﻿using IronPdf;
+﻿using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace KiwiApp.Application.Services;
 
@@ -10,45 +12,25 @@ public class PdfService
         int flightId
     )
     {
-        var html = $$"""
+        var document = Document.Create(container =>
+        {
+            container.Page(page =>
+            {
+                page.Size(PageSizes.A4);
+                page.Margin(2, Unit.Centimetre);
+                page.Content().Column(column =>
+                {
+                    column.Item().Text("Booking Confirmation").FontSize(24).Bold();
+                    column.Item().Text($"Passenger: {clientName}");
+                    column.Item().Text($"Email: {clientEmail}");
+                    column.Item().Text($"Flight ID: {flightId}");
+                    column.Item().Text("Thank you for choosing KiwiApp.");
+                });
+            });
+        });
 
-                     <html>
-                     <head>
-                         <style>
-                             body {
-                                 font-family: Arial, sans-serif;
-                                 padding: 40px;
-                             }
-
-                             .card {
-                                 border: 1px solid #ddd;
-                                 border-radius: 12px;
-                                 padding: 24px;
-                             }
-
-                             h1 {
-                                 color: #2d7a46;
-                             }
-                         </style>
-                     </head>
-                     <body>
-                         <div class="card">
-                             <h1>Booking Confirmation</h1>
-
-                             <p><strong>Passenger:</strong> {{clientName}}</p>
-                             <p><strong>Email:</strong> {{clientEmail}}</p>
-                             <p><strong>Flight ID:</strong> {{flightId}}</p>
-
-                             <p>Thank you for choosing KiwiApp.</p>
-                         </div>
-                     </body>
-                     </html>
-                     """;
-
-        var renderer = new ChromePdfRenderer();
-
-        var pdf = renderer.RenderHtmlAsPdf(html);
-
-        return pdf.BinaryData;
+        using var memoryStream = new MemoryStream();
+        document.GeneratePdf(memoryStream);
+        return memoryStream.ToArray();
     }
 }
