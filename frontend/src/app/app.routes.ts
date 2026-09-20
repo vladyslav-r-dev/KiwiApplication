@@ -6,6 +6,8 @@ import { Register } from './pages/register/register';
 import { Login } from './pages/login/login';
 import { authGuard } from './guards/auth-guard';
 import { MyBookings } from './pages/my-bookings/my-bookings';
+import { PaymentSuccess } from './payment-success/payment-success';
+import { PaymentCancel } from './payment-cancel/payment-cancel';
 
 export const routes: Routes = [
   {
@@ -36,6 +38,17 @@ export const routes: Routes = [
   {
   path: 'bookings',
   component: MyBookings,
-  canActivate: [authGuard]
-},
+  canActivate: [authGuard],
+  title: 'My Bookings',
+  },
+  {
+    path: 'payment-success',
+    component: PaymentSuccess,
+    title: 'Payment Success',
+  },
+  {
+    path: 'payment-cancel',
+    component: PaymentCancel,
+    title: 'Payment Cancel',
+  }
 ];
