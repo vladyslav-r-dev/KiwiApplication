@@ -1,4 +1,11 @@
 ﻿using System.Security.Claims;
+using FluentValidation;
+using KiwiApp.Api.Contracts;
+using KiwiApp.Api.Contracts.Booking;
+using KiwiApp.Application.Services;
+using KiwiApp.Application.UseCases.Bookings.Create;
+using KiwiApp.Application.UseCases.Bookings.Update;
+using KiwiApp.Domain.Entities;
 
 namespace KiwiApp.Api.Endpoints;
 

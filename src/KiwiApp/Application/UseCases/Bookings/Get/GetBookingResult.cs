@@ -10,4 +10,5 @@ public class GetBookingResult
     public BookingStatus Status { get; set; }
     public decimal Price { get; set; }
     public string? Email { get; set; }
+    public int UserId { get; set; }
 }

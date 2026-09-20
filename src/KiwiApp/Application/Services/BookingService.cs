@@ -116,7 +116,8 @@ public class BookingService(
                 Status = cachedBooking.Status,
                 Price = cachedBooking.Price,
                 Email = cachedBooking.Email,
-                Passengers = cachedBooking.Passengers
+                Passengers = cachedBooking.Passengers,
+                UserId = cachedBooking.UserId
             };
         }
         
