@@ -13,8 +13,8 @@ public class StripeCheckoutService(IConfiguration configuration)
     {
         var options = new SessionCreateOptions
         {
-            SuccessUrl = "https://example.com/success",
-            CancelUrl = "https://example.com/cancel",
+            SuccessUrl = "http://localhost:4200/payment-success",
+            CancelUrl = "http://localhost:4200/payment-cancel",
 
             ClientReferenceId = bookingId.ToString(),
 

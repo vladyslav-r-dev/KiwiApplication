@@ -15,10 +15,8 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var ironPdfLicenseKey = builder.Configuration["IronPdf:LicenseKey"];
-License.LicenseKey = ironPdfLicenseKey;
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
