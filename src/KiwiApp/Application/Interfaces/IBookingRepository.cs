@@ -1,4 +1,5 @@
 ﻿using KiwiApp.Domain.Entities;
+using KiwiApp.Application.Services;
 
 namespace KiwiApp.Application.Interfaces;
 

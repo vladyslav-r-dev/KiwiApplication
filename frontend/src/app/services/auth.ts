@@ -4,6 +4,7 @@ import { LoginResult } from '../pages/login/login-result';
 import { LoginRequest } from '../pages/login/login';
 import { signal } from '@angular/core';
 import { RefreshResult } from '../pages/login/refresh-result';
+import { User } from '../pages/profile/User';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class AuthService {
   }
 
   getMe(){
-    return this.httpClient.get(
+    return this.httpClient.get<User>(
       'http://localhost:5086/auth/me'
     );
   }
@@ -53,6 +54,20 @@ export class AuthService {
     );
   }
 
+  updateMe(data: { name: string; lastName: string }) {
+    return this.httpClient.put<User>(
+      'http://localhost:5086/auth/me',
+      data,
+      { withCredentials: true }
+    );
+  }
+
+  getAllUsers() {
+  return this.httpClient.get<AdminUser[]>(
+    'http://localhost:5086/admin/users'
+  );
+}
+
    restoreSession() {
   this.refresh().subscribe({
     next: result => {
@@ -65,10 +80,38 @@ export class AuthService {
     }
    });
   }
+
+  getAllBookings() {
+  return this.httpClient.get<AdminBooking[]>(
+    'http://localhost:5086/admin/bookings'
+    );
+  }
+
+  deleteBooking(id: number) {
+  return this.httpClient.delete(
+    `http://localhost:5086/bookings/${id}`
+    );
+  }
 }
 
+export interface AdminUser {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+}
 
-interface RegisterRequest{
+export interface AdminBooking {
+  bookingId: number;
+  userId: number;
+  flightId: number;
+  email: string;
+  status: string;
+  price: number;
+}
+
+export interface RegisterRequest{
   name: string;
   lastName: string;
   email: string;

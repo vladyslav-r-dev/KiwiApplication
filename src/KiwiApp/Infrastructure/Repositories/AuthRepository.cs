@@ -19,4 +19,9 @@ public class AuthRepository(AppDbContext db) : GenericRepository<UserEntity>(db)
     {
         return _db.Users.FirstOrDefaultAsync(x => x.GoogleId == payloadSubject);
     }
+
+    public Task<UserEntity?> GetUserById(int userId)
+    {
+        return _db.Users.FirstOrDefaultAsync(x => x.Id == userId);
+    }
 }

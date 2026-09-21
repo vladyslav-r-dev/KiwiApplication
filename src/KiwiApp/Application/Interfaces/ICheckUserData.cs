@@ -6,4 +6,5 @@ public interface ICheckUserData
 {
     Task<UserEntity?> GetUserByEmail(string email);
     Task<UserEntity?> GetUserByGoogleId(string payloadSubject);
+    Task<UserEntity?> GetUserById(int userId);
 }

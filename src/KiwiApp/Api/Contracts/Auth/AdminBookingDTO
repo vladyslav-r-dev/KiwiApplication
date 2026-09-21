@@ -1,0 +1,11 @@
+namespace KiwiApp.Application.Services;
+
+public class AdminBookingDTO
+{
+    public int BookingId { get; set; }
+    public int UserId { get; set; }
+    public int FlightId { get; set; }
+    public string Email { get; set; }
+    public string Status { get; set; }
+    public decimal Price { get; set; }
+}
