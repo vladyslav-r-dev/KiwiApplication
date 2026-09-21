@@ -1,0 +1,34 @@
+@if (loading()) {
+  <p>Loading...</p>
+} @else if (error()) {
+  <p>Error: {{ error() }}</p>
+} @else if (currentUser(); as user) {
+  <p>User ID: {{ user.userId }}</p>
+  <p>Email: {{ user.email }}</p>
+  <p>Role: {{ user.role }}</p>
+  <p>Name: {{ user.name }}</p>
+  <p>Last Name: {{ user.lastName }}</p>
+}
+
+<form [formGroup]="updateProfileForm" (ngSubmit)="saveProfile()">
+
+  <label for="name">Name:</label>
+  <input
+    type="text"
+    id="name"
+    formControlName="name"
+  >
+
+  <label for="lastName">Last Name:</label>
+  <input
+    type="text"
+    id="lastName"
+    formControlName="lastName"
+  >
+
+  <p>Email: {{ currentUser()?.email }}</p>
+  <p>Role: {{ currentUser()?.role }}</p>
+
+  <button type="submit">Update</button>
+
+</form>

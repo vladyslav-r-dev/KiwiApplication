@@ -8,10 +8,25 @@ public static class AuthEndpoints
 {
     public static void MapAuthEndpoints(this WebApplication app)
     {
-        app.MapGet("/auth/me", (HttpContext context, 
-            AuthService authService) =>
+        app.MapGet("/auth/me", async (
+        HttpContext context,
+        AuthService authService) =>
         {
-            var result = authService.GetMe(context.User);
+        var result = await authService.GetMe(context.User);
+
+        return Results.Ok(result);
+        }).RequireAuthorization();
+
+        app.MapPut("/auth/me", async (
+            UpdateUserDto request,
+            AuthService authService,
+            HttpContext context) =>
+        {
+            var result = await authService.UpdateMe(context.User, new UpdateUserCommand
+            {
+                Name = request.Name,
+                LastName = request.LastName,
+            });
 
             return Results.Ok(result);
         }).RequireAuthorization();
@@ -140,5 +155,11 @@ public static class AuthEndpoints
 
             return Results.Ok(result);
         });
+
+        app.MapGet("/admin/users", async (AuthService authService) =>
+        {
+            var users = await authService.GetAllUsers();
+            return Results.Ok(users);
+        }).RequireAuthorization(policy => policy.RequireRole("Admin"));
     }
 }

@@ -1,22 +1,29 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { filter, map, take } from 'rxjs';
+import { catchError, filter, map, of, switchMap, take } from 'rxjs';
 import { AuthService } from '../services/auth';
 
-export const authGuard: CanActivateFn = () => {
+export const adminGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
   return toObservable(authService.sessionRestored).pipe(
     filter(restored => restored),
     take(1),
-    map(() => {
-      if (authService.accessToken()) {
+
+    switchMap(() => authService.getMe()),
+
+    map(user => {
+      if (user.role === 'Admin') {
         return true;
       }
 
-      return router.createUrlTree(['/login']);
+      return router.createUrlTree(['/']);
+    }),
+
+    catchError(() => {
+      return of(router.createUrlTree(['/']));
     })
   );
 };

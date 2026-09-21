@@ -13,21 +13,62 @@ public class AuthService(
     TokenService tokenService,
     ILogger<AuthService> logger, GoogleAuthService googleAuthService)
 {
-    public MeResult GetMe(ClaimsPrincipal user)
+    public async Task<MeResult> GetMe(ClaimsPrincipal user)
+{
+    var userIdClaim = user.Claims
+        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+    if (!int.TryParse(userIdClaim, out var userId))
     {
-        var userId = user.Claims
+        throw new UnauthorizedAccessException("User ID not found in claims");
+    }
+
+    var existingUser = await checkUserData.GetUserById(userId);
+
+    if (existingUser is null)
+    {
+        throw new UnauthorizedAccessException("User not found");
+    }
+
+    return new MeResult
+    {
+        UserId = existingUser.Id,
+        Name = existingUser.FirstName,
+        LastName = existingUser.LastName,
+        Email = existingUser.Email,
+        Role = existingUser.Role
+    };
+}
+
+    public async Task<UpdateUserResult> UpdateMe(ClaimsPrincipal user, UpdateUserCommand command)
+    {
+         var userId = user.Claims
             .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        var email = user.Claims
-            .FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-        
-        var role = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
-
-        return new MeResult
+        if (string.IsNullOrWhiteSpace(userId))
         {
-            UserId = userId,
-            Email = email,
-            Role = role
+            throw new UnauthorizedAccessException("User ID not found in claims");
+        }
+
+        var existingUser = await checkUserData.GetUserById(int.Parse(userId));
+
+        if (existingUser is null)
+        {
+            throw new UnauthorizedAccessException("User not found");
+        }
+
+        existingUser.FirstName = command.Name;
+        existingUser.LastName = command.LastName;
+
+        await unitOfWork.SaveChangesAsync();
+
+        return new UpdateUserResult
+        {
+            UserId = existingUser.Id,
+            Name = existingUser.FirstName,
+            LastName = existingUser.LastName,
+            Email = existingUser.Email,
+            Role = existingUser.Role
         };
     }
 
@@ -229,4 +270,17 @@ public class AuthService(
         };
     }
 
+    public async Task<List<AllUsersDTO>> GetAllUsers()
+    {
+        var users = await userRepository.GetAll();
+
+        return users.Select(user => new AllUsersDTO
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Role = user.Role
+        }).ToList();
+    }
 }

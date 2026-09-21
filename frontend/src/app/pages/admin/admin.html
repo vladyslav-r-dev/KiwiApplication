@@ -1,0 +1,64 @@
+<h1>Admin Panel</h1>
+
+<h2>Users</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Email</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (user of adminUsers(); track user.id) {
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<h2>Bookings</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Booking ID</th>
+      <th>User ID</th>
+      <th>Flight ID</th>
+      <th>Email</th>
+      <th>Status</th>
+      <th>Price</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (booking of adminBookings(); track booking.bookingId) {
+      <tr>
+        <td>{{ booking.bookingId }}</td>
+        <td>{{ booking.userId }}</td>
+        <td>{{ booking.flightId }}</td>
+        <td>{{ booking.email }}</td>
+        <td>{{ booking.status }}</td>
+        <td>{{ booking.price }}</td>
+        <td>
+          <button
+            type="button"
+            (click)="deleteBooking(booking.bookingId)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

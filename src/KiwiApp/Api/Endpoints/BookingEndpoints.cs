@@ -207,5 +207,13 @@ public static class BookingEndpoints
             return Results.NoContent();
         })
         .RequireAuthorization();
+
+        app.MapGet("/admin/bookings", async (
+            BookingService service) =>
+        {
+            var bookings = await service.GetAllBookings();
+            return Results.Ok(bookings);
+        })
+        .RequireAuthorization(policy => policy.RequireRole("Admin"));
     }
 }

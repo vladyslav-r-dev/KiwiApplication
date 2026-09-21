@@ -83,22 +83,34 @@ public class BookingService(
         };
     }
 
-    public async Task<List<Booking>> GetAllBookings()
+    public async Task<List<AdminBookingResult>> GetAllBookings()
     {
-        const string cacheKey = "bookings:all";
+    const string cacheKey = "bookings:all";
 
-        var cachedBookings = await cacheService.GetAsync<List<Booking>>(cacheKey);
-        
-        if (cachedBookings is not null)
-        {
-            return cachedBookings;
-        }
-        
-        var bookings = await bookingRepository.GetAllWithPassengers();
+    var cachedBookings = await cacheService.GetAsync<List<Booking>>(cacheKey);
 
-        await cacheService.SetAsync(cacheKey, bookings, TimeSpan.FromMinutes(1));
+    var bookings = cachedBookings;
 
-        return bookings;
+    if (bookings is null)
+    {
+        bookings = await bookingRepository.GetAllWithPassengers();
+
+        await cacheService.SetAsync(
+            cacheKey,
+            bookings,
+            TimeSpan.FromMinutes(1)
+        );
+    }
+
+    return bookings.Select(booking => new AdminBookingResult
+    {
+        BookingId = booking.BookingId,
+        UserId = booking.UserId,
+        FlightId = booking.FlightId,
+        Email = booking.Email,
+        Status = booking.Status.ToString(),
+        Price = booking.Price
+    }).ToList();
     }
 
     public async Task<GetBookingResult> GetBookingById(int id)
@@ -139,7 +151,8 @@ public class BookingService(
             Status = booking.Status,
             Price = booking.Price,
             Email = booking.Email,
-            Passengers = booking.Passengers
+            Passengers = booking.Passengers,
+            UserId = booking.UserId
         };
     }
 

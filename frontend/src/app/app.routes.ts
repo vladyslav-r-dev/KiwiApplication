@@ -8,6 +8,9 @@ import { authGuard } from './guards/auth-guard';
 import { MyBookings } from './pages/my-bookings/my-bookings';
 import { PaymentSuccess } from './payment-success/payment-success';
 import { PaymentCancel } from './payment-cancel/payment-cancel';
+import { Profile } from './pages/profile/profile';
+import { adminGuard } from './guards/admin-guard';
+import { Admin } from './pages/admin/admin';
 
 export const routes: Routes = [
   {
@@ -50,5 +53,17 @@ export const routes: Routes = [
     path: 'payment-cancel',
     component: PaymentCancel,
     title: 'Payment Cancel',
+  },
+  {
+    path: 'profile',
+    component: Profile,
+    canActivate: [authGuard],
+    title: 'Profile Page',
+  },
+  {
+    path: 'admin',
+    component: Admin,
+    canActivate: [adminGuard],
+    title: 'Admin Page',
   }
 ];

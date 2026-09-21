@@ -22,5 +22,5 @@ public class UserEntity
     
     public List<RefreshToken> RefreshTokens { get; set; } = [];
     
-    public string Role { get; set; } = "Admin";
+    public string Role { get; set; } = "User";
 }
