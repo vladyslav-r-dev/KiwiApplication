@@ -27,7 +27,13 @@ onReset() {
 
   searchForm = new FormGroup({
     from: new FormControl(''),
-    to: new FormControl('')
+    to: new FormControl(''),
+    status: new FormControl(''),
+    minPrice: new FormControl<number | null>(null),
+    maxPrice: new FormControl<number | null>(null),
+    sortBy: new FormControl(''),
+    airline: new FormControl(''),
+    departureDate: new FormControl(''),
   });
   
   constructor(private flightsService: FlightsService, private router: Router) {
@@ -65,17 +71,26 @@ onSearch() {
   reactiveSearch() {
     const from = this.searchForm.get('from')?.value;
     const to = this.searchForm.get('to')?.value;
-
-    if (!from && !to) {
-  this.filteredFlights.set(this.flights());
-  return;
-    }
-      this.flightsService.searchFlights(from ?? null, to ?? null).subscribe({
+    const status = this.searchForm.get('status')?.value;
+    const minPrice = this.searchForm.get('minPrice')?.value;
+    const maxPrice = this.searchForm.get('maxPrice')?.value;
+    const sortBy = this.searchForm.get('sortBy')?.value;
+    const airline = this.searchForm.get('airline')?.value;
+    const departureDate = this.searchForm.get('departureDate')?.value;
+    
+      this.flightsService.getFlights(
+        from ?? null,
+        to ?? null,
+        status ?? null,
+        minPrice ? Number(minPrice) : null,
+        maxPrice ? Number(maxPrice) : null,
+        sortBy ?? null,
+        airline ?? null,
+        departureDate ?? null
+      ).subscribe({
         next: (data) => {
-          this.filteredFlights.set(data.flight);
-          this.weatherFrom.set(data.weatherFrom);
-          this.weatherTo.set(data.weatherTo);
-          this.router.navigate(['/flights'], { queryParams: { from, to } });
+          this.filteredFlights.set(data);
+          this.loading.set(false);
         },
         error: (err) => {
           console.error(err);

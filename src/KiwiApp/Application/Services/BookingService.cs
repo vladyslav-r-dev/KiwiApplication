@@ -10,34 +10,103 @@ namespace KiwiApp.Application.Services;
 public class BookingService(
     IGenericRepository<Flight> repository,
     IBookingRepository bookingRepository,
-    IUnitOfWork unitOfWork, ILogger<BookingService> logger, CacheService cacheService)
+    IUnitOfWork unitOfWork,
+    ILogger<BookingService> logger,
+    CacheService cacheService,
+    IFlightRepository flightRepository){
+        
+   public async Task<CreateBookingResult?> CreateBooking(CreateBookingCommand command)
 {
-    public async Task<CreateBookingResult?> CreateBooking(CreateBookingCommand command)
+    var flight = await flightRepository.GetFlightById(command.FlightId);
+
+    if (flight is null)
     {
-        var flight = await repository.GetById(command.FlightId);
+        logger.LogWarning(
+            "Flight with id {FlightId} was not found",
+            command.FlightId
+        );
 
-        if (flight is null)
-        {
-            logger.LogWarning("Flight with id {FlightId} was not found", command.FlightId);
-
-            throw new KeyNotFoundException($"Flight with id {command.FlightId} was not found");
-        }
-        
-        var booking = Booking.CreateBooking(command.FlightId, command.Passengers, command.Email, command.UserId);
-        
-        await bookingRepository.Add(booking);
-        
-        await unitOfWork.SaveChangesAsync();
-        
-        await cacheService.RemoveAsync("bookings:all");
-        
-        return new CreateBookingResult
-        {
-            BookingId = booking.BookingId,
-            Status = booking.Status,
-            Price = booking.Price
-        };
+        throw new KeyNotFoundException(
+            $"Flight with id {command.FlightId} was not found"
+        );
     }
+
+    var availableSeats = flight.Seats
+        .Where(seat => !seat.IsOccupied)
+        .ToList();
+
+    if (command.Passengers.Count > availableSeats.Count)
+    {
+        throw new InvalidOperationException(
+            "There are not enough available seats for all passengers."
+        );
+    }
+
+    var passengers = new List<Passenger>();
+
+    var manualSeatCount = 0;
+
+    foreach (var passengerCommand in command.Passengers)
+    {
+        Seat selectedSeat;
+
+        if (!string.IsNullOrWhiteSpace(passengerCommand.SelectedSeatNumber))
+        {
+            selectedSeat = availableSeats.FirstOrDefault(seat =>
+                seat.SeatNumber.Equals(
+                    passengerCommand.SelectedSeatNumber,
+                    StringComparison.OrdinalIgnoreCase
+                )
+            ) ?? throw new InvalidOperationException(
+                $"Seat {passengerCommand.SelectedSeatNumber} is occupied or does not exist."
+            );
+
+            manualSeatCount++;
+        }
+        else
+        {
+            var randomIndex = Random.Shared.Next(availableSeats.Count);
+
+            selectedSeat = availableSeats[randomIndex];
+        }
+
+        selectedSeat.IsOccupied = true;
+
+        availableSeats.Remove(selectedSeat);
+
+        passengers.Add(new Passenger
+        {
+            FirstName = passengerCommand.FirstName,
+            LastName = passengerCommand.LastName,
+            SeatId = selectedSeat.Id
+        });
+    }
+
+    var price =
+        flight.Price * passengers.Count +
+        15m * manualSeatCount;
+
+    var booking = Booking.CreateBooking(
+        command.FlightId,
+        passengers,
+        command.Email,
+        command.UserId,
+        price
+    );
+
+    await bookingRepository.Add(booking);
+
+    await unitOfWork.SaveChangesAsync();
+
+    await cacheService.RemoveAsync("bookings:all");
+
+    return new CreateBookingResult
+    {
+        BookingId = booking.BookingId,
+        Status = booking.Status,
+        Price = booking.Price
+    };
+}
     
     public async Task DeleteBooking(int id)
     {

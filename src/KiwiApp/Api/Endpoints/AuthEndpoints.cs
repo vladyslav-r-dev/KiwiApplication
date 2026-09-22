@@ -144,17 +144,32 @@ public static class AuthEndpoints
                 });
             });
         
-        app.MapPost("/auth/google", async (
+            app.MapPost("/auth/google", async (
             GoogleUserDto request,
-            AuthService authService) =>
+            AuthService authService,
+            HttpContext context) =>
         {
             var result = await authService.LoginWithGoogle(new GoogleLoginCommand
             {
                 IdToken = request.IdToken
             });
 
-            return Results.Ok(result);
-        });
+            context.Response.Cookies.Append(
+                "refreshToken",
+                result.RefreshToken,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = false,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddDays(7)
+                });
+
+            return Results.Ok(new
+            {
+                accessToken = result.AccessToken
+         });
+    });
 
         app.MapGet("/admin/users", async (AuthService authService) =>
         {

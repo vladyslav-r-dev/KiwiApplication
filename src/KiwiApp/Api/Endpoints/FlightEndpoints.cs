@@ -13,9 +13,10 @@ public static class FlightEndpoints
 {
     public static void MapFlightEndpoints(this WebApplication app)
     {
-        app.MapGet("/flights", async (FlightService service) =>
+        app.MapGet("/flights", async (FlightService service, string? from, string? to, string? status, 
+        decimal? minPrice, decimal? maxPrice, string? sortBy, string? airline, string? departureDate) =>
         {
-            var result = await service.GetAllFlights();
+            var result = await service.GetFilteredFlights(from, to, status, minPrice, maxPrice, sortBy, airline, departureDate);
 
             return Results.Ok(result);
         });
@@ -99,8 +100,9 @@ public static class FlightEndpoints
         
         app.MapDelete("/flights/clear", async (AppDbContext dbContext) => // фича для тестов только, хардкод
         {
-            await dbContext.Flights.ExecuteDeleteAsync();
-
+            await dbContext.Flights
+            .Where(flight => !flight.Bookings.Any())
+            .ExecuteDeleteAsync();
             return Results.Ok("Flights cleared");
         });
     }

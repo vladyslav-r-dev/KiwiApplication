@@ -7,63 +7,161 @@
   <p>{{ error() }}</p>
 }
 @else if (flight(); as currentFlight) {
-  <p>{{ currentFlight.from }} - {{ currentFlight.to }}</p>
-  
-  @if (weatherFrom(); as weather) {
-  <p>From weather:</p>
-  <p>{{ weather.city }} — {{ weather.temp }}°C — {{ weather.description }}</p>
-}
 
-@if (weatherTo(); as weather) {
-  <p>To weather:</p>
-  <p>{{ weather.city }} — {{ weather.temp }}°C — {{ weather.description }}</p>
-}
-}
+  <div class="flight-info">
+    <h2>
+      {{ currentFlight.from }} → {{ currentFlight.to }}
+    </h2>
 
-<form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
-  <label for="email">Email:</label>
-  <input
-    id="email"
-    type="email"
-    formControlName="email"
-  />
-
-  <div formArrayName="passengers">
-    @for (
-      passenger of bookingForm.controls.passengers.controls;
-      track $index;
-      let i = $index
-    ) {
-      <div [formGroupName]="i">
-        <label [for]="'firstName-' + i">First Name:</label>
-        <input
-          [id]="'firstName-' + i"
-          type="text"
-          formControlName="firstName"
-        />
-
-        <label [for]="'lastName-' + i">Last Name:</label>
-        <input
-          [id]="'lastName-' + i"
-          type="text"
-          formControlName="lastName"
-        />
-      </div>
+    @if (currentFlight.airline) {
+      <p>Airline: {{ currentFlight.airline }}</p>
     }
+
+    @if (currentFlight.flightNumber) {
+      <p>Flight: {{ currentFlight.flightNumber }}</p>
+    }
+
+    <p>Price: {{ currentFlight.price }} €</p>
   </div>
 
-  <button
-    type="submit"
-    [disabled]="bookingForm.invalid || bookingLoading()"
-  >
-    @if (bookingLoading()) {
-      Creating booking...
-    } @else {
-      Book Flight
-    }
-  </button>
+  <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
 
-  @if (bookingError()) {
-    <p>{{ bookingError() }}</p>
-  }
-</form>
+    <div class="booking-email">
+      <label for="email">Email:</label>
+
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+      />
+    </div>
+
+    <div formArrayName="passengers">
+
+      @for (
+        passenger of bookingForm.controls.passengers.controls;
+        track $index;
+        let i = $index
+      ) {
+
+        <div
+          class="passenger"
+          [formGroupName]="i"
+        >
+
+          <h3>Passenger {{ i + 1 }}</h3>
+
+          <label [for]="'firstName-' + i">
+            First Name:
+          </label>
+
+          <input
+            [id]="'firstName-' + i"
+            type="text"
+            formControlName="firstName"
+          />
+
+          <label [for]="'lastName-' + i">
+            Last Name:
+          </label>
+
+          <input
+            [id]="'lastName-' + i"
+            type="text"
+            formControlName="lastName"
+          />
+
+          <div class="seat-selection">
+
+            <h4>Choose seat</h4>
+
+            <p>
+              Manual seat selection: +15 €
+            </p>
+
+            <div class="seats">
+
+              @for (
+                seat of currentFlight.seats;
+                track seat.seatNumber
+              ) {
+
+                <button
+                  type="button"
+                  class="seat"
+                  [disabled]="seat.isOccupied"
+                  [class.selected]="
+                    passenger.get('selectedSeatNumber')?.value === seat.seatNumber
+                  "
+                  (click)="
+                    $any(passenger.get('selectedSeatNumber'))?.setValue(seat.seatNumber)
+                  "
+                >
+                  {{ seat.seatNumber }}
+                </button>
+
+              }
+
+            </div>
+
+            <button
+              type="button"
+              (click)="
+                $any(passenger.get('selectedSeatNumber'))?.setValue(null)
+              "
+            >
+              Random seat
+            </button>
+
+            @if (passenger.get('selectedSeatNumber')?.value; as selectedSeat) {
+              <p>
+                Selected seat: {{ selectedSeat }}
+              </p>
+            }
+            @else {
+              <p>
+                Seat will be assigned automatically.
+              </p>
+            }
+
+          </div>
+
+          @if (bookingForm.controls.passengers.length > 1) {
+            <button
+              type="button"
+              (click)="removePassenger(i)"
+            >
+              Remove Passenger
+            </button>
+          }
+
+        </div>
+      }
+
+    </div>
+
+    <button
+      type="button"
+      (click)="addPassenger()"
+    >
+      Add Passenger
+    </button>
+
+    <button
+      type="submit"
+      [disabled]="bookingForm.invalid || bookingLoading()"
+    >
+      @if (bookingLoading()) {
+        Creating booking...
+      }
+      @else {
+        Book Flight
+      }
+    </button>
+
+    @if (bookingError()) {
+      <p>{{ bookingError() }}</p>
+    }
+
+  </form>
+}

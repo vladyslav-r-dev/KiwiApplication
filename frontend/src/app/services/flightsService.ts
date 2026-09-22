@@ -12,9 +12,45 @@ export class FlightsService {
   constructor(private httpClient: HttpClient) {
   }
 
-  public getFlights(): Observable<Flight[]> {
+  public getFlights(
+  from: string | null = null,
+  to: string | null = null,
+  status: string | null = null,
+  minPrice: number | null = null,
+  maxPrice: number | null = null,
+  sortBy: string | null = null,
+  airline: string | null = null,
+  departureDate: string | null = null
+  ): Observable<Flight[]> { 
+    const params: any = {};
+    if (from) {
+      params.from = from;
+    }
+    if (to) {
+      params.to = to;
+    }
+    if (status) {
+      params.status = status;
+    }
+    if (minPrice !== null) {
+      params.minPrice = minPrice;
+    }
+    if (maxPrice !== null) {
+      params.maxPrice = maxPrice;
+    }
+    if (sortBy) {
+      params.sortBy = sortBy;
+    }
+    if (airline) {
+      params.airline = airline;
+    }
+    if (departureDate) {
+      params.departureDate = departureDate;
+    }
+
     return this.httpClient.get<Flight[]>(
-      'http://localhost:5086/flights'
+      'http://localhost:5086/flights',
+      { params }
     );
   }
 

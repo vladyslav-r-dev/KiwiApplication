@@ -21,21 +21,23 @@ public class Booking
     public int UserId { get; set; }    
 
     public static Booking CreateBooking(
-        int flightId,
-        List<Passenger> passengers,
-        string email, int userId)
+    int flightId,
+    List<Passenger> passengers,
+    string email,
+    int userId,
+    decimal price)
+{
+    return new Booking
     {
-        return new Booking
-        {
-            BookingId = new Random().Next(),
-            FlightId = flightId,
-            Passengers = passengers,
-            Price = 100,
-            Email = email,
-            Status = BookingStatus.Pending,
-            UserId = userId
-        };
-    }
+        BookingId = new Random().Next(),
+        FlightId = flightId,
+        Passengers = passengers,
+        Price = price,
+        Email = email,
+        Status = BookingStatus.Pending,
+        UserId = userId
+    };
+}
     
     public void UpdateBooking(List<Passenger> passengers, string? email)
     {

@@ -6,7 +6,7 @@ public class CreateBookingCommand
 {
     public int FlightId { get; set; }
     
-    public List<Passenger> Passengers { get; set; } = [];
+    public List<CreatePassengerCommand> Passengers { get; set; } = [];
     
     public string Email { get; set; }
 

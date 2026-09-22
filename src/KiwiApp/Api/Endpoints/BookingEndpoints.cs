@@ -83,10 +83,19 @@ public static class BookingEndpoints
                 return Results.BadRequest(validation.Errors);
             }
 
+            var passengerCommands = request.Passengers
+                .Select(p => new CreatePassengerCommand
+                {
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    SelectedSeatNumber = p.SelectedSeatNumber
+                })
+                .ToList();
+
             var command = new CreateBookingCommand
             {
                 FlightId = request.FlightId,
-                Passengers = request.Passengers,
+                Passengers = passengerCommands,
                 Email = request.Email,
                 UserId = userId
             };

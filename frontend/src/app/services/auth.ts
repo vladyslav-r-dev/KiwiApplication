@@ -92,6 +92,14 @@ export class AuthService {
     `http://localhost:5086/bookings/${id}`
     );
   }
+
+  googleLogin(idToken: string) {
+  return this.httpClient.post<LoginResult>(
+    'http://localhost:5086/auth/google',
+    { idToken },
+    { withCredentials: true }
+  );
+  }
 }
 
 export interface AdminUser {

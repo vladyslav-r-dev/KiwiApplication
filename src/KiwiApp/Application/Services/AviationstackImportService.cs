@@ -35,6 +35,14 @@ public class AviationstackImportService(
             var departureAirport = item.Departure.Airport;
 
             var arrivalAirport = item.Arrival.Airport;
+
+            var departureIata = item.Departure.Iata;
+            var arrivalIata = item.Arrival.Iata;
+            var airline = item.Airline.Name;
+            var flightNumber = item.Flight.Number;
+            var departureTime = item.Departure.Scheduled;
+            var arrivalTime = item.Arrival.Scheduled;
+            var status = item.FlightStatus;
                 
             if (string.IsNullOrWhiteSpace(departureAirport) ||
                 string.IsNullOrWhiteSpace(arrivalAirport))
@@ -45,8 +53,41 @@ public class AviationstackImportService(
             var flight = new Flight
             {
                 From = departureAirport,
-                To = arrivalAirport
+                To = arrivalAirport,
+                FromIata = departureIata,
+                ToIata = arrivalIata,
+                Airline = airline,
+                FlightNumber = flightNumber,
+                DepartureTime = DateTime.TryParse(departureTime, out var depTime) ? depTime : null,
+                ArrivalTime = DateTime.TryParse(arrivalTime, out var arrTime) ? arrTime : null,
+                Status = status,
+                Price = Random.Shared.Next(100, 1000)
             };
+
+            var seatLetters = new[] { 'A', 'B', 'C', 'D', 'E', 'F' };
+
+            for (var row = 1; row <= 10; row++)
+            {
+                foreach (var letter in seatLetters)
+                {
+                    var seat = new Seat
+                    {
+                        SeatNumber = $"{row}{letter}",
+                        IsOccupied = false
+                    };
+
+                    flight.Seats.Add(seat);
+                }
+            }
+
+            var occupiedSeats = flight.Seats
+                .OrderBy(_ => Random.Shared.Next())
+                .Take(50);
+
+            foreach (var seat in occupiedSeats)
+            {
+                seat.IsOccupied = true;
+            }
                 
             dbContext.Flights.Add(flight);
         }
