@@ -54,6 +54,19 @@ public class FlightService(IGenericRepository<Flight> repository,
             To = flight.To
         };
     }
+
+    public async Task<IEnumerable<Flight>> GetFilteredFlights(
+        string? from,
+        string? to,
+        string? status,
+        decimal? minPrice,
+        decimal? maxPrice,
+        string? sortBy,
+        string? airline,
+        string? departureDate)
+    {
+        return await flightRepository.GetFilteredFlights(from, to, status, minPrice, maxPrice, sortBy, airline, departureDate);
+    }
     
     public async Task<IEnumerable<Flight>> GetAllFlights()
     {   
@@ -74,57 +87,54 @@ public class FlightService(IGenericRepository<Flight> repository,
     }
 
     public async Task<GetFlightResult> GetAllFlightById(int id)
-    {
-        var cacheKey = $"flights:id:{id}";
-        
-        var cachedFlight = await cacheService.GetAsync<Flight>(cacheKey);
-        
-        if (cachedFlight is not null)
-        {
-            return new GetFlightResult
-            {
-                FlightId = cachedFlight.FlightId,
-                From = cachedFlight.From,
-                To = cachedFlight.To
-            };
-        }
+{
+    var flight = await flightRepository.GetFlightById(id);
 
-        var flight = await repository.GetById(id);
-        
+    if (flight is null)
+    {
+        logger.LogWarning(
+            "Flight with id {FlightId} was not found",
+            id
+        );
+
+        throw new KeyNotFoundException(
+            $"Flight with id {id} was not found"
+        );
+    }
+
+    return new GetFlightResult
+    {
+        FlightId = flight.FlightId,
+        From = flight.From,
+        To = flight.To,
+
+        Seats = flight.Seats
+            .Select(seat => new SeatResult
+            {
+                SeatNumber = seat.SeatNumber,
+                IsOccupied = seat.IsOccupied
+            })
+            .ToList()
+    };
+}
+    
+    public async Task<bool> DeleteFlight(int id)
+    {
+        var flight = await flightRepository.GetFlightById(id);
+
         if (flight is null)
         {
             logger.LogWarning("Flight with id {FlightId} was not found", id);
 
             throw new KeyNotFoundException($"Flight with id {id} was not found");
         }
-        
-        await cacheService.SetAsync(cacheKey, flight, TimeSpan.FromMinutes(5));
 
-        return new GetFlightResult
-        {
-            FlightId = flight.FlightId,
-            From = flight.From,
-            To = flight.To
-        };
-    }
-    
-    public async Task<bool> DeleteFlight(int id)
-    {
-        var flightId = await repository.GetById(id);
-
-        if (flightId is null)
-        {
-            logger.LogWarning("Flight with id {FlightId} was not found", id);
-
-            throw new KeyNotFoundException($"Flight with id {id} was not found");
-        }
-
-        await repository.Remove(flightId);
+        await repository.Remove(flight);
         
         await unitOfWork.SaveChangesAsync();
         
         await cacheService.RemoveAsync("flights:all");
-        await cacheService.RemoveAsync($"flights:id:{flightId}");
+        await cacheService.RemoveAsync($"flights:id:{flight.FlightId}");
         
         return true;
     }

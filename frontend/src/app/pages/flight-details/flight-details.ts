@@ -24,13 +24,14 @@ export class FlightDetails implements OnInit {
   weatherFrom = signal<Weather | null>(null);
   weatherTo = signal<Weather | null>(null);
   bookingLoading = signal(false);
-bookingError = signal<string | null>(null);
+  bookingError = signal<string | null>(null);
   bookingForm = new FormGroup({
     email: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     passengers: new FormArray([new FormGroup({
       firstName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       lastName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     })], Validators.required),
+    selectedSeatNumber: new FormControl<string | null>(null),
   });
 
   ngOnInit() {
@@ -90,5 +91,21 @@ bookingError = signal<string | null>(null);
     this.loading.set(false);
   }
   });
+  }
+
+  addPassenger() {
+    const passengers = this.bookingForm.controls.passengers as FormArray;
+    passengers.push(new FormGroup({
+      firstName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      lastName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      selectedSeatNumber: new FormControl<string | null>(null),
+    }));
+  }
+
+  removePassenger(index: number) {
+    const passengers = this.bookingForm.controls.passengers as FormArray;
+    if (passengers.length > 1) {
+      passengers.removeAt(index);
+    }
   }
 }

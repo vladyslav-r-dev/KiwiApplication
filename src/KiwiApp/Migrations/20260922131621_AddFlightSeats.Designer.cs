@@ -3,6 +3,7 @@ using System;
 using KiwiApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KiwiApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260922131621_AddFlightSeats")]
+    partial class AddFlightSeats
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.20");
@@ -106,14 +109,9 @@ namespace KiwiApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("SeatId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("PassengerId");
 
                     b.HasIndex("BookingId");
-
-                    b.HasIndex("SeatId");
 
                     b.ToTable("Passengers");
                 });
@@ -230,12 +228,6 @@ namespace KiwiApp.Migrations
                     b.HasOne("KiwiApp.Domain.Entities.Booking", null)
                         .WithMany("Passengers")
                         .HasForeignKey("BookingId");
-
-                    b.HasOne("Seat", "Seat")
-                        .WithMany()
-                        .HasForeignKey("SeatId");
-
-                    b.Navigation("Seat");
                 });
 
             modelBuilder.Entity("KiwiApp.Domain.Entities.RefreshToken", b =>

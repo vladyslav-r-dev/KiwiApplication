@@ -4,7 +4,7 @@ namespace KiwiApp.Api.Contracts;
 
 public class CreateBookingRequest
 {
-    public List<Passenger> Passengers { get; set; } = [];
+    public List<CreatePassengerRequest> Passengers { get; set; } = [];
     
     public int FlightId { get; set; }
     

@@ -13,6 +13,7 @@ public class BookingRepository(AppDbContext db)
     {
         return db.Bookings
             .Include(x => x.Passengers)
+            .ThenInclude(p => p.Seat)
             .FirstOrDefaultAsync(x => x.BookingId == id);
     }
 

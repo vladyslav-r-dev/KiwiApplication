@@ -1,23 +1,99 @@
 <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+
   <label for="from">From:</label>
   <select id="from" formControlName="from">
     <option value="">All</option>
+
     @for (option of fromOptions(); track option) {
-      <option [value]="option">{{ option }}</option>
+      <option [value]="option">
+        {{ option }}
+      </option>
     }
   </select>
+
 
   <label for="to">To:</label>
   <select id="to" formControlName="to">
     <option value="">All</option>
+
     @for (option of toOptions(); track option) {
-      <option [value]="option">{{ option }}</option>
+      <option [value]="option">
+        {{ option }}
+      </option>
     }
   </select>
 
-  <button type="submit">Search</button>
-  <button type="button" (click)="onReset()">Reset</button>
+
+  <label for="status">Status:</label>
+  <select id="status" formControlName="status">
+    <option value="">All</option>
+    <option value="scheduled">Scheduled</option>
+    <option value="active">Active</option>
+    <option value="landed">Landed</option>
+    <option value="cancelled">Cancelled</option>
+    <option value="incident">Incident</option>
+    <option value="diverted">Diverted</option>
+  </select>
+
+
+  <label for="airline">Airline:</label>
+  <input
+    id="airline"
+    type="text"
+    formControlName="airline"
+    placeholder="Airline name"
+  >
+
+
+  <label for="departureDate">Departure date:</label>
+  <input
+    id="departureDate"
+    type="date"
+    formControlName="departureDate"
+  >
+
+
+  <label for="minPrice">Min price:</label>
+  <input
+    id="minPrice"
+    type="number"
+    formControlName="minPrice"
+    min="0"
+  >
+
+
+  <label for="maxPrice">Max price:</label>
+  <input
+    id="maxPrice"
+    type="number"
+    formControlName="maxPrice"
+    min="0"
+  >
+
+
+  <label for="sortBy">Sort:</label>
+  <select id="sortBy" formControlName="sortBy">
+    <option value="">Default</option>
+    <option value="priceAsc">Price: low to high</option>
+    <option value="priceDesc">Price: high to low</option>
+    <option value="departureAsc">Departure: earliest</option>
+    <option value="departureDesc">Departure: latest</option>
+  </select>
+
+
+  <button type="submit">
+    Search
+  </button>
+
+  <button
+    type="button"
+    (click)="onReset()"
+  >
+    Reset
+  </button>
+
 </form>
+
 
 @if (loading()) {
   <p>Loading...</p>
@@ -29,18 +105,47 @@
   <p>No flights found.</p>
 }
 @else {
-  @for (item of filteredFlights(); track item.flightId) {
-    <a [routerLink]="['/flights', item.flightId]">
-      <p>{{ item.from }} - {{ item.to }}</p>
-    </a>
-  }
-  @if (weatherFrom(); as weather) {
-  <p>From weather:</p>
-  <p>{{ weather.city }} — {{ weather.temp }}°C — {{ weather.description }}</p>
-}
 
-@if (weatherTo(); as weather) {
-  <p>To weather:</p>
-  <p>{{ weather.city }} — {{ weather.temp }}°C — {{ weather.description }}</p>
-}
+  @for (item of filteredFlights(); track item.flightId) {
+
+    <div>
+      <a [routerLink]="['/flights', item.flightId]">
+        <h3>
+          {{ item.fromIata }} → {{ item.toIata }}
+        </h3>
+      </a>
+
+      <p>
+        {{ item.from }} → {{ item.to }}
+      </p>
+
+      <p>
+        Airline: {{ item.airline }}
+      </p>
+
+      <p>
+        Flight: {{ item.flightNumber }}
+      </p>
+
+      <p>
+        Departure: {{ item.departureTime }}
+      </p>
+
+      <p>
+        Arrival: {{ item.arrivalTime }}
+      </p>
+
+      <p>
+        Status: {{ item.status }}
+      </p>
+
+      <p>
+        Price: {{ item.price }}
+      </p>
+    </div>
+
+    <hr>
+
+  }
+
 }
