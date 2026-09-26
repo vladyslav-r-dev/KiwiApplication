@@ -1,23 +1,37 @@
+<button
+  class="register-close"
+  type="button"
+  (click)="registerClose.emit()"
+>
+  ×
+</button> 
+
+<h2>Register to KiwiApp</h2>
+
+<p class="register-subtitle">
+  Register to continue your journey
+</p>
+
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
   <div>
-    <label for="name">Name:</label>
+    <label class="register-label" for="name">Name:</label>
     <input type="text" id="name" formControlName="name">
   </div>
   <div>
-    <label for="lastName">Last Name:</label>
+    <label class="register-label" for="lastName">Last Name:</label>
     <input type="text" id="lastName" formControlName="lastName">
   </div>
   <div>
-    <label for="email">Email:</label>
+    <label class="register-label" for="email">Email:</label>
     <input type="email" id="email" formControlName="email">
   </div>
   <div>
-    <label for="password">Password:</label>
+    <label class="register-label" for="password">Password:</label>
     <input type="password" id="password" formControlName="password">
   </div>
   <div>
-    <label for="passport">Passport:</label>
+    <label class="register-label" for="passport">Passport:</label>
     <input type="text" id="passport" formControlName="passport">
   </div>
-  <button type="submit">Register</button>
+  <button type="submit" class="register-submit">Register</button>
 </form>

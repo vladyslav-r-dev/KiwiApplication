@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
 import { LoginResult } from '../pages/login/login-result';
 import { LoginRequest } from '../pages/login/login';
-import { signal } from '@angular/core';
 import { RefreshResult } from '../pages/login/refresh-result';
 import { User } from '../pages/profile/User';
 
@@ -11,11 +11,12 @@ import { User } from '../pages/profile/User';
 })
 export class AuthService {
 
-    accessToken = signal<string | null>(null);
-    sessionRestored = signal(false);
+  accessToken = signal<string | null>(null);
+  sessionRestored = signal(false);
 
-  constructor(private httpClient: HttpClient) {
-  }
+  isAuthenticated = computed(() => this.accessToken() !== null);
+
+  constructor(private httpClient: HttpClient) {}
 
   register(data: RegisterRequest) {
     return this.httpClient.post(
@@ -32,7 +33,7 @@ export class AuthService {
     );
   }
 
-  getMe(){
+  getMe() {
     return this.httpClient.get<User>(
       'http://localhost:5086/auth/me'
     );
@@ -46,7 +47,7 @@ export class AuthService {
     );
   }
 
-  refresh(){
+  refresh() {
     return this.httpClient.post<RefreshResult>(
       'http://localhost:5086/auth/refresh',
       {},
@@ -63,42 +64,42 @@ export class AuthService {
   }
 
   getAllUsers() {
-  return this.httpClient.get<AdminUser[]>(
-    'http://localhost:5086/admin/users'
-  );
-}
+    return this.httpClient.get<AdminUser[]>(
+      'http://localhost:5086/admin/users'
+    );
+  }
 
-   restoreSession() {
-  this.refresh().subscribe({
-    next: result => {
-      this.accessToken.set(result.accessToken);
-      this.sessionRestored.set(true);
-    },
-    error: () => {
-      this.accessToken.set(null);
-      this.sessionRestored.set(true);
-    }
-   });
+  restoreSession() {
+    this.refresh().subscribe({
+      next: (result) => {
+        this.accessToken.set(result.accessToken);
+        this.sessionRestored.set(true);
+      },
+      error: () => {
+        this.accessToken.set(null);
+        this.sessionRestored.set(true);
+      }
+    });
   }
 
   getAllBookings() {
-  return this.httpClient.get<AdminBooking[]>(
-    'http://localhost:5086/admin/bookings'
+    return this.httpClient.get<AdminBooking[]>(
+      'http://localhost:5086/admin/bookings'
     );
   }
 
   deleteBooking(id: number) {
-  return this.httpClient.delete(
-    `http://localhost:5086/bookings/${id}`
+    return this.httpClient.delete(
+      `http://localhost:5086/bookings/${id}`
     );
   }
 
   googleLogin(idToken: string) {
-  return this.httpClient.post<LoginResult>(
-    'http://localhost:5086/auth/google',
-    { idToken },
-    { withCredentials: true }
-  );
+    return this.httpClient.post<LoginResult>(
+      'http://localhost:5086/auth/google',
+      { idToken },
+      { withCredentials: true }
+    );
   }
 }
 
@@ -119,7 +120,7 @@ export interface AdminBooking {
   price: number;
 }
 
-export interface RegisterRequest{
+export interface RegisterRequest {
   name: string;
   lastName: string;
   email: string;

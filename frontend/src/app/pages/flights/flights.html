@@ -1,151 +1,490 @@
-<form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+<header class="navbar">
 
-  <label for="from">From:</label>
-  <select id="from" formControlName="from">
-    <option value="">All</option>
-
-    @for (option of fromOptions(); track option) {
-      <option [value]="option">
-        {{ option }}
-      </option>
-    }
-  </select>
-
-
-  <label for="to">To:</label>
-  <select id="to" formControlName="to">
-    <option value="">All</option>
-
-    @for (option of toOptions(); track option) {
-      <option [value]="option">
-        {{ option }}
-      </option>
-    }
-  </select>
-
-
-  <label for="status">Status:</label>
-  <select id="status" formControlName="status">
-    <option value="">All</option>
-    <option value="scheduled">Scheduled</option>
-    <option value="active">Active</option>
-    <option value="landed">Landed</option>
-    <option value="cancelled">Cancelled</option>
-    <option value="incident">Incident</option>
-    <option value="diverted">Diverted</option>
-  </select>
-
-
-  <label for="airline">Airline:</label>
-  <input
-    id="airline"
-    type="text"
-    formControlName="airline"
-    placeholder="Airline name"
+  <a
+    class="navbar__logo"
+    routerLink="/home"
   >
+    KiwiApp
+  </a>
+
+  <nav class="navbar__menu">
+
+    <a
+      class="navbar__link"
+      routerLink="/flights"
+    >
+      Flights
+    </a>
 
 
-  <label for="departureDate">Departure date:</label>
-  <input
-    id="departureDate"
-    type="date"
-    formControlName="departureDate"
-  >
+    @if (authService.isAuthenticated()) {
 
-
-  <label for="minPrice">Min price:</label>
-  <input
-    id="minPrice"
-    type="number"
-    formControlName="minPrice"
-    min="0"
-  >
-
-
-  <label for="maxPrice">Max price:</label>
-  <input
-    id="maxPrice"
-    type="number"
-    formControlName="maxPrice"
-    min="0"
-  >
-
-
-  <label for="sortBy">Sort:</label>
-  <select id="sortBy" formControlName="sortBy">
-    <option value="">Default</option>
-    <option value="priceAsc">Price: low to high</option>
-    <option value="priceDesc">Price: high to low</option>
-    <option value="departureAsc">Departure: earliest</option>
-    <option value="departureDesc">Departure: latest</option>
-  </select>
-
-
-  <button type="submit">
-    Search
-  </button>
-
-  <button
-    type="button"
-    (click)="onReset()"
-  >
-    Reset
-  </button>
-
-</form>
-
-
-@if (loading()) {
-  <p>Loading...</p>
-}
-@else if (error()) {
-  <p>{{ error() }}</p>
-}
-@else if (filteredFlights().length === 0) {
-  <p>No flights found.</p>
-}
-@else {
-
-  @for (item of filteredFlights(); track item.flightId) {
-
-    <div>
-      <a [routerLink]="['/flights', item.flightId]">
-        <h3>
-          {{ item.fromIata }} → {{ item.toIata }}
-        </h3>
+      <a
+        class="navbar__link"
+        routerLink="/bookings"
+      >
+        My bookings
       </a>
 
-      <p>
-        {{ item.from }} → {{ item.to }}
-      </p>
+      <a
+        class="navbar__link"
+        routerLink="/profile"
+      >
+        Profile
+      </a>
+
+    }
+
+  </nav>
+
+</header>
+
+
+<section class="flights-page">
+
+  <div class="flights-header">
+
+    <div>
+
+      <h1>
+        Find your flight
+      </h1>
 
       <p>
-        Airline: {{ item.airline }}
+        Choose the route that fits your journey.
       </p>
 
-      <p>
-        Flight: {{ item.flightNumber }}
-      </p>
-
-      <p>
-        Departure: {{ item.departureTime }}
-      </p>
-
-      <p>
-        Arrival: {{ item.arrivalTime }}
-      </p>
-
-      <p>
-        Status: {{ item.status }}
-      </p>
-
-      <p>
-        Price: {{ item.price }}
-      </p>
     </div>
 
-    <hr>
+
+    <a
+      class="flights-header__back"
+      routerLink="/home"
+    >
+      ← Back home
+    </a>
+
+  </div>
+
+
+  <form
+    class="filters"
+    [formGroup]="searchForm"
+    (ngSubmit)="onSearch()"
+  >
+
+    <div class="filter-field">
+
+      <label for="from">
+        From
+      </label>
+
+      <select
+        id="from"
+        formControlName="from"
+      >
+
+        <option value="">
+          Anywhere
+        </option>
+
+        @for (
+          option of fromOptions();
+          track option
+        ) {
+
+          <option [value]="option">
+            {{ option }}
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+
+    <div class="filter-field">
+
+      <label for="to">
+        To
+      </label>
+
+      <select
+        id="to"
+        formControlName="to"
+      >
+
+        <option value="">
+          Anywhere
+        </option>
+
+        @for (
+          option of toOptions();
+          track option
+        ) {
+
+          <option [value]="option">
+            {{ option }}
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+
+    <div class="filter-field">
+
+      <label for="departureDate">
+        Departure
+      </label>
+
+      <input
+        id="departureDate"
+        type="date"
+        formControlName="departureDate"
+      >
+
+    </div>
+
+
+    <div class="filter-field">
+
+      <label for="airline">
+        Airline
+      </label>
+
+      <input
+        id="airline"
+        type="text"
+        formControlName="airline"
+        placeholder="Any airline"
+      >
+
+    </div>
+
+
+    <div class="filter-field">
+
+      <label for="status">
+        Status
+      </label>
+
+      <select
+        id="status"
+        formControlName="status"
+      >
+
+        <option value="">
+          All
+        </option>
+
+        <option value="scheduled">
+          Scheduled
+        </option>
+
+        <option value="active">
+          Active
+        </option>
+
+        <option value="landed">
+          Landed
+        </option>
+
+        <option value="cancelled">
+          Cancelled
+        </option>
+
+        <option value="incident">
+          Incident
+        </option>
+
+        <option value="diverted">
+          Diverted
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="filter-field">
+
+      <label for="sortBy">
+        Sort by
+      </label>
+
+      <select
+        id="sortBy"
+        formControlName="sortBy"
+      >
+
+        <option value="">
+          Default
+        </option>
+
+        <option value="priceAsc">
+          Price: low to high
+        </option>
+
+        <option value="priceDesc">
+          Price: high to low
+        </option>
+
+        <option value="departureAsc">
+          Departure: earliest
+        </option>
+
+        <option value="departureDesc">
+          Departure: latest
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="filter-field">
+
+      <label for="minPrice">
+        Min price
+      </label>
+
+      <input
+        id="minPrice"
+        type="number"
+        formControlName="minPrice"
+        placeholder="0"
+        min="0"
+      >
+
+    </div>
+
+
+    <div class="filter-field">
+
+      <label for="maxPrice">
+        Max price
+      </label>
+
+      <input
+        id="maxPrice"
+        type="number"
+        formControlName="maxPrice"
+        placeholder="Any"
+        min="0"
+      >
+
+    </div>
+
+
+    <div class="filters__actions">
+
+      <button
+        class="filters__search"
+        type="submit"
+      >
+        Search
+      </button>
+
+      <button
+        class="filters__reset"
+        type="button"
+        (click)="onReset()"
+      >
+        Reset
+      </button>
+
+    </div>
+
+  </form>
+
+
+  <div class="results-header">
+
+    <h2>
+      Available flights
+    </h2>
+
+    <span>
+      {{ filteredFlights().length }} flights
+    </span>
+
+  </div>
+
+
+  @if (loading()) {
+
+    <p class="state-message">
+      Loading flights...
+    </p>
+
+  } @else if (error()) {
+
+    <p
+      class="state-message state-message--error"
+    >
+      {{ error() }}
+    </p>
+
+  } @else if (
+    filteredFlights().length === 0
+  ) {
+
+    <p class="state-message">
+      No flights found.
+    </p>
+
+  } @else {
+
+    <div class="flights-grid">
+
+      @for (
+        flight of filteredFlights();
+        track flight.flightId;
+        let index = $index
+      ) {
+
+        <a
+          class="flight-card"
+
+          [routerLink]="[
+            '/flights',
+            flight.flightId
+          ]"
+        >
+
+          <div
+            class="flight-card__image-wrapper"
+          >
+
+            <img
+              class="flight-card__image"
+
+              [src]="
+                cardImages[
+                  index %
+                  cardImages.length
+                ]
+              "
+
+              [alt]="flight.to"
+            >
+
+
+            <div
+              class="flight-card__image-overlay"
+            ></div>
+
+
+            <div
+              class="flight-card__image-route"
+            >
+              {{ flight.fromIata }}
+              →
+              {{ flight.toIata }}
+            </div>
+
+          </div>
+
+
+          <div class="flight-card__body">
+
+            <div class="flight-card__top">
+
+              <div>
+
+                <h3>
+                  {{ flight.from }}
+                  →
+                  {{ flight.to }}
+                </h3>
+
+              </div>
+
+
+              <strong
+                class="flight-card__price"
+              >
+                ${{ flight.price }}
+              </strong>
+
+            </div>
+
+
+            <div
+              class="flight-card__airline"
+            >
+              {{ flight.airline }}
+              ·
+              {{ flight.flightNumber }}
+            </div>
+
+
+            <div class="flight-card__info">
+
+              <div>
+
+                <span>
+                  Departure
+                </span>
+
+                <strong>
+                  {{
+                    flight.departureTime
+                    | date:'dd MMM, HH:mm'
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  Arrival
+                </span>
+
+                <strong>
+                  {{
+                    flight.arrivalTime
+                    | date:'dd MMM, HH:mm'
+                  }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="flight-card__footer"
+            >
+
+              <span
+                class="flight-card__status"
+              >
+                {{ flight.status }}
+              </span>
+
+              <span
+                class="flight-card__details"
+              >
+                View details →
+              </span>
+
+            </div>
+
+          </div>
+
+        </a>
+
+      }
+
+    </div>
 
   }
 
-}
+</section>

@@ -1,10 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { BookingService } from '../../services/bookingService';
 import { Booking } from '../../models/booking';
 
 @Component({
   selector: 'app-my-bookings',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './my-bookings.html',
   styleUrl: './my-bookings.scss',
 })

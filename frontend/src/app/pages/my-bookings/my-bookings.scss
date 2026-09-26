@@ -1,0 +1,298 @@
+.navbar {
+  height: 80px;
+  padding: 0 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #ffffff;
+}
+
+.navbar__logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #605dec;
+  text-decoration: none;
+}
+
+.navbar__menu {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navbar__link {
+  color: #7c8db0;
+  text-decoration: none;
+  font-size: 16px;
+  transition: 0.2s;
+
+  &:hover {
+    color: #605dec;
+  }
+}
+
+.navbar__link--active {
+  color: #605dec;
+}
+
+
+.bookings-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 64px 40px 100px;
+}
+
+.bookings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  margin-bottom: 40px;
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 40px;
+    color: #27273f;
+  }
+
+  p {
+    margin: 0;
+    color: #7c8db0;
+    font-size: 16px;
+  }
+}
+
+.bookings-header__back {
+  color: #605dec;
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover {
+    color: #5046d4;
+  }
+}
+
+
+.bookings-list {
+  display: grid;
+  gap: 20px;
+}
+
+
+.booking-card {
+  padding: 28px;
+
+  background: #ffffff;
+
+  border: 1px solid #e6e8f0;
+  border-radius: 14px;
+
+  box-shadow: 0 8px 30px rgba(25, 33, 61, 0.06);
+
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 12px 35px rgba(25, 33, 61, 0.1);
+  }
+}
+
+
+.booking-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 28px;
+
+  h2 {
+    margin: 4px 0 0;
+    font-size: 22px;
+    color: #27273f;
+  }
+}
+
+.booking-card__label {
+  font-size: 13px;
+  color: #a1a8bd;
+}
+
+
+.booking-card__status {
+  padding: 7px 12px;
+
+  border-radius: 20px;
+
+  background: #eeecff;
+  color: #605dec;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  text-transform: capitalize;
+}
+
+
+.booking-card__flight {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 18px;
+
+  background: #f8f8fc;
+
+  border-radius: 10px;
+
+  margin-bottom: 22px;
+
+  span {
+    display: block;
+    font-size: 12px;
+    color: #a1a8bd;
+    margin-bottom: 4px;
+  }
+
+  strong {
+    color: #27273f;
+    font-size: 16px;
+  }
+}
+
+.booking-card__plane {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #605dec;
+  color: #ffffff;
+
+  font-size: 18px;
+}
+
+
+.booking-card__details {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 30px;
+
+  span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 12px;
+    color: #a1a8bd;
+  }
+
+  strong {
+    color: #27273f;
+    font-size: 14px;
+  }
+}
+
+.booking-card__price {
+  font-size: 20px !important;
+  color: #605dec !important;
+}
+
+
+.state-message {
+  padding: 60px 0;
+  text-align: center;
+  color: #7c8db0;
+}
+
+.state-message--error {
+  color: #c94b4b;
+}
+
+
+.empty-state {
+  padding: 80px 30px;
+
+  text-align: center;
+
+  border: 1px solid #e6e8f0;
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  h2 {
+    margin: 20px 0 8px;
+    color: #27273f;
+  }
+
+  p {
+    margin: 0 0 24px;
+    color: #7c8db0;
+  }
+
+  a {
+    display: inline-block;
+
+    padding: 12px 20px;
+
+    border-radius: 6px;
+
+    background: #605dec;
+    color: #ffffff;
+
+    text-decoration: none;
+
+    &:hover {
+      background: #5046d4;
+    }
+  }
+}
+
+.empty-state__icon {
+  width: 60px;
+  height: 60px;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #eeecff;
+  color: #605dec;
+
+  font-size: 25px;
+}
+
+
+@media (max-width: 700px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .navbar__menu {
+    gap: 16px;
+  }
+
+  .bookings-page {
+    padding: 40px 20px 80px;
+  }
+
+  .bookings-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .booking-card__details {
+    grid-template-columns: 1fr;
+  }
+}

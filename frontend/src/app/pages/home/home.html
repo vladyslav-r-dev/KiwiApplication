@@ -1,1 +1,353 @@
-<p>home works!</p>
+<header class="navbar">
+
+  <a class="navbar__logo" routerLink="/">
+    KiwiApp
+  </a>
+
+  <nav class="navbar__menu">
+
+    <a class="navbar__link" routerLink="/flights">
+      Flights
+    </a>
+
+    @if (authService.isAuthenticated()) {
+
+      <a
+        class="navbar__link"
+        routerLink="/profile"
+      >
+        Profile
+      </a>
+
+    } @else {
+
+      <a
+        class="navbar__link"
+        (click)="toggleLogin()"
+      >
+        Sign in
+      </a>
+
+      <a
+        class="navbar__signup"
+        (click)="toggleRegister()"
+      >
+        Sign up
+      </a>
+
+    }
+
+  </nav>
+
+</header>
+
+
+<section class="hero">
+
+  <h1 class="hero__title">
+    It’s more than<br>
+    just a trip
+  </h1>
+
+
+  <form
+    class="hero__searchbar"
+    [formGroup]="searchForm"
+    (ngSubmit)="onSearch()"
+  >
+
+    <div class="search-field">
+
+      <img
+        class="search-field__icon"
+        src="/assets/images/departure.svg"
+        alt=""
+      >
+
+      <select
+        class="hero__search search-field__input"
+        formControlName="from"
+      >
+
+        <option value="">
+          From where?
+        </option>
+
+        @for (option of fromOptions(); track option) {
+
+          <option [value]="option">
+            {{ option }}
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+
+    <div class="search-field">
+
+      <img
+        class="search-field__icon"
+        src="/assets/images/arrival.svg"
+        alt=""
+      >
+
+      <select
+        class="hero__search search-field__input"
+        formControlName="to"
+      >
+
+        <option value="">
+          Where to?
+        </option>
+
+        @for (option of toOptions(); track option) {
+
+          <option [value]="option">
+            {{ option }}
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+
+    <div class="search-field">
+
+      <img
+        class="search-field__icon"
+        src="/assets/images/calendar.svg"
+        alt=""
+      >
+
+      <input
+        class="hero__search search-field__input"
+        type="date"
+        formControlName="departureDate"
+      >
+
+    </div>
+
+
+    <div class="search-field">
+
+      <img
+        class="search-field__icon"
+        src="/assets/images/adult.svg"
+        alt=""
+      >
+
+      <input
+        class="hero__search search-field__input"
+        type="text"
+        value="1 adult"
+        readonly
+      >
+
+    </div>
+
+
+    <button
+      class="btn"
+      type="submit"
+    >
+      Search
+    </button>
+
+  </form>
+
+</section>
+
+
+<section class="explore">
+
+  <div class="explore__header">
+
+    <h2>
+      Find your next
+      <span>adventure</span>
+    </h2>
+
+    <a routerLink="/flights">
+      All flights →
+    </a>
+
+  </div>
+
+
+  <div class="explore__grid">
+
+    @for (
+      flight of flights();
+      track flight.flightId;
+      let index = $index
+    ) {
+
+      <a
+        class="flight-card"
+        [routerLink]="[
+          '/flights',
+          flight.flightId
+        ]"
+      >
+
+        <img
+          class="flight-card__image"
+          [src]="cardImages[index]"
+          [alt]="flight.to"
+        >
+
+
+        <div
+          class="flight-card__overlay"
+        ></div>
+
+
+        <div class="flight-card__content">
+
+          <div class="flight-card__main">
+
+            <div>
+
+              <span class="flight-card__route">
+                {{ flight.from }}
+                →
+                {{ flight.to }}
+              </span>
+
+              <p>
+                {{ flight.airline }}
+              </p>
+
+            </div>
+
+
+            <strong class="flight-card__price">
+              ${{ flight.price }}
+            </strong>
+
+          </div>
+
+
+          <div class="flight-card__details">
+
+            <div>
+              <span>Flight</span>
+
+              <strong>
+                {{ flight.flightNumber }}
+              </strong>
+            </div>
+
+
+            <div>
+              <span>Departure</span>
+
+              <strong>
+                {{ flight.departureTime | date:'dd MMM, HH:mm' }}
+              </strong>
+            </div>
+
+
+            <div>
+              <span>Status</span>
+
+              <strong>
+                {{ flight.status }}
+              </strong>
+            </div>
+
+          </div>
+
+        </div>
+
+      </a>
+
+    }
+
+  </div>
+
+</section>
+
+
+<footer class="footer">
+
+  <a
+    class="footer__logo"
+    routerLink="/home"
+  >
+    KiwiApp
+  </a>
+
+
+  <nav class="footer__links">
+
+    <a routerLink="/flights">
+      Flights
+    </a>
+
+
+    @if (authService.isAuthenticated()) {
+
+      <a routerLink="/bookings">
+        My bookings
+      </a>
+
+      <a routerLink="/profile">
+        Profile
+      </a>
+
+    } @else {
+
+      <a (click)="toggleLogin()">
+        Sign in
+      </a>
+
+    }
+
+  </nav>
+
+
+  <p class="footer__copy">
+    © 2026 KiwiApp
+  </p>
+
+</footer>
+
+
+@if (isLoginOpen) {
+
+  <div class="modal-backdrop">
+
+    <div class="modal-window">
+
+      <app-login
+        (close)="closeLogin()"
+      ></app-login>
+
+    </div>
+
+  </div>
+
+}
+
+
+@if (isRegisterOpen) {
+
+  <div class="modal-backdrop">
+
+    <div class="modal-window">
+
+      <app-register
+        (registerClose)="closeRegister()"
+      ></app-register>
+
+    </div>
+
+  </div>
+
+}

@@ -1,64 +1,204 @@
-<h1>Admin Panel</h1>
+<header class="admin-header">
+  <a class="admin-header__logo" routerLink="/home">
+    KiwiApp
+    <span>Admin</span>
+  </a>
 
-<h2>Users</h2>
+  <a class="admin-header__back" routerLink="/home">
+    ← Back to app
+  </a>
+</header>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Email</th>
-      <th>Role</th>
-    </tr>
-  </thead>
 
-  <tbody>
-    @for (user of adminUsers(); track user.id) {
-      <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.firstName }}</td>
-        <td>{{ user.lastName }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.role }}</td>
-      </tr>
-    }
-  </tbody>
-</table>
+<main class="admin-page">
 
-<h2>Bookings</h2>
+  <div class="admin-title">
+    <div>
+      <h1>Admin dashboard</h1>
+      <p>Manage users and bookings.</p>
+    </div>
+  </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Booking ID</th>
-      <th>User ID</th>
-      <th>Flight ID</th>
-      <th>Email</th>
-      <th>Status</th>
-      <th>Price</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
 
-  <tbody>
-    @for (booking of adminBookings(); track booking.bookingId) {
-      <tr>
-        <td>{{ booking.bookingId }}</td>
-        <td>{{ booking.userId }}</td>
-        <td>{{ booking.flightId }}</td>
-        <td>{{ booking.email }}</td>
-        <td>{{ booking.status }}</td>
-        <td>{{ booking.price }}</td>
-        <td>
-          <button
-            type="button"
-            (click)="deleteBooking(booking.bookingId)"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    }
-  </tbody>
-</table>
+  <section class="admin-stats">
+
+    <div class="stat-card">
+      <span>Total users</span>
+
+      <strong>
+        {{ adminUsers().length }}
+      </strong>
+    </div>
+
+
+    <div class="stat-card">
+      <span>Total bookings</span>
+
+      <strong>
+        {{ adminBookings().length }}
+      </strong>
+    </div>
+
+  </section>
+
+
+  <section class="admin-section">
+
+    <div class="admin-section__header">
+      <div>
+        <h2>Users</h2>
+        <p>Registered KiwiApp accounts.</p>
+      </div>
+
+      <span class="admin-section__count">
+        {{ adminUsers().length }} users
+      </span>
+    </div>
+
+
+    <div class="table-wrapper">
+
+      <table class="admin-table">
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (user of adminUsers(); track user.id) {
+
+            <tr>
+              <td class="admin-table__id">
+                #{{ user.id }}
+              </td>
+
+              <td>
+                {{ user.firstName }}
+              </td>
+
+              <td>
+                {{ user.lastName }}
+              </td>
+
+              <td>
+                {{ user.email }}
+              </td>
+
+              <td>
+                <span
+                  class="role-badge"
+                  [class.role-badge--admin]="user.role === 'Admin'"
+                >
+                  {{ user.role }}
+                </span>
+              </td>
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+  <section class="admin-section">
+
+    <div class="admin-section__header">
+      <div>
+        <h2>Bookings</h2>
+        <p>All bookings created in the system.</p>
+      </div>
+
+      <span class="admin-section__count">
+        {{ adminBookings().length }} bookings
+      </span>
+    </div>
+
+
+    <div class="table-wrapper">
+
+      <table class="admin-table">
+
+        <thead>
+          <tr>
+            <th>Booking</th>
+            <th>User</th>
+            <th>Flight</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Price</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (
+            booking of adminBookings();
+            track booking.bookingId
+          ) {
+
+            <tr>
+
+              <td class="admin-table__id">
+                #{{ booking.bookingId }}
+              </td>
+
+              <td>
+                #{{ booking.userId }}
+              </td>
+
+              <td>
+                #{{ booking.flightId }}
+              </td>
+
+              <td>
+                {{ booking.email }}
+              </td>
+
+              <td>
+                <span class="status-badge">
+                  {{ booking.status }}
+                </span>
+              </td>
+
+              <td class="admin-table__price">
+                €{{ booking.price }}
+              </td>
+
+              <td class="admin-table__actions">
+
+                <button
+                  class="delete-button"
+                  type="button"
+                  (click)="deleteBooking(booking.bookingId)"
+                >
+                  Delete
+                </button>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</main>

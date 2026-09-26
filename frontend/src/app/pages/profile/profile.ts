@@ -1,17 +1,20 @@
 import { Component, signal } from '@angular/core';
 import { AuthService } from '../../services/auth';
 import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { User } from './User';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
 export class Profile {
   authService = inject(AuthService);
+  router = inject(Router);
   
   updateProfileForm = new FormGroup({
   name: new FormControl('', { nonNullable: true }),
@@ -29,6 +32,10 @@ export class Profile {
   this.currentUser.set(user);
   this.error.set(null);
   this.loading.set(false);
+  this.updateProfileForm.patchValue({
+  name: user.name,
+  lastName: user.lastName
+});
   },
 error: (err) => {
   this.error.set(err.message);
@@ -56,4 +63,16 @@ error: (err) => {
       });
     }
   }
+
+  logout() {
+  this.authService.logout().subscribe({
+    next: () => {
+      this.authService.accessToken.set(null);
+      this.router.navigate(['/home']);
+    },
+    error: (err) => {
+      console.error('Logout failed:', err);
+    }
+  });
+}
 }

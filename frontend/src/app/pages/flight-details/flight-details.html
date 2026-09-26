@@ -1,167 +1,492 @@
-<p>Flight Details</p>
+<header class="navbar">
+  <a class="navbar__logo" routerLink="/">
+    KiwiApp
+  </a>
 
-@if (loading()) {
-  <p>Loading...</p>
-}
-@else if (error()) {
-  <p>{{ error() }}</p>
-}
-@else if (flight(); as currentFlight) {
+  <nav class="navbar__menu">
+    <a class="navbar__link" routerLink="/flights">
+      Flights
+    </a>
 
-  <div class="flight-info">
-    <h2>
-      {{ currentFlight.from }} → {{ currentFlight.to }}
-    </h2>
+    @if (authService.isAuthenticated()) {
+      <a class="navbar__link" routerLink="/bookings">
+        My bookings
+      </a>
 
-    @if (currentFlight.airline) {
-      <p>Airline: {{ currentFlight.airline }}</p>
+      <a class="navbar__link" routerLink="/profile">
+        Profile
+      </a>
     }
+  </nav>
+</header>
 
-    @if (currentFlight.flightNumber) {
-      <p>Flight: {{ currentFlight.flightNumber }}</p>
-    }
 
-    <p>Price: {{ currentFlight.price }} €</p>
-  </div>
+<main class="flight-page">
 
-  <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+  <a class="back-link" routerLink="/flights">
+    ← Back to flights
+  </a>
 
-    <div class="booking-email">
-      <label for="email">Email:</label>
 
-      <input
-        id="email"
-        type="email"
-        formControlName="email"
-      />
-    </div>
+  @if (loading()) {
 
-    <div formArrayName="passengers">
+    <p class="state-message">
+      Loading flight...
+    </p>
 
-      @for (
-        passenger of bookingForm.controls.passengers.controls;
-        track $index;
-        let i = $index
-      ) {
+  } @else if (error()) {
 
-        <div
-          class="passenger"
-          [formGroupName]="i"
-        >
+    <p class="state-message state-message--error">
+      {{ error() }}
+    </p>
 
-          <h3>Passenger {{ i + 1 }}</h3>
+  } @else if (flight(); as currentFlight) {
 
-          <label [for]="'firstName-' + i">
-            First Name:
-          </label>
+    <section class="flight-hero">
 
-          <input
-            [id]="'firstName-' + i"
-            type="text"
-            formControlName="firstName"
-          />
+      <div class="flight-hero__route">
 
-          <label [for]="'lastName-' + i">
-            Last Name:
-          </label>
+        <div>
+          <span class="flight-hero__label">
+            Departure
+          </span>
 
-          <input
-            [id]="'lastName-' + i"
-            type="text"
-            formControlName="lastName"
-          />
+          <h1>
+            {{ currentFlight.from }}
+          </h1>
 
-          <div class="seat-selection">
+          <strong>
+            {{ currentFlight.fromIata }}
+          </strong>
+        </div>
 
-            <h4>Choose seat</h4>
 
-            <p>
-              Manual seat selection: +15 €
-            </p>
+        <div class="flight-hero__direction">
+          <span>✈</span>
+          <div></div>
+        </div>
 
-            <div class="seats">
 
-              @for (
-                seat of currentFlight.seats;
-                track seat.seatNumber
-              ) {
+        <div class="flight-hero__destination">
+          <span class="flight-hero__label">
+            Arrival
+          </span>
 
-                <button
-                  type="button"
-                  class="seat"
-                  [disabled]="seat.isOccupied"
-                  [class.selected]="
-                    passenger.get('selectedSeatNumber')?.value === seat.seatNumber
-                  "
-                  (click)="
-                    $any(passenger.get('selectedSeatNumber'))?.setValue(seat.seatNumber)
-                  "
-                >
-                  {{ seat.seatNumber }}
-                </button>
+          <h1>
+            {{ currentFlight.to }}
+          </h1>
 
-              }
+          <strong>
+            {{ currentFlight.toIata }}
+          </strong>
+        </div>
 
+      </div>
+
+
+      <div class="flight-hero__price">
+        <span>From</span>
+
+        <strong>
+          €{{ currentFlight.price }}
+        </strong>
+      </div>
+
+    </section>
+
+
+    <section class="flight-summary">
+
+      <div class="flight-summary__item">
+        <span>Airline</span>
+        <strong>{{ currentFlight.airline }}</strong>
+      </div>
+
+      <div class="flight-summary__item">
+        <span>Flight</span>
+        <strong>{{ currentFlight.flightNumber }}</strong>
+      </div>
+
+      <div class="flight-summary__item">
+        <span>Departure</span>
+
+        <strong>
+          {{ currentFlight.departureTime | date:'dd MMM, HH:mm' }}
+        </strong>
+      </div>
+
+      <div class="flight-summary__item">
+        <span>Arrival</span>
+
+        <strong>
+          {{ currentFlight.arrivalTime | date:'dd MMM, HH:mm' }}
+        </strong>
+      </div>
+
+      <div class="flight-summary__item">
+        <span>Status</span>
+
+        <strong class="flight-status">
+          {{ currentFlight.status }}
+        </strong>
+      </div>
+
+    </section>
+
+
+    <form
+      class="booking-layout"
+      [formGroup]="bookingForm"
+      (ngSubmit)="submitBooking()"
+    >
+
+      <div class="booking-main">
+
+        <section class="booking-section">
+
+          <div class="section-heading">
+            <div>
+              <h2>Passenger details</h2>
+
+              <p>
+                Enter the information for each passenger.
+              </p>
             </div>
 
             <button
+              class="add-passenger"
               type="button"
+              (click)="addPassenger()"
+            >
+              + Add passenger
+            </button>
+          </div>
+
+
+          <div class="booking-email">
+
+            <label for="email">
+              Contact email
+            </label>
+
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="you@example.com"
+            >
+
+          </div>
+
+
+          <div formArrayName="passengers">
+
+            @for (
+              passenger of bookingForm.controls.passengers.controls;
+              track $index;
+              let i = $index
+            ) {
+
+              <div
+                class="passenger-card"
+                [formGroupName]="i"
+              >
+
+                <div class="passenger-card__header">
+
+                  <h3>
+                    Passenger {{ i + 1 }}
+                  </h3>
+
+                  @if (bookingForm.controls.passengers.length > 1) {
+
+                    <button
+                      class="remove-passenger"
+                      type="button"
+                      (click)="removePassenger(i)"
+                    >
+                      Remove
+                    </button>
+
+                  }
+
+                </div>
+
+
+                <div class="passenger-fields">
+
+                  <div class="form-field">
+
+                    <label [for]="'firstName-' + i">
+                      First name
+                    </label>
+
+                    <input
+                      [id]="'firstName-' + i"
+                      type="text"
+                      formControlName="firstName"
+                      placeholder="First name"
+                    >
+
+                  </div>
+
+
+                  <div class="form-field">
+
+                    <label [for]="'lastName-' + i">
+                      Last name
+                    </label>
+
+                    <input
+                      [id]="'lastName-' + i"
+                      type="text"
+                      formControlName="lastName"
+                      placeholder="Last name"
+                    >
+
+                  </div>
+
+                </div>
+
+
+                <div class="seat-selection">
+
+                  <div class="seat-selection__header">
+
+                    <div>
+                      <h4>Choose seat</h4>
+
+                      <p>
+                        Manual seat selection +15 €
+                      </p>
+                    </div>
+
+
+                    <button
+                      class="random-seat"
+                      type="button"
+                      (click)="
+                        $any(passenger.get('selectedSeatNumber'))
+                          ?.setValue(null)
+                      "
+                    >
+                      Random seat
+                    </button>
+
+                  </div>
+
+
+                  <div class="seat-legend">
+
+                    <span>
+                      <i class="seat-example"></i>
+                      Available
+                    </span>
+
+                    <span>
+                      <i class="seat-example seat-example--selected"></i>
+                      Selected
+                    </span>
+
+                    <span>
+                      <i class="seat-example seat-example--occupied"></i>
+                      Occupied
+                    </span>
+
+                  </div>
+
+
+                  <div class="plane-map">
+
+  <div class="plane-map__cabin">
+
+    @for (row of seatRows(); track row.row) {
+
+      <div class="plane-row">
+
+        <div class="plane-row__seats">
+
+          @for (seat of row.left; track seat.seatNumber) {
+
+            <button
+              type="button"
+              class="plane-seat"
+              [disabled]="seat.isOccupied"
+              [class.plane-seat--selected]="
+                passenger.get('selectedSeatNumber')?.value
+                  === seat.seatNumber
+              "
               (click)="
-                $any(passenger.get('selectedSeatNumber'))?.setValue(null)
+                $any(
+                  passenger.get('selectedSeatNumber')
+                )?.setValue(seat.seatNumber)
               "
             >
-              Random seat
+              {{ seat.seatNumber.slice(-1) }}
             </button>
 
-            @if (passenger.get('selectedSeatNumber')?.value; as selectedSeat) {
-              <p>
-                Selected seat: {{ selectedSeat }}
-              </p>
-            }
-            @else {
-              <p>
-                Seat will be assigned automatically.
-              </p>
+          }
+
+        </div>
+
+
+        <span class="plane-row__number">
+          {{ row.row }}
+        </span>
+
+
+        <div class="plane-row__seats">
+
+          @for (seat of row.right; track seat.seatNumber) {
+
+            <button
+              type="button"
+              class="plane-seat"
+              [disabled]="seat.isOccupied"
+              [class.plane-seat--selected]="
+                passenger.get('selectedSeatNumber')?.value
+                  === seat.seatNumber
+              "
+              (click)="
+                $any(
+                  passenger.get('selectedSeatNumber')
+                )?.setValue(seat.seatNumber)
+              "
+            >
+              {{ seat.seatNumber.slice(-1) }}
+            </button>
+
+          }
+
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
+
+
+                  @if (
+                    passenger.get('selectedSeatNumber')?.value;
+                    as selectedSeat
+                  ) {
+
+                    <p class="selected-seat">
+                      Selected seat:
+                      <strong>{{ selectedSeat }}</strong>
+                    </p>
+
+                  } @else {
+
+                    <p class="selected-seat">
+                      Seat will be assigned automatically.
+                    </p>
+
+                  }
+
+                </div>
+
+              </div>
+
             }
 
           </div>
 
-          @if (bookingForm.controls.passengers.length > 1) {
-            <button
-              type="button"
-              (click)="removePassenger(i)"
-            >
-              Remove Passenger
-            </button>
+        </section>
+
+      </div>
+
+
+      <aside class="booking-sidebar">
+
+        <div class="booking-summary">
+
+          <h2>Your trip</h2>
+
+          <div class="booking-summary__route">
+
+            <strong>
+              {{ currentFlight.fromIata }}
+            </strong>
+
+            <span>→</span>
+
+            <strong>
+              {{ currentFlight.toIata }}
+            </strong>
+
+          </div>
+
+
+          <div class="booking-summary__row">
+            <span>Flight</span>
+            <strong>{{ currentFlight.flightNumber }}</strong>
+          </div>
+
+          <div class="booking-summary__row">
+            <span>Passengers</span>
+
+            <strong>
+              {{ bookingForm.controls.passengers.length }}
+            </strong>
+          </div>
+
+          <div class="booking-summary__row">
+            <span>Price per passenger</span>
+
+            <strong>
+              €{{ currentFlight.price }}
+            </strong>
+          </div>
+
+
+          <div class="booking-summary__total">
+
+            <span>Flight total</span>
+
+            <strong>
+              €{{
+                currentFlight.price
+                * bookingForm.controls.passengers.length
+              }}
+            </strong>
+
+          </div>
+
+
+          <button
+            class="book-button"
+            type="submit"
+            [disabled]="
+              bookingForm.invalid ||
+              bookingLoading()
+            "
+          >
+            @if (bookingLoading()) {
+              Creating booking...
+            } @else {
+              Continue to payment
+            }
+          </button>
+
+
+          @if (bookingError()) {
+
+            <p class="booking-error">
+              {{ bookingError() }}
+            </p>
+
           }
 
         </div>
-      }
 
-    </div>
+      </aside>
 
-    <button
-      type="button"
-      (click)="addPassenger()"
-    >
-      Add Passenger
-    </button>
+    </form>
 
-    <button
-      type="submit"
-      [disabled]="bookingForm.invalid || bookingLoading()"
-    >
-      @if (bookingLoading()) {
-        Creating booking...
-      }
-      @else {
-        Book Flight
-      }
-    </button>
+  }
 
-    @if (bookingError()) {
-      <p>{{ bookingError() }}</p>
-    }
-
-  </form>
-}
+</main>

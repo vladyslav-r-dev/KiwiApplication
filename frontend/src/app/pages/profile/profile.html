@@ -1,34 +1,148 @@
-@if (loading()) {
-  <p>Loading...</p>
-} @else if (error()) {
-  <p>Error: {{ error() }}</p>
-} @else if (currentUser(); as user) {
-  <p>User ID: {{ user.userId }}</p>
-  <p>Email: {{ user.email }}</p>
-  <p>Role: {{ user.role }}</p>
-  <p>Name: {{ user.name }}</p>
-  <p>Last Name: {{ user.lastName }}</p>
-}
+<header class="navbar">
+  <a class="navbar__logo" routerLink="/">
+    KiwiApp
+  </a>
 
-<form [formGroup]="updateProfileForm" (ngSubmit)="saveProfile()">
+  <nav class="navbar__menu">
+    <a class="navbar__link" routerLink="/flights">
+      Flights
+    </a>
 
-  <label for="name">Name:</label>
-  <input
-    type="text"
-    id="name"
-    formControlName="name"
-  >
+    <a class="navbar__link" routerLink="/bookings">
+      My bookings
+    </a>
 
-  <label for="lastName">Last Name:</label>
-  <input
-    type="text"
-    id="lastName"
-    formControlName="lastName"
-  >
+    <a class="navbar__link" routerLink="/profile">
+      Profile
+    </a>
+  </nav>
+</header>
 
-  <p>Email: {{ currentUser()?.email }}</p>
-  <p>Role: {{ currentUser()?.role }}</p>
+<section class="profile-page">
 
-  <button type="submit">Update</button>
+  <div class="profile-header">
+    <div>
+      <h1>Profile</h1>
+      <p>Manage your personal information.</p>
+    </div>
+  </div>
 
-</form>
+
+  @if (loading()) {
+
+    <p class="profile-state">
+      Loading profile...
+    </p>
+
+  } @else if (error()) {
+
+    <p class="profile-state profile-state--error">
+      {{ error() }}
+    </p>
+
+  } @else if (currentUser(); as user) {
+
+    <div class="profile-card">
+
+      <div class="profile-card__top">
+
+        <div class="profile-avatar">
+          {{ user.name.charAt(0) }}
+        </div>
+
+        <div>
+          <h2>
+            {{ user.name }} {{ user.lastName }}
+          </h2>
+
+          <p>
+            {{ user.email }}
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="profile-info">
+
+        <div class="profile-info__item">
+          <span>Email</span>
+          <strong>{{ user.email }}</strong>
+        </div>
+
+        <div class="profile-info__item">
+          <span>Role</span>
+          <strong>{{ user.role }}</strong>
+        </div>
+
+        <div class="profile-info__item">
+          <span>User ID</span>
+          <strong>{{ user.userId }}</strong>
+        </div>
+
+      </div>
+
+
+      <div class="profile-divider"></div>
+
+
+      <form
+        class="profile-form"
+        [formGroup]="updateProfileForm"
+        (ngSubmit)="saveProfile()"
+      >
+
+        <h3>Personal information</h3>
+
+        <div class="profile-form__grid">
+
+          <div class="profile-field">
+            <label for="name">
+              Name
+            </label>
+
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+            >
+          </div>
+
+
+          <div class="profile-field">
+            <label for="lastName">
+              Last name
+            </label>
+
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+            >
+          </div>
+
+        </div>
+
+
+        <button
+          class="profile-submit"
+          type="submit"
+        >
+          Save changes
+        </button>
+
+        <button
+          class="profile-logout"
+          type="button"
+          (click)="logout()"
+        >
+          Log out
+        </button>
+
+      </form>
+
+    </div>
+
+  }
+
+</section>

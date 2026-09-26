@@ -1,4 +1,6 @@
 import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
 import {
   AuthService,
   AdminUser,
@@ -7,12 +9,11 @@ import {
 
 @Component({
   selector: 'app-admin',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './admin.html',
   styleUrl: './admin.scss',
 })
 export class Admin {
-
   adminUsers = signal<AdminUser[]>([]);
   adminBookings = signal<AdminBooking[]>([]);
 

@@ -104,17 +104,25 @@ public class FlightService(IGenericRepository<Flight> repository,
 
     return new GetFlightResult
     {
-        FlightId = flight.FlightId,
-        From = flight.From,
-        To = flight.To,
+    FlightId = flight.FlightId,
+    From = flight.From,
+    To = flight.To,
+    FromIata = flight.FromIata,
+    ToIata = flight.ToIata,
+    Airline = flight.Airline,
+    FlightNumber = flight.FlightNumber,
+    DepartureTime = flight.DepartureTime,
+    ArrivalTime = flight.ArrivalTime,
+    Price = flight.Price,
+    Status = flight.Status,
 
-        Seats = flight.Seats
-            .Select(seat => new SeatResult
-            {
-                SeatNumber = seat.SeatNumber,
-                IsOccupied = seat.IsOccupied
-            })
-            .ToList()
+    Seats = flight.Seats
+        .Select(seat => new SeatResult
+        {
+            SeatNumber = seat.SeatNumber,
+            IsOccupied = seat.IsOccupied
+        })
+        .ToList()
     };
 }
     

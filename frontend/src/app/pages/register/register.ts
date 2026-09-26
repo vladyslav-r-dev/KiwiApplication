@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 
@@ -10,6 +10,8 @@ import { AuthService } from '../../services/auth';
 })
 export class Register {
 
+  @Output() registerClose = new EventEmitter<void>();
+
   constructor(private authService: AuthService) {}
   registerForm = new FormGroup({
   name: new FormControl('', { nonNullable: true }),
@@ -19,12 +21,13 @@ export class Register {
   passport: new FormControl('', { nonNullable: true }),
 });
 
+
   onSubmit() {
     if (this.registerForm.valid) {
       const registrationData = this.registerForm.getRawValue();
       this.authService.register(registrationData).subscribe({
         next: (response) => {
-          console.log('Registration successful:', response);
+          this.registerClose.emit();
         },
         error: (error) => {
           console.error('Registration failed:', error);
