@@ -31,6 +31,37 @@ public class BookingRepository(AppDbContext db)
             .ToListAsync();
     }
 
+    public async Task<bool> TryMarkAsPaid(int id)
+    {
+        var updated = await db.Bookings
+            .Where(booking => booking.BookingId == id && booking.Status != BookingStatus.Paid)
+            .ExecuteUpdateAsync(update => update.SetProperty(booking => booking.Status, BookingStatus.Paid));
+
+        return updated == 1;
+    }
+
+    public async Task ReleaseSeatsForBooking(Booking booking)
+    {
+        var seats = booking.Passengers
+            .Where(passenger => passenger.Seat is not null)
+            .Select(passenger => passenger.Seat!)
+            .DistinctBy(seat => seat.Id)
+            .ToList();
+        var seatIds = seats.Select(seat => seat.Id).ToList();
+        var seatsUsedElsewhere = await db.Bookings
+            .Where(other => other.BookingId != booking.BookingId)
+            .SelectMany(other => other.Passengers)
+            .Where(passenger => passenger.SeatId.HasValue && seatIds.Contains(passenger.SeatId.Value))
+            .Select(passenger => passenger.SeatId!.Value)
+            .ToListAsync();
+
+        foreach (var seat in seats)
+        {
+            if (!seatsUsedElsewhere.Contains(seat.Id))
+                seat.IsOccupied = false;
+        }
+    }
+
     public Task<List<Booking>> GetBookingsByUserId(int userId)
     {
         return db.Bookings

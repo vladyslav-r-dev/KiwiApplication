@@ -34,11 +34,12 @@ public class StripeWebhookService(
                     return Results.BadRequest();
                 }
 
-                await bookingService.MarkAsPaid(bookingId);
-
-                backgroundJobClient.Enqueue<BookingEmailJob>(
-                    job => job.SendBookingConfirmationAsync(bookingId)
-                );
+                if (await bookingService.MarkAsPaid(bookingId))
+                {
+                    backgroundJobClient.Enqueue<BookingEmailJob>(
+                        job => job.SendBookingConfirmationAsync(bookingId)
+                    );
+                }
             }
 
             return Results.Ok();

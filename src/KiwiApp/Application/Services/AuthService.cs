@@ -191,14 +191,15 @@ public class AuthService(
         {
             logger.LogWarning("Login failed. Email {Email} was not found", command.Email);
 
-            throw new KeyNotFoundException("Email doesn't exist");
+            throw new UnauthorizedAccessException("Invalid email or password");
         }
 
-        var isPasswordValid = BCrypt.Net.BCrypt.Verify(command.Password, existingUser.Password);
+        var isPasswordValid = existingUser.Password is not null &&
+            BCrypt.Net.BCrypt.Verify(command.Password, existingUser.Password);
 
         if (!isPasswordValid)
         {
-            throw new KeyNotFoundException("Invalid email or password");
+            throw new UnauthorizedAccessException("Invalid email or password");
         }
 
         var accessToken = tokenService.CreateAccessToken(existingUser);
@@ -263,7 +264,7 @@ public class AuthService(
         {
             logger.LogWarning("User with id {UserId} was not found", refreshToken.UserId);
 
-            throw new KeyNotFoundException($"User with id {refreshToken.UserId} was not found");
+            throw new UnauthorizedAccessException("Invalid refresh token");
         }
 
         var accessToken = tokenService.CreateAccessToken(existingUser);

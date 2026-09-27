@@ -42,6 +42,18 @@ public static class ExceptionMapper
                 ex.Message,
                 path),
 
+            KeyNotFoundException ex => Create(
+                StatusCodes.Status404NotFound,
+                "Not found",
+                ex.Message,
+                path),
+
+            UnauthorizedAccessException ex => Create(
+                StatusCodes.Status401Unauthorized,
+                "Unauthorized",
+                ex.Message,
+                path),
+
             _ => Create(
                 StatusCodes.Status500InternalServerError,
                 "Internal server error",

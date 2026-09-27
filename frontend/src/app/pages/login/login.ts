@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, inject, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
 
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
@@ -38,8 +38,6 @@ export class Login implements AfterViewInit {
 
       return;
     }
-
-    inject(Router);
 
     google.accounts.id.initialize({
       client_id: '269421523996-9mvqdofsd00fm7k8vb5sg4r841capblj.apps.googleusercontent.com',

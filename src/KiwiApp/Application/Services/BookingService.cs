@@ -1,3 +1,4 @@
+using KiwiApp.Application.Exceptions;
 using KiwiApp.Application.Mapping;
 using KiwiApp.Application.UseCases.Shared;
 using KiwiApp.Application.Interfaces;
@@ -38,7 +39,7 @@ public class BookingService(
 
         if (command.Passengers.Count > availableSeats.Count)
         {
-            throw new InvalidOperationException(
+            throw new BadRequestException(
                 "There are not enough available seats for all passengers."
             );
         }
@@ -58,7 +59,7 @@ public class BookingService(
                         passengerCommand.SelectedSeatNumber,
                         StringComparison.OrdinalIgnoreCase
                     )
-                ) ?? throw new InvalidOperationException(
+                ) ?? throw new BadRequestException(
                     $"Seat {passengerCommand.SelectedSeatNumber} is occupied or does not exist."
                 );
 
@@ -120,6 +121,7 @@ public class BookingService(
             throw new KeyNotFoundException($"Booking with id {id} was not found");
         }
 
+        await bookingRepository.ReleaseSeatsForBooking(booking);
         await bookingRepository.Remove(booking);
 
         await unitOfWork.SaveChangesAsync();
@@ -227,21 +229,14 @@ public class BookingService(
         };
     }
 
-    public async Task MarkAsPaid(int id)
+    public async Task<bool> MarkAsPaid(int id)
     {
-        var booking = await bookingRepository.GetByIdWithPassengers(id);
-
-        if (booking is null)
-            return;
-
-        if (booking.Status == BookingStatus.Paid)
-            return;
-
-        booking.Status = BookingStatus.Paid;
-
-        await unitOfWork.SaveChangesAsync();
+        var changed = await bookingRepository.TryMarkAsPaid(id);
 
         await cacheService.RemoveAsync("bookings:all");
+        await cacheService.RemoveAsync($"bookings:id:{id}");
+
+        return changed;
     }
 
     public async Task SetStripeCheckoutSessionId(int bookingId, string sessionId)

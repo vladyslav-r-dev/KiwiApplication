@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
@@ -52,9 +52,16 @@ export class Flights {
   constructor(
     private flightsService: FlightsService,
     public authService: AuthService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
+    const params = this.route.snapshot.queryParamMap;
+    this.searchForm.patchValue({
+      from: params.get('from') ?? '',
+      to: params.get('to') ?? '',
+      departureDate: params.get('departureDate') ?? '',
+    });
     this.loadFlights();
   }
 
@@ -73,6 +80,11 @@ export class Flights {
         this.fromOptions.set([...new Set(data.map((flight) => flight.from))]);
 
         this.toOptions.set([...new Set(data.map((flight) => flight.to))]);
+
+        const { from, to, departureDate } = this.searchForm.getRawValue();
+        if (from || to || departureDate) {
+          this.reactiveSearch();
+        }
       },
 
       error: () => {

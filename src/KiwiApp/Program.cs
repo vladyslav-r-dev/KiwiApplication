@@ -48,7 +48,10 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 builder.Services.AddProblemDetails();
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Flight.Create", policy => policy.RequireRole("Admin"));
+});
 builder.Services.AddAuthentication();
 var dbPath = Path.GetFullPath("app.db");
 Console.WriteLine($"SQLite DB path: {dbPath}");
@@ -57,7 +60,11 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidat
 ServiceBuilder.AddRepositories(builder);
 ServiceBuilder.ServiceCollection(builder);
 
-var key = "9fH3kL8xQ2vPz7A1mN4sD6wR0yT5uB8cE1gJ9hK2L4M6nP8rS0vX3Z5";
+var key = builder.Configuration["Token:Key"];
+if (string.IsNullOrWhiteSpace(key) || Encoding.UTF8.GetByteCount(key) < 32)
+{
+    throw new InvalidOperationException("Configure Token:Key (at least 32 UTF-8 bytes) using User Secrets or Token__Key.");
+}
 
 builder.Services.AddCors(options =>
 {

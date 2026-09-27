@@ -97,12 +97,15 @@ public static class FlightEndpoints
 
         }).RequireAuthorization(policy => policy.RequireRole("Admin"));
 
-        app.MapDelete("/flights/clear", async (AppDbContext dbContext) => // фича для тестов только, хардкод
+        if (app.Environment.IsDevelopment())
         {
-            await dbContext.Flights
-            .Where(flight => !flight.Bookings.Any())
-            .ExecuteDeleteAsync();
-            return Results.Ok("Flights cleared");
-        });
+            app.MapDelete("/flights/clear", async (AppDbContext dbContext) =>
+            {
+                await dbContext.Flights
+                .Where(flight => !flight.Bookings.Any())
+                .ExecuteDeleteAsync();
+                return Results.Ok("Flights cleared");
+            }).RequireAuthorization(policy => policy.RequireRole("Admin"));
+        }
     }
 }

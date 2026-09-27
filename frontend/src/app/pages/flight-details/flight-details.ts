@@ -61,6 +61,12 @@ export class FlightDetails implements OnInit {
     this.getFlightDetails();
   }
 
+  get totalPrice(): number {
+    const passengers = this.bookingForm.controls.passengers.getRawValue();
+    const manualSeats = passengers.filter((passenger) => passenger.selectedSeatNumber?.trim()).length;
+    return (this.flight()?.price ?? 0) * passengers.length + 15 * manualSeats;
+  }
+
   submitBooking() {
     if (this.bookingForm.invalid) {
       return;

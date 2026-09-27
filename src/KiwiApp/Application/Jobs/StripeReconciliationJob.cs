@@ -43,7 +43,8 @@ public class StripeReconciliationJob(
 
             if (session.PaymentStatus == "paid")
             {
-                await bookingService.MarkAsPaid(booking.BookingId);
+                if (!await bookingService.MarkAsPaid(booking.BookingId))
+                    continue;
 
                 backgroundJobClient.Enqueue<BookingEmailJob>(
                     job => job.SendBookingConfirmationAsync(booking.BookingId)
