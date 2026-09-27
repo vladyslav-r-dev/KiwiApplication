@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { BookingService } from '../../services/bookingService';
+import { BookingService } from '../../services/booking.service';
 import { Booking } from '../../models/booking';
 
 @Component({
@@ -29,7 +29,7 @@ export class MyBookings {
         console.error('Loading bookings failed:', error);
         this.error.set('Failed to load bookings');
         this.loading.set(false);
-      }
+      },
     });
   }
 }

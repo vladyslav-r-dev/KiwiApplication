@@ -1,55 +1,31 @@
 <header class="navbar">
-  <a class="navbar__logo" routerLink="/">
-    KiwiApp
-  </a>
+  <a class="navbar__logo" routerLink="/"> KiwiApp </a>
 
   <nav class="navbar__menu">
-    <a class="navbar__link" routerLink="/flights">
-      Flights
-    </a>
+    <a class="navbar__link" routerLink="/flights"> Flights </a>
 
     @if (authService.isAuthenticated()) {
-      <a class="navbar__link" routerLink="/bookings">
-        My bookings
-      </a>
+      <a class="navbar__link" routerLink="/bookings"> My bookings </a>
 
-      <a class="navbar__link" routerLink="/profile">
-        Profile
-      </a>
+      <a class="navbar__link" routerLink="/profile"> Profile </a>
     }
   </nav>
 </header>
 
-
 <main class="flight-page">
-
-  <a class="back-link" routerLink="/flights">
-    ← Back to flights
-  </a>
-
+  <a class="back-link" routerLink="/flights"> ← Back to flights </a>
 
   @if (loading()) {
-
-    <p class="state-message">
-      Loading flight...
-    </p>
-
+    <p class="state-message">Loading flight...</p>
   } @else if (error()) {
-
     <p class="state-message state-message--error">
       {{ error() }}
     </p>
-
   } @else if (flight(); as currentFlight) {
-
     <section class="flight-hero">
-
       <div class="flight-hero__route">
-
         <div>
-          <span class="flight-hero__label">
-            Departure
-          </span>
+          <span class="flight-hero__label"> Departure </span>
 
           <h1>
             {{ currentFlight.from }}
@@ -60,17 +36,13 @@
           </strong>
         </div>
 
-
         <div class="flight-hero__direction">
           <span>✈</span>
           <div></div>
         </div>
 
-
         <div class="flight-hero__destination">
-          <span class="flight-hero__label">
-            Arrival
-          </span>
+          <span class="flight-hero__label"> Arrival </span>
 
           <h1>
             {{ currentFlight.to }}
@@ -80,23 +52,16 @@
             {{ currentFlight.toIata }}
           </strong>
         </div>
-
       </div>
-
 
       <div class="flight-hero__price">
         <span>From</span>
 
-        <strong>
-          €{{ currentFlight.price }}
-        </strong>
+        <strong> €{{ currentFlight.price }} </strong>
       </div>
-
     </section>
 
-
     <section class="flight-summary">
-
       <div class="flight-summary__item">
         <span>Airline</span>
         <strong>{{ currentFlight.airline }}</strong>
@@ -111,7 +76,7 @@
         <span>Departure</span>
 
         <strong>
-          {{ currentFlight.departureTime | date:'dd MMM, HH:mm' }}
+          {{ currentFlight.departureTime | date: 'dd MMM, HH:mm' }}
         </strong>
       </div>
 
@@ -119,7 +84,7 @@
         <span>Arrival</span>
 
         <strong>
-          {{ currentFlight.arrivalTime | date:'dd MMM, HH:mm' }}
+          {{ currentFlight.arrivalTime | date: 'dd MMM, HH:mm' }}
         </strong>
       </div>
 
@@ -130,154 +95,88 @@
           {{ currentFlight.status }}
         </strong>
       </div>
-
     </section>
 
-
-    <form
-      class="booking-layout"
-      [formGroup]="bookingForm"
-      (ngSubmit)="submitBooking()"
-    >
-
+    <form class="booking-layout" [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
       <div class="booking-main">
-
         <section class="booking-section">
-
           <div class="section-heading">
             <div>
               <h2>Passenger details</h2>
 
-              <p>
-                Enter the information for each passenger.
-              </p>
+              <p>Enter the information for each passenger.</p>
             </div>
 
-            <button
-              class="add-passenger"
-              type="button"
-              (click)="addPassenger()"
-            >
+            <button class="add-passenger" type="button" (click)="addPassenger()">
               + Add passenger
             </button>
           </div>
 
-
           <div class="booking-email">
+            <label for="email"> Contact email </label>
 
-            <label for="email">
-              Contact email
-            </label>
-
-            <input
-              id="email"
-              type="email"
-              formControlName="email"
-              placeholder="you@example.com"
-            >
-
+            <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
           </div>
 
-
           <div formArrayName="passengers">
-
             @for (
               passenger of bookingForm.controls.passengers.controls;
               track $index;
               let i = $index
             ) {
-
-              <div
-                class="passenger-card"
-                [formGroupName]="i"
-              >
-
+              <div class="passenger-card" [formGroupName]="i">
                 <div class="passenger-card__header">
-
-                  <h3>
-                    Passenger {{ i + 1 }}
-                  </h3>
+                  <h3>Passenger {{ i + 1 }}</h3>
 
                   @if (bookingForm.controls.passengers.length > 1) {
-
-                    <button
-                      class="remove-passenger"
-                      type="button"
-                      (click)="removePassenger(i)"
-                    >
+                    <button class="remove-passenger" type="button" (click)="removePassenger(i)">
                       Remove
                     </button>
-
                   }
-
                 </div>
 
-
                 <div class="passenger-fields">
-
                   <div class="form-field">
-
-                    <label [for]="'firstName-' + i">
-                      First name
-                    </label>
+                    <label [for]="'firstName-' + i"> First name </label>
 
                     <input
                       [id]="'firstName-' + i"
                       type="text"
                       formControlName="firstName"
                       placeholder="First name"
-                    >
-
+                    />
                   </div>
 
-
                   <div class="form-field">
-
-                    <label [for]="'lastName-' + i">
-                      Last name
-                    </label>
+                    <label [for]="'lastName-' + i"> Last name </label>
 
                     <input
                       [id]="'lastName-' + i"
                       type="text"
                       formControlName="lastName"
                       placeholder="Last name"
-                    >
-
+                    />
                   </div>
-
                 </div>
 
-
                 <div class="seat-selection">
-
                   <div class="seat-selection__header">
-
                     <div>
                       <h4>Choose seat</h4>
 
-                      <p>
-                        Manual seat selection +15 €
-                      </p>
+                      <p>Manual seat selection +15 €</p>
                     </div>
-
 
                     <button
                       class="random-seat"
                       type="button"
-                      (click)="
-                        $any(passenger.get('selectedSeatNumber'))
-                          ?.setValue(null)
-                      "
+                      (click)="$any(passenger.get('selectedSeatNumber'))?.setValue(null)"
                     >
                       Random seat
                     </button>
-
                   </div>
 
-
                   <div class="seat-legend">
-
                     <span>
                       <i class="seat-example"></i>
                       Available
@@ -292,122 +191,80 @@
                       <i class="seat-example seat-example--occupied"></i>
                       Occupied
                     </span>
-
                   </div>
 
-
                   <div class="plane-map">
+                    <div class="plane-map__cabin">
+                      @for (row of seatRows(); track row.row) {
+                        <div class="plane-row">
+                          <div class="plane-row__seats">
+                            @for (seat of row.left; track seat.seatNumber) {
+                              <button
+                                type="button"
+                                class="plane-seat"
+                                [disabled]="seat.isOccupied"
+                                [class.plane-seat--selected]="
+                                  passenger.get('selectedSeatNumber')?.value === seat.seatNumber
+                                "
+                                (click)="
+                                  $any(passenger.get('selectedSeatNumber'))?.setValue(
+                                    seat.seatNumber
+                                  )
+                                "
+                              >
+                                {{ seat.seatNumber.slice(-1) }}
+                              </button>
+                            }
+                          </div>
 
-  <div class="plane-map__cabin">
+                          <span class="plane-row__number">
+                            {{ row.row }}
+                          </span>
 
-    @for (row of seatRows(); track row.row) {
+                          <div class="plane-row__seats">
+                            @for (seat of row.right; track seat.seatNumber) {
+                              <button
+                                type="button"
+                                class="plane-seat"
+                                [disabled]="seat.isOccupied"
+                                [class.plane-seat--selected]="
+                                  passenger.get('selectedSeatNumber')?.value === seat.seatNumber
+                                "
+                                (click)="
+                                  $any(passenger.get('selectedSeatNumber'))?.setValue(
+                                    seat.seatNumber
+                                  )
+                                "
+                              >
+                                {{ seat.seatNumber.slice(-1) }}
+                              </button>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
 
-      <div class="plane-row">
-
-        <div class="plane-row__seats">
-
-          @for (seat of row.left; track seat.seatNumber) {
-
-            <button
-              type="button"
-              class="plane-seat"
-              [disabled]="seat.isOccupied"
-              [class.plane-seat--selected]="
-                passenger.get('selectedSeatNumber')?.value
-                  === seat.seatNumber
-              "
-              (click)="
-                $any(
-                  passenger.get('selectedSeatNumber')
-                )?.setValue(seat.seatNumber)
-              "
-            >
-              {{ seat.seatNumber.slice(-1) }}
-            </button>
-
-          }
-
-        </div>
-
-
-        <span class="plane-row__number">
-          {{ row.row }}
-        </span>
-
-
-        <div class="plane-row__seats">
-
-          @for (seat of row.right; track seat.seatNumber) {
-
-            <button
-              type="button"
-              class="plane-seat"
-              [disabled]="seat.isOccupied"
-              [class.plane-seat--selected]="
-                passenger.get('selectedSeatNumber')?.value
-                  === seat.seatNumber
-              "
-              (click)="
-                $any(
-                  passenger.get('selectedSeatNumber')
-                )?.setValue(seat.seatNumber)
-              "
-            >
-              {{ seat.seatNumber.slice(-1) }}
-            </button>
-
-          }
-
-        </div>
-
-      </div>
-
-    }
-
-  </div>
-
-</div>
-
-
-                  @if (
-                    passenger.get('selectedSeatNumber')?.value;
-                    as selectedSeat
-                  ) {
-
+                  @if (passenger.get('selectedSeatNumber')?.value; as selectedSeat) {
                     <p class="selected-seat">
                       Selected seat:
                       <strong>{{ selectedSeat }}</strong>
                     </p>
-
                   } @else {
-
-                    <p class="selected-seat">
-                      Seat will be assigned automatically.
-                    </p>
-
+                    <p class="selected-seat">Seat will be assigned automatically.</p>
                   }
-
                 </div>
-
               </div>
-
             }
-
           </div>
-
         </section>
-
       </div>
 
-
       <aside class="booking-sidebar">
-
         <div class="booking-summary">
-
           <h2>Your trip</h2>
 
           <div class="booking-summary__route">
-
             <strong>
               {{ currentFlight.fromIata }}
             </strong>
@@ -417,9 +274,7 @@
             <strong>
               {{ currentFlight.toIata }}
             </strong>
-
           </div>
-
 
           <div class="booking-summary__row">
             <span>Flight</span>
@@ -437,33 +292,19 @@
           <div class="booking-summary__row">
             <span>Price per passenger</span>
 
-            <strong>
-              €{{ currentFlight.price }}
-            </strong>
+            <strong> €{{ currentFlight.price }} </strong>
           </div>
-
 
           <div class="booking-summary__total">
-
             <span>Flight total</span>
 
-            <strong>
-              €{{
-                currentFlight.price
-                * bookingForm.controls.passengers.length
-              }}
-            </strong>
-
+            <strong> €{{ currentFlight.price * bookingForm.controls.passengers.length }} </strong>
           </div>
-
 
           <button
             class="book-button"
             type="submit"
-            [disabled]="
-              bookingForm.invalid ||
-              bookingLoading()
-            "
+            [disabled]="bookingForm.invalid || bookingLoading()"
           >
             @if (bookingLoading()) {
               Creating booking...
@@ -472,21 +313,13 @@
             }
           </button>
 
-
           @if (bookingError()) {
-
             <p class="booking-error">
               {{ bookingError() }}
             </p>
-
           }
-
         </div>
-
       </aside>
-
     </form>
-
   }
-
 </main>

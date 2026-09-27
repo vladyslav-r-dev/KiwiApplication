@@ -1,10 +1,5 @@
-import { Flight } from "./flight";
-
-export interface Weather {
-  city: string;
-  temp: number;
-  description: string;
-}
+import { Weather } from './weather';
+import { Flight } from './flight';
 
 export interface SearchFlightResult {
   flight: Flight[];

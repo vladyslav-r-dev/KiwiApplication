@@ -36,8 +36,7 @@
 
   background: #ffffff;
 
-  box-shadow:
-    0 8px 30px rgba(25, 33, 61, 0.08);
+  box-shadow: 0 8px 30px rgba(25, 33, 61, 0.08);
 }
 
 .profile-card__top {
@@ -81,8 +80,7 @@
 .profile-info {
   display: grid;
 
-  grid-template-columns:
-    repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   gap: 20px;
 
@@ -135,8 +133,7 @@
 .profile-form__grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
 
   gap: 20px;
 }
@@ -263,7 +260,6 @@
 }
 
 @media (max-width: 700px) {
-
   .profile-page {
     padding: 40px 20px 80px;
   }
@@ -272,7 +268,6 @@
   .profile-form__grid {
     grid-template-columns: 1fr;
   }
-
 }
 
 .profile-logout {

@@ -1,4 +1,8 @@
-﻿using KiwiApp.Api.Contracts.Auth;
+﻿using KiwiApp.Application.UseCases.Auth.Login;
+using KiwiApp.Application.UseCases.Auth.Register;
+using KiwiApp.Application.UseCases.Auth.Refresh;
+using KiwiApp.Application.UseCases.Auth.Update;
+using KiwiApp.Api.Contracts.Auth;
 using KiwiApp.Api.Validator;
 using KiwiApp.Application.Services;
 
@@ -12,9 +16,9 @@ public static class AuthEndpoints
         HttpContext context,
         AuthService authService) =>
         {
-        var result = await authService.GetMe(context.User);
+            var result = await authService.GetMe(context.User);
 
-        return Results.Ok(result);
+            return Results.Ok(result);
         }).RequireAuthorization();
 
         app.MapPut("/auth/me", async (
@@ -107,7 +111,7 @@ public static class AuthEndpoints
 
             if (string.IsNullOrWhiteSpace(refreshToken))
             {
-                 return Results.Unauthorized();
+                return Results.Unauthorized();
             }
 
             await authService.Logout(new RefreshCommand
@@ -118,7 +122,7 @@ public static class AuthEndpoints
             context.Response.Cookies.Delete("refreshToken");
 
             return Results.Ok();
-            });
+        });
 
         app.MapPost("/auth/refresh",
             async (
@@ -143,32 +147,32 @@ public static class AuthEndpoints
                     accessToken = result.AccessToken
                 });
             });
-        
-            app.MapPost("/auth/google", async (
-            GoogleUserDto request,
-            AuthService authService,
-            HttpContext context) =>
+
+        app.MapPost("/auth/google", async (
+        GoogleUserDto request,
+        AuthService authService,
+        HttpContext context) =>
+    {
+        var result = await authService.LoginWithGoogle(new GoogleLoginCommand
         {
-            var result = await authService.LoginWithGoogle(new GoogleLoginCommand
+            IdToken = request.IdToken
+        });
+
+        context.Response.Cookies.Append(
+            "refreshToken",
+            result.RefreshToken,
+            new CookieOptions
             {
-                IdToken = request.IdToken
+                HttpOnly = true,
+                Secure = false,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddDays(7)
             });
 
-            context.Response.Cookies.Append(
-                "refreshToken",
-                result.RefreshToken,
-                new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = false,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTimeOffset.UtcNow.AddDays(7)
-                });
-
-            return Results.Ok(new
-            {
-                accessToken = result.AccessToken
-         });
+        return Results.Ok(new
+        {
+            accessToken = result.AccessToken
+        });
     });
 
         app.MapGet("/admin/users", async (AuthService authService) =>

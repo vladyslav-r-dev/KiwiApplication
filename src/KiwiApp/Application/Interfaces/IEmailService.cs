@@ -5,6 +5,6 @@ public interface IEmailService
     Task SendBookingConfirmationAsync(
         string clientEmail,
         string clientName,
-        int flightId,byte[] pdfBytes
+        int flightId, byte[] pdfBytes
     );
 }

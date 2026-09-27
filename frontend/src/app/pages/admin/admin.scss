@@ -47,7 +47,6 @@
   }
 }
 
-
 .admin-page {
   max-width: 1200px;
 
@@ -73,7 +72,6 @@
   }
 }
 
-
 .admin-stats {
   display: grid;
   grid-template-columns: repeat(2, 220px);
@@ -91,8 +89,7 @@
 
   background: #fff;
 
-  box-shadow:
-    0 6px 20px rgba(25, 33, 61, 0.05);
+  box-shadow: 0 6px 20px rgba(25, 33, 61, 0.05);
 
   span {
     display: block;
@@ -110,7 +107,6 @@
     font-size: 30px;
   }
 }
-
 
 .admin-section {
   margin-bottom: 30px;
@@ -160,7 +156,6 @@
   font-size: 12px;
   font-weight: 600;
 }
-
 
 .table-wrapper {
   width: 100%;
@@ -224,7 +219,6 @@
   text-align: right !important;
 }
 
-
 .role-badge,
 .status-badge {
   display: inline-flex;
@@ -252,7 +246,6 @@
   color: #27896d;
 }
 
-
 .delete-button {
   padding: 7px 12px;
 
@@ -277,9 +270,7 @@
   }
 }
 
-
 @media (max-width: 700px) {
-
   .admin-header {
     padding: 0 20px;
   }

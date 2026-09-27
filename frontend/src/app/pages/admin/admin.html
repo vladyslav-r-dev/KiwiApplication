@@ -4,14 +4,10 @@
     <span>Admin</span>
   </a>
 
-  <a class="admin-header__back" routerLink="/home">
-    ← Back to app
-  </a>
+  <a class="admin-header__back" routerLink="/home"> ← Back to app </a>
 </header>
 
-
 <main class="admin-page">
-
   <div class="admin-title">
     <div>
       <h1>Admin dashboard</h1>
@@ -19,9 +15,7 @@
     </div>
   </div>
 
-
   <section class="admin-stats">
-
     <div class="stat-card">
       <span>Total users</span>
 
@@ -30,7 +24,6 @@
       </strong>
     </div>
 
-
     <div class="stat-card">
       <span>Total bookings</span>
 
@@ -38,28 +31,20 @@
         {{ adminBookings().length }}
       </strong>
     </div>
-
   </section>
 
-
   <section class="admin-section">
-
     <div class="admin-section__header">
       <div>
         <h2>Users</h2>
         <p>Registered KiwiApp accounts.</p>
       </div>
 
-      <span class="admin-section__count">
-        {{ adminUsers().length }} users
-      </span>
+      <span class="admin-section__count"> {{ adminUsers().length }} users </span>
     </div>
 
-
     <div class="table-wrapper">
-
       <table class="admin-table">
-
         <thead>
           <tr>
             <th>ID</th>
@@ -71,13 +56,9 @@
         </thead>
 
         <tbody>
-
           @for (user of adminUsers(); track user.id) {
-
             <tr>
-              <td class="admin-table__id">
-                #{{ user.id }}
-              </td>
+              <td class="admin-table__id">#{{ user.id }}</td>
 
               <td>
                 {{ user.firstName }}
@@ -92,44 +73,29 @@
               </td>
 
               <td>
-                <span
-                  class="role-badge"
-                  [class.role-badge--admin]="user.role === 'Admin'"
-                >
+                <span class="role-badge" [class.role-badge--admin]="user.role === 'Admin'">
                   {{ user.role }}
                 </span>
               </td>
             </tr>
-
           }
-
         </tbody>
-
       </table>
-
     </div>
-
   </section>
 
-
   <section class="admin-section">
-
     <div class="admin-section__header">
       <div>
         <h2>Bookings</h2>
         <p>All bookings created in the system.</p>
       </div>
 
-      <span class="admin-section__count">
-        {{ adminBookings().length }} bookings
-      </span>
+      <span class="admin-section__count"> {{ adminBookings().length }} bookings </span>
     </div>
 
-
     <div class="table-wrapper">
-
       <table class="admin-table">
-
         <thead>
           <tr>
             <th>Booking</th>
@@ -143,25 +109,13 @@
         </thead>
 
         <tbody>
-
-          @for (
-            booking of adminBookings();
-            track booking.bookingId
-          ) {
-
+          @for (booking of adminBookings(); track booking.bookingId) {
             <tr>
+              <td class="admin-table__id">#{{ booking.bookingId }}</td>
 
-              <td class="admin-table__id">
-                #{{ booking.bookingId }}
-              </td>
+              <td>#{{ booking.userId }}</td>
 
-              <td>
-                #{{ booking.userId }}
-              </td>
-
-              <td>
-                #{{ booking.flightId }}
-              </td>
+              <td>#{{ booking.flightId }}</td>
 
               <td>
                 {{ booking.email }}
@@ -173,12 +127,9 @@
                 </span>
               </td>
 
-              <td class="admin-table__price">
-                €{{ booking.price }}
-              </td>
+              <td class="admin-table__price">€{{ booking.price }}</td>
 
               <td class="admin-table__actions">
-
                 <button
                   class="delete-button"
                   type="button"
@@ -186,19 +137,11 @@
                 >
                   Delete
                 </button>
-
               </td>
-
             </tr>
-
           }
-
         </tbody>
-
       </table>
-
     </div>
-
   </section>
-
 </main>

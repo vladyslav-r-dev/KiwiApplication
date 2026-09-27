@@ -70,7 +70,6 @@
   }
 }
 
-
 /* HERO */
 
 .hero__title {
@@ -84,18 +83,13 @@
 
   text-align: center;
 
-  background: linear-gradient(
-    90deg,
-    #4f7cff,
-    #7047eb
-  );
+  background: linear-gradient(90deg, #4f7cff, #7047eb);
 
   background-clip: text;
   -webkit-background-clip: text;
 
   -webkit-text-fill-color: transparent;
 }
-
 
 /* SEARCH */
 
@@ -256,28 +250,18 @@
 
   background: #ffffff;
 
-  box-shadow:
-    0 4px 18px rgba(25, 33, 61, 0.12);
+  box-shadow: 0 4px 18px rgba(25, 33, 61, 0.12);
 
-  transform:
-    perspective(900px)
-    rotateX(0)
-    rotateY(0)
-    translateY(0);
+  transform: perspective(900px) rotateX(0) rotateY(0) translateY(0);
 
   transition:
     transform 0.35s ease,
     box-shadow 0.35s ease;
 
   &:hover {
-    transform:
-      perspective(900px)
-      rotateX(2deg)
-      rotateY(-2deg)
-      translateY(-8px);
+    transform: perspective(900px) rotateX(2deg) rotateY(-2deg) translateY(-8px);
 
-    box-shadow:
-      0 20px 45px rgba(25, 33, 61, 0.20);
+    box-shadow: 0 20px 45px rgba(25, 33, 61, 0.2);
 
     .flight-card__image {
       transform: scale(1.06);

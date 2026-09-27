@@ -31,7 +31,6 @@
   }
 }
 
-
 .flight-page {
   max-width: 1180px;
   margin: 0 auto;
@@ -56,12 +55,7 @@
 
   border-radius: 18px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #f2f0ff,
-      #f7f9ff
-    );
+  background: linear-gradient(135deg, #f2f0ff, #f7f9ff);
 
   margin-bottom: 20px;
 }
@@ -121,7 +115,6 @@
   }
 }
 
-
 .flight-summary {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -162,7 +155,6 @@
   text-transform: capitalize;
 }
 
-
 .booking-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
@@ -201,7 +193,6 @@
     color: #7c8db0;
   }
 }
-
 
 .add-passenger {
   padding: 10px 15px;
@@ -247,7 +238,6 @@
   }
 }
 
-
 .passenger-card {
   padding: 24px;
 
@@ -278,7 +268,6 @@
 
   cursor: pointer;
 }
-
 
 .passenger-fields {
   display: grid;
@@ -317,7 +306,6 @@
   }
 }
 
-
 .seat-selection {
   margin-top: 26px;
   padding-top: 24px;
@@ -355,7 +343,6 @@
   cursor: pointer;
 }
 
-
 .seat-legend {
   display: flex;
   gap: 20px;
@@ -392,7 +379,6 @@
   border-color: #d9dce5;
   background: #e9ebf1;
 }
-
 
 .seats {
   display: grid;
@@ -442,7 +428,6 @@
   color: #fff !important;
 }
 
-
 .selected-seat {
   margin: 15px 0 0;
 
@@ -454,7 +439,6 @@
   }
 }
 
-
 .booking-sidebar {
   position: sticky;
   top: 25px;
@@ -463,8 +447,7 @@
 .booking-summary {
   padding: 26px;
 
-  box-shadow:
-    0 10px 30px rgba(25, 33, 61, 0.07);
+  box-shadow: 0 10px 30px rgba(25, 33, 61, 0.07);
 
   h2 {
     margin: 0 0 24px;
@@ -558,7 +541,6 @@
   font-size: 13px;
 }
 
-
 .state-message {
   padding: 80px 0;
 
@@ -570,7 +552,6 @@
 .state-message--error {
   color: #c94b4b;
 }
-
 
 @media (max-width: 900px) {
   .flight-summary {

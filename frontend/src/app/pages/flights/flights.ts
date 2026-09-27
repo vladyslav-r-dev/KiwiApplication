@@ -1,38 +1,25 @@
 import { Component, signal } from '@angular/core';
 
-import {
-  Router,
-  RouterLink
-} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { DatePipe } from '@angular/common';
 
-import { FlightsService } from '../../services/flightsService';
-import { AuthService } from '../../services/auth';
+import { FlightsService } from '../../services/flights.service';
+import { AuthService } from '../../services/auth.service';
 
 import { Flight } from '../../models/flight';
-import { Weather } from '../../models/search-flight-result';
 
 @Component({
   selector: 'app-flights',
 
-  imports: [
-    RouterLink,
-    ReactiveFormsModule,
-    DatePipe
-  ],
+  imports: [RouterLink, ReactiveFormsModule, DatePipe],
 
   templateUrl: './flights.html',
   styleUrl: './flights.scss',
 })
 export class Flights {
-
   flights = signal<Flight[]>([]);
   filteredFlights = signal<Flight[]>([]);
 
@@ -42,22 +29,16 @@ export class Flights {
   fromOptions = signal<string[]>([]);
   toOptions = signal<string[]>([]);
 
-  weatherFrom = signal<Weather | null>(null);
-  weatherTo = signal<Weather | null>(null);
-
   searchForm = new FormGroup({
     from: new FormControl(''),
     to: new FormControl(''),
     status: new FormControl(''),
-    minPrice:
-      new FormControl<number | null>(null),
-    maxPrice:
-      new FormControl<number | null>(null),
+    minPrice: new FormControl<number | null>(null),
+    maxPrice: new FormControl<number | null>(null),
     sortBy: new FormControl(''),
     airline: new FormControl(''),
     departureDate: new FormControl(''),
   });
-
 
   cardImages: string[] = [
     'https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?auto=format&fit=crop&w=1000&q=80',
@@ -65,155 +46,105 @@ export class Flights {
     'https://images.unsplash.com/photo-1537531383496-f4749b8032cf?auto=format&fit=crop&w=1000&q=80',
     'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1000&q=80',
     'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1522083165195-3424ed129620?auto=format&fit=crop&w=1000&q=80'
+    'https://images.unsplash.com/photo-1522083165195-3424ed129620?auto=format&fit=crop&w=1000&q=80',
   ];
-
 
   constructor(
     private flightsService: FlightsService,
-    private router: Router,
-    public authService: AuthService
+    public authService: AuthService,
   ) {}
-
 
   ngOnInit() {
     this.loadFlights();
   }
 
-
   loadFlights() {
-
     this.error.set(null);
     this.loading.set(true);
 
-    this.flightsService.getFlights()
-      .subscribe({
+    this.flightsService.getFlights().subscribe({
+      next: (data) => {
+        this.flights.set(data);
 
-        next: (data) => {
+        this.filteredFlights.set(data);
 
-          this.flights.set(data);
+        this.loading.set(false);
 
-          this.filteredFlights.set(data);
+        this.fromOptions.set([...new Set(data.map((flight) => flight.from))]);
 
-          this.loading.set(false);
+        this.toOptions.set([...new Set(data.map((flight) => flight.to))]);
+      },
 
-          this.fromOptions.set([
-            ...new Set(
-              data.map(
-                flight => flight.from
-              )
-            )
-          ]);
+      error: () => {
+        this.error.set('Failed to load flights');
 
-          this.toOptions.set([
-            ...new Set(
-              data.map(
-                flight => flight.to
-              )
-            )
-          ]);
-        },
-
-        error: () => {
-
-          this.error.set(
-            'Failed to load flights'
-          );
-
-          this.loading.set(false);
-        }
-
-      });
+        this.loading.set(false);
+      },
+    });
   }
-
 
   onSearch() {
     this.reactiveSearch();
   }
 
-
   reactiveSearch() {
+    const from = this.searchForm.get('from')?.value;
 
-    const from =
-      this.searchForm.get('from')?.value;
+    const to = this.searchForm.get('to')?.value;
 
-    const to =
-      this.searchForm.get('to')?.value;
+    const status = this.searchForm.get('status')?.value;
 
-    const status =
-      this.searchForm.get('status')?.value;
+    const minPrice = this.searchForm.get('minPrice')?.value;
 
-    const minPrice =
-      this.searchForm.get('minPrice')?.value;
+    const maxPrice = this.searchForm.get('maxPrice')?.value;
 
-    const maxPrice =
-      this.searchForm.get('maxPrice')?.value;
+    const sortBy = this.searchForm.get('sortBy')?.value;
 
-    const sortBy =
-      this.searchForm.get('sortBy')?.value;
+    const airline = this.searchForm.get('airline')?.value;
 
-    const airline =
-      this.searchForm.get('airline')?.value;
-
-    const departureDate =
-      this.searchForm.get('departureDate')?.value;
-
+    const departureDate = this.searchForm.get('departureDate')?.value;
 
     this.error.set(null);
     this.loading.set(true);
 
+    this.flightsService
+      .getFlights(
+        from ?? null,
+        to ?? null,
+        status ?? null,
 
-    this.flightsService.getFlights(
-      from ?? null,
-      to ?? null,
-      status ?? null,
+        minPrice ? Number(minPrice) : null,
 
-      minPrice
-        ? Number(minPrice)
-        : null,
+        maxPrice ? Number(maxPrice) : null,
 
-      maxPrice
-        ? Number(maxPrice)
-        : null,
+        sortBy ?? null,
+        airline ?? null,
+        departureDate ?? null,
+      )
+      .subscribe({
+        next: (data) => {
+          this.filteredFlights.set(data);
 
-      sortBy ?? null,
-      airline ?? null,
-      departureDate ?? null
+          this.loading.set(false);
+        },
 
-    ).subscribe({
+        error: (err) => {
+          console.error(err);
 
-      next: (data) => {
+          this.filteredFlights.set([]);
 
-        this.filteredFlights.set(data);
+          this.error.set('Failed to search flights.');
 
-        this.loading.set(false);
-      },
-
-      error: (err) => {
-
-        console.error(err);
-
-        this.filteredFlights.set([]);
-
-        this.error.set(
-          'Failed to search flights.'
-        );
-
-        this.loading.set(false);
-      }
-
-    });
+          this.loading.set(false);
+        },
+      });
   }
 
-
   onReset() {
-
     this.searchForm.reset();
 
     this.error.set(null);
 
-    this.filteredFlights.set(
-      this.flights()
-    );
+    this.filteredFlights.set(this.flights());
   }
 }

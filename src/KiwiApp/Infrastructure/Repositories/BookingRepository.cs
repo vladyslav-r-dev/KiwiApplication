@@ -1,5 +1,4 @@
 ﻿using KiwiApp.Application.Interfaces;
-using KiwiApp.Application.UseCases;
 using KiwiApp.Domain.Entities;
 using KiwiApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +31,7 @@ public class BookingRepository(AppDbContext db)
             .ToListAsync();
     }
 
-    public Task<List<Booking>> GetBookingsByID(int userId)
+    public Task<List<Booking>> GetBookingsByUserId(int userId)
     {
         return db.Bookings
         .Where(booking => booking.UserId == userId)

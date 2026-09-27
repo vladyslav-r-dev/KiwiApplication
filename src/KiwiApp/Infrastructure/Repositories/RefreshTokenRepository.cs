@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KiwiApp.Infrastructure.Repositories;
 
-public class RefreshTokenRepository(AppDbContext db) : IRefreshToken
+public class RefreshTokenRepository(AppDbContext db) : IRefreshTokenRepository
 {
     public async Task<RefreshToken?> GetToken(string refreshToken)
     {
@@ -23,16 +23,16 @@ public class RefreshTokenRepository(AppDbContext db) : IRefreshToken
             UserId = userId,
             ExpiresAt = DateTime.UtcNow.AddDays(7),
         };
-        
+
         db.RefreshTokens.Add(newToken);
-        
+
         return Task.FromResult(newToken);
     }
 
     public Task Revoke(RefreshToken refreshToken)
     {
         refreshToken.IsRevoked = true;
-        
+
         return Task.CompletedTask;
     }
 }

@@ -1,35 +1,15 @@
-<button
-  class="login-close"
-  type="button"
-  (click)="close.emit()"
->
-  ×
-</button>
+<button class="login-close" type="button" (click)="close.emit()">×</button>
 
 <h2>Sign in to KiwiApp</h2>
 
-<p class="login-subtitle">
-  Sign in to continue your journey
-</p>
+<p class="login-subtitle">Sign in to continue your journey</p>
 
 <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+  <input type="email" formControlName="email" placeholder="Email address" />
 
-  <input
-    type="email"
-    formControlName="email"
-    placeholder="Email address"
-  >
+  <input type="password" formControlName="password" placeholder="Password" />
 
-  <input
-    type="password"
-    formControlName="password"
-    placeholder="Password"
-  >
-
-  <button type="submit">
-    Sign in
-  </button>
-
+  <button type="submit">Sign in</button>
 </form>
 
 <div class="login-divider">

@@ -5,6 +5,5 @@ import { RouterModule } from '@angular/router';
   selector: 'app-payment-success',
   imports: [RouterModule],
   templateUrl: './payment-success.html',
-  styleUrl: './payment-success.scss',
 })
 export class PaymentSuccess {}

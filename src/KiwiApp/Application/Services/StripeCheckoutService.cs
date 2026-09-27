@@ -1,4 +1,4 @@
-﻿using KiwiApp.Api.Contracts.Other;
+﻿using KiwiApp.Application.UseCases.Payments;
 using Stripe;
 using Stripe.Checkout;
 
@@ -44,11 +44,11 @@ public class StripeCheckoutService(IConfiguration configuration)
 
             Mode = "payment"
         };
-            
+
         var secretKey = configuration["Stripe:SecretKey"];
-        
+
         var client = new StripeClient(secretKey);
-        
+
         var stripe = client.V1.Checkout.Sessions;
 
         Session session = await stripe.CreateAsync(options);
@@ -63,11 +63,11 @@ public class StripeCheckoutService(IConfiguration configuration)
     public async Task<Session> RetrieveCheckoutSessionAsync(string sessionId)
     {
         var secretKey = configuration["Stripe:SecretKey"];
-        
+
         var client = new StripeClient(secretKey);
-        
+
         var service = client.V1.Checkout.Sessions;
-        
+
         return await service.GetAsync(sessionId);
     }
 }

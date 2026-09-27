@@ -1,10 +1,10 @@
-﻿import { Weather } from "./search-flight-result";
-import { Seat } from "./seats";
+import { Weather } from './weather';
+import { Seat } from './seat';
 
 export interface Flight {
   weatherFrom: Weather | null;
   weatherTo: Weather | null;
-  flightId : number;
+  flightId: number;
   from: string;
   to: string;
   bookings: unknown[];

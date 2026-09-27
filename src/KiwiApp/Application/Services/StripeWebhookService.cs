@@ -6,15 +6,15 @@ using Stripe.Checkout;
 namespace KiwiApp.Application.Services;
 
 public class StripeWebhookService(
-    IConfiguration configuration, BookingService bookingService, 
-    ILogger<StripeWebhookService> logger, IBackgroundJobClient  backgroundJobClient)
+    IConfiguration configuration, BookingService bookingService,
+    ILogger<StripeWebhookService> logger, IBackgroundJobClient backgroundJobClient)
 {
     public async Task<IResult> HandleWebhookAsync(HttpRequest request)
     {
         var json = await new StreamReader(request.Body).ReadToEndAsync();
-        
+
         var endpointSecret = configuration["Stripe:WebhookSecret"];
-        
+
         try
         {
             var signatureHeader = request.Headers["Stripe-Signature"];
@@ -24,7 +24,7 @@ public class StripeWebhookService(
                 signatureHeader,
                 endpointSecret
             );
-                
+
             if (stripeEvent.Type == EventTypes.CheckoutSessionCompleted)
             {
                 var session = stripeEvent.Data.Object as Session;
@@ -40,7 +40,7 @@ public class StripeWebhookService(
                     job => job.SendBookingConfirmationAsync(bookingId)
                 );
             }
-                
+
             return Results.Ok();
         }
         catch (StripeException e)

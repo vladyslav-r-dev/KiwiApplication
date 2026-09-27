@@ -7,7 +7,6 @@
   font-family: 'Nunito Sans', sans-serif;
 }
 
-
 /* HEADER */
 
 .flights-header {
@@ -50,14 +49,12 @@
   }
 }
 
-
 /* FILTERS */
 
 .filters {
   display: grid;
 
-  grid-template-columns:
-    repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   gap: 20px;
 
@@ -68,8 +65,7 @@
 
   background: #ffffff;
 
-  box-shadow:
-    0 4px 20px rgba(25, 33, 61, 0.06);
+  box-shadow: 0 4px 20px rgba(25, 33, 61, 0.06);
 }
 
 .filter-field {
@@ -112,12 +108,10 @@
     &:focus {
       border-color: #605dec;
 
-      box-shadow:
-        0 0 0 3px rgba(96, 93, 236, 0.08);
+      box-shadow: 0 0 0 3px rgba(96, 93, 236, 0.08);
     }
   }
 }
-
 
 /* FILTER BUTTONS */
 
@@ -168,7 +162,6 @@
   }
 }
 
-
 /* RESULTS HEADER */
 
 .results-header {
@@ -194,18 +187,15 @@
   }
 }
 
-
 /* GRID */
 
 .flights-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   gap: 24px;
 }
-
 
 /* CARD */
 
@@ -220,8 +210,7 @@
   text-decoration: none;
   color: inherit;
 
-  box-shadow:
-    0 4px 18px rgba(25, 33, 61, 0.07);
+  box-shadow: 0 4px 18px rgba(25, 33, 61, 0.07);
 
   transition:
     transform 0.3s ease,
@@ -233,15 +222,13 @@
 
     border-color: #d5d2ff;
 
-    box-shadow:
-      0 18px 40px rgba(25, 33, 61, 0.16);
+    box-shadow: 0 18px 40px rgba(25, 33, 61, 0.16);
 
     .flight-card__image {
       transform: scale(1.07);
     }
   }
 }
-
 
 /* IMAGE */
 
@@ -261,8 +248,7 @@
 
   object-fit: cover;
 
-  transition:
-    transform 0.45s ease;
+  transition: transform 0.45s ease;
 }
 
 .flight-card__image-overlay {
@@ -270,11 +256,7 @@
 
   inset: 0;
 
-  background: linear-gradient(
-    to top,
-    rgba(20, 24, 40, 0.65),
-    rgba(20, 24, 40, 0.05)
-  );
+  background: linear-gradient(to top, rgba(20, 24, 40, 0.65), rgba(20, 24, 40, 0.05));
 }
 
 .flight-card__image-route {
@@ -291,13 +273,11 @@
   color: #ffffff;
 }
 
-
 /* CARD BODY */
 
 .flight-card__body {
   padding: 22px;
 }
-
 
 /* CARD TOP */
 
@@ -328,7 +308,6 @@
   white-space: nowrap;
 }
 
-
 /* AIRLINE */
 
 .flight-card__airline {
@@ -343,14 +322,12 @@
   color: #7c8db0;
 }
 
-
 /* TIMES */
 
 .flight-card__info {
   display: grid;
 
-  grid-template-columns:
-    1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 
   gap: 20px;
 
@@ -376,7 +353,6 @@
     color: #27273f;
   }
 }
-
 
 /* CARD FOOTER */
 
@@ -410,7 +386,6 @@
   color: #605dec;
 }
 
-
 /* STATES */
 
 .state-message {
@@ -427,28 +402,21 @@
   color: #c94b4b;
 }
 
-
 /* RESPONSIVE */
 
 @media (max-width: 1000px) {
-
   .filters {
-    grid-template-columns:
-      repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .flights-grid {
-    grid-template-columns:
-      repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
-
 }
 
 @media (max-width: 700px) {
-
   .flights-page {
-    padding:
-      40px 20px 80px;
+    padding: 40px 20px 80px;
   }
 
   .flights-header {
@@ -474,7 +442,6 @@
   .filters__reset {
     flex: 1;
   }
-
 }
 
 .navbar {

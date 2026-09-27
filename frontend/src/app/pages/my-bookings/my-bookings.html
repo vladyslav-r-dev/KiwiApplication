@@ -1,114 +1,68 @@
 <header class="navbar">
-  <a class="navbar__logo" routerLink="/home">
-    KiwiApp
-  </a>
+  <a class="navbar__logo" routerLink="/home"> KiwiApp </a>
 
   <nav class="navbar__menu">
-    <a class="navbar__link" routerLink="/flights">
-      Flights
-    </a>
+    <a class="navbar__link" routerLink="/flights"> Flights </a>
 
-    <a class="navbar__link navbar__link--active" routerLink="/bookings">
-      My bookings
-    </a>
+    <a class="navbar__link navbar__link--active" routerLink="/bookings"> My bookings </a>
 
-    <a class="navbar__link" routerLink="/profile">
-      Profile
-    </a>
+    <a class="navbar__link" routerLink="/profile"> Profile </a>
   </nav>
 </header>
 
-
 <section class="bookings-page">
-
   <div class="bookings-header">
     <div>
       <h1>My bookings</h1>
       <p>View and manage your upcoming trips.</p>
     </div>
 
-    <a class="bookings-header__back" routerLink="/flights">
-      Find another flight →
-    </a>
+    <a class="bookings-header__back" routerLink="/flights"> Find another flight → </a>
   </div>
 
-
   @if (loading()) {
-
-    <div class="state-message">
-      Loading bookings...
-    </div>
-
+    <div class="state-message">Loading bookings...</div>
   } @else if (error()) {
-
     <div class="state-message state-message--error">
       {{ error() }}
     </div>
-
   } @else if (bookings().length === 0) {
-
     <div class="empty-state">
-      <div class="empty-state__icon">
-        ✈
-      </div>
+      <div class="empty-state__icon">✈</div>
 
       <h2>No bookings yet</h2>
 
-      <p>
-        Your booked flights will appear here.
-      </p>
+      <p>Your booked flights will appear here.</p>
 
-      <a routerLink="/flights">
-        Explore flights
-      </a>
+      <a routerLink="/flights"> Explore flights </a>
     </div>
-
   } @else {
-
     <div class="bookings-list">
-
       @for (booking of bookings(); track booking.bookingId) {
-
         <article class="booking-card">
-
           <div class="booking-card__header">
-
             <div>
-              <span class="booking-card__label">
-                Booking
-              </span>
+              <span class="booking-card__label"> Booking </span>
 
-              <h2>
-                #{{ booking.bookingId }}
-              </h2>
+              <h2>#{{ booking.bookingId }}</h2>
             </div>
 
             <span class="booking-card__status">
               {{ booking.status }}
             </span>
-
           </div>
 
-
           <div class="booking-card__flight">
-
-            <div class="booking-card__plane">
-              ✈
-            </div>
+            <div class="booking-card__plane">✈</div>
 
             <div>
               <span>Flight</span>
 
-              <strong>
-                #{{ booking.flightId }}
-              </strong>
+              <strong> #{{ booking.flightId }} </strong>
             </div>
-
           </div>
 
-
           <div class="booking-card__details">
-
             <div>
               <span>Passenger email</span>
 
@@ -120,19 +74,11 @@
             <div>
               <span>Total price</span>
 
-              <strong class="booking-card__price">
-                ${{ booking.price }}
-              </strong>
+              <strong class="booking-card__price"> ${{ booking.price }} </strong>
             </div>
-
           </div>
-
         </article>
-
       }
-
     </div>
-
   }
-
 </section>

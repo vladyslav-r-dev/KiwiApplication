@@ -1,5 +1,9 @@
-﻿using System.Security.Claims;
-using KiwiApp.Api.Contracts.Auth;
+﻿using KiwiApp.Application.UseCases.Auth.Login;
+using KiwiApp.Application.UseCases.Auth.Register;
+using KiwiApp.Application.UseCases.Auth.Refresh;
+using KiwiApp.Application.UseCases.Auth.Get;
+using KiwiApp.Application.UseCases.Auth.Update;
+using System.Security.Claims;
 using KiwiApp.Application.Interfaces;
 using KiwiApp.Domain.Entities;
 
@@ -7,43 +11,43 @@ namespace KiwiApp.Application.Services;
 
 public class AuthService(
     IUnitOfWork unitOfWork,
-    ICheckUserData checkUserData,
+    IUserRepository checkUserData,
     IGenericRepository<UserEntity> userRepository,
-    IRefreshToken refreshTokenRepository,
+    IRefreshTokenRepository refreshTokenRepository,
     TokenService tokenService,
     ILogger<AuthService> logger, GoogleAuthService googleAuthService)
 {
     public async Task<MeResult> GetMe(ClaimsPrincipal user)
-{
-    var userIdClaim = user.Claims
-        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-
-    if (!int.TryParse(userIdClaim, out var userId))
     {
-        throw new UnauthorizedAccessException("User ID not found in claims");
+        var userIdClaim = user.Claims
+            .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            throw new UnauthorizedAccessException("User ID not found in claims");
+        }
+
+        var existingUser = await checkUserData.GetUserById(userId);
+
+        if (existingUser is null)
+        {
+            throw new UnauthorizedAccessException("User not found");
+        }
+
+        return new MeResult
+        {
+            UserId = existingUser.Id,
+            Name = existingUser.FirstName,
+            LastName = existingUser.LastName,
+            Email = existingUser.Email,
+            Role = existingUser.Role
+        };
     }
-
-    var existingUser = await checkUserData.GetUserById(userId);
-
-    if (existingUser is null)
-    {
-        throw new UnauthorizedAccessException("User not found");
-    }
-
-    return new MeResult
-    {
-        UserId = existingUser.Id,
-        Name = existingUser.FirstName,
-        LastName = existingUser.LastName,
-        Email = existingUser.Email,
-        Role = existingUser.Role
-    };
-}
 
     public async Task<UpdateUserResult> UpdateMe(ClaimsPrincipal user, UpdateUserCommand command)
     {
-         var userId = user.Claims
-            .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        var userId = user.Claims
+           .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrWhiteSpace(userId))
         {
@@ -128,7 +132,7 @@ public class AuthService(
             await unitOfWork.SaveChangesAsync();
         }
 
-        var accessToken = tokenService.CreateAccesToken(user);
+        var accessToken = tokenService.CreateAccessToken(user);
 
         var refreshToken = Guid.NewGuid().ToString();
 
@@ -142,7 +146,7 @@ public class AuthService(
             RefreshToken = refreshToken
         };
     }
-    
+
     public async Task<RegisterResult> Register(RegisterCommand command)
     {
         var existingUser = await checkUserData.GetUserByEmail(command.Email);
@@ -153,9 +157,9 @@ public class AuthService(
 
             throw new InvalidOperationException("User already exists");
         }
-        
+
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
-        
+
         var newUser = new UserEntity
         {
             FirstName = command.Name,
@@ -167,7 +171,7 @@ public class AuthService(
             EmailConfirmed = false,
             GoogleId = null
         };
-        
+
         await userRepository.Add(newUser);
 
         await unitOfWork.SaveChangesAsync();
@@ -197,7 +201,7 @@ public class AuthService(
             throw new KeyNotFoundException("Invalid email or password");
         }
 
-        var accessToken = tokenService.CreateAccesToken(existingUser);
+        var accessToken = tokenService.CreateAccessToken(existingUser);
 
         var refreshToken = Guid.NewGuid().ToString();
 
@@ -262,7 +266,7 @@ public class AuthService(
             throw new KeyNotFoundException($"User with id {refreshToken.UserId} was not found");
         }
 
-        var accessToken = tokenService.CreateAccesToken(existingUser);
+        var accessToken = tokenService.CreateAccessToken(existingUser);
 
         return new RefreshResult
         {
@@ -270,11 +274,11 @@ public class AuthService(
         };
     }
 
-    public async Task<List<AllUsersDTO>> GetAllUsers()
+    public async Task<List<AdminUserResult>> GetAllUsers()
     {
         var users = await userRepository.GetAll();
 
-        return users.Select(user => new AllUsersDTO
+        return users.Select(user => new AdminUserResult
         {
             Id = user.Id,
             FirstName = user.FirstName,

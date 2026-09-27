@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using KiwiApp.Api.Contracts;
-using KiwiApp.Application.Interfaces;
 using KiwiApp.Application.Services;
 using KiwiApp.Application.UseCases.Flights.Create;
 using KiwiApp.Application.UseCases.Flights.Update;
@@ -13,7 +12,7 @@ public static class FlightEndpoints
 {
     public static void MapFlightEndpoints(this WebApplication app)
     {
-        app.MapGet("/flights", async (FlightService service, string? from, string? to, string? status, 
+        app.MapGet("/flights", async (FlightService service, string? from, string? to, string? status,
         decimal? minPrice, decimal? maxPrice, string? sortBy, string? airline, string? departureDate) =>
         {
             var result = await service.GetFilteredFlights(from, to, status, minPrice, maxPrice, sortBy, airline, departureDate);
@@ -23,26 +22,26 @@ public static class FlightEndpoints
 
         app.MapGet("/flights/{id:int}", async (FlightService service, int id) =>
         {
-            var result = await service.GetAllFlightById(id);
+            var result = await service.GetFlightById(id);
 
             return Results.Ok(result);
         });
-        
+
         app.MapGet("/flights/import/api", async (FlightService service) =>
         {
             await service.ImportFlights();
-            
+
             return Results.Ok("Flights imported");
-            
+
         }).RequireAuthorization(policy => policy.RequireRole("Admin"));
 
         app.MapGet("/search/flight", async (FlightService service, string? from, string? to) =>
         {
             var result = await service.SearchFlight(from, to);
-            
+
             if (result is null)
                 return Results.NotFound();
-            
+
             return Results.Ok(result);
         });
 
@@ -53,7 +52,7 @@ public static class FlightEndpoints
                 From = request.From,
                 To = request.To
             };
-            
+
             var result = await service.CreateFlight(command);
 
             var response = new CreateFlightResponse
@@ -62,11 +61,11 @@ public static class FlightEndpoints
                 From = result.From,
                 To = result.To
             };
-            
+
             return Results.Created($"/flights/{response.FlightId}", response);
         }).RequireAuthorization("Flight.Create");
 
-        app.MapPut("/flights/{id:int}", async (int id, UpdateFlightRequest request, 
+        app.MapPut("/flights/{id:int}", async (int id, UpdateFlightRequest request,
             IValidator<UpdateFlightRequest> validator, FlightService service) =>
         {
             var validation = await validator.ValidateAsync(request);
@@ -87,7 +86,7 @@ public static class FlightEndpoints
                 return Results.NotFound();
 
             return Results.Ok(result);
-            
+
         }).RequireAuthorization(policy => policy.RequireRole("Admin"));
 
         app.MapDelete("/flights/{id:int}", async (int id, FlightService service) =>
@@ -95,9 +94,9 @@ public static class FlightEndpoints
             await service.DeleteFlight(id);
 
             return Results.NoContent();
-            
+
         }).RequireAuthorization(policy => policy.RequireRole("Admin"));
-        
+
         app.MapDelete("/flights/clear", async (AppDbContext dbContext) => // фича для тестов только, хардкод
         {
             await dbContext.Flights

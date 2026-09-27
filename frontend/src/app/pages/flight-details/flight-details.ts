@@ -1,22 +1,17 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import {ReactiveFormsModule,FormGroup,FormControl,FormArray,Validators} from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
-import { FlightsService } from '../../services/flightsService';
-import { BookingService } from '../../services/bookingService';
-import { AuthService } from '../../services/auth';
+import { FlightsService } from '../../services/flights.service';
+import { BookingService } from '../../services/booking.service';
+import { AuthService } from '../../services/auth.service';
 
 import { Flight } from '../../models/flight';
-import { Weather } from '../../models/search-flight-result';
 
 @Component({
   selector: 'app-flight-details',
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    DatePipe
-  ],
+  imports: [ReactiveFormsModule, RouterLink, DatePipe],
   templateUrl: './flight-details.html',
   styleUrl: './flight-details.scss',
 })
@@ -33,33 +28,33 @@ export class FlightDetails implements OnInit {
   loading = signal(true);
   error = signal<string | null>(null);
 
-  weatherFrom = signal<Weather | null>(null);
-  weatherTo = signal<Weather | null>(null);
-
   bookingLoading = signal(false);
   bookingError = signal<string | null>(null);
 
   bookingForm = new FormGroup({
     email: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required]
+      validators: [Validators.required],
     }),
 
-    passengers: new FormArray([
-      new FormGroup({
-        firstName: new FormControl('', {
-          nonNullable: true,
-          validators: [Validators.required]
-        }),
+    passengers: new FormArray(
+      [
+        new FormGroup({
+          firstName: new FormControl('', {
+            nonNullable: true,
+            validators: [Validators.required],
+          }),
 
-        lastName: new FormControl('', {
-          nonNullable: true,
-          validators: [Validators.required]
-        }),
+          lastName: new FormControl('', {
+            nonNullable: true,
+            validators: [Validators.required],
+          }),
 
-        selectedSeatNumber: new FormControl<string | null>(null),
-      })
-    ], Validators.required)
+          selectedSeatNumber: new FormControl<string | null>(null),
+        }),
+      ],
+      Validators.required,
+    ),
   });
 
   ngOnInit() {
@@ -81,16 +76,16 @@ export class FlightDetails implements OnInit {
     this.bookingLoading.set(true);
 
     this.bookingService.createBooking(createBookingRequest).subscribe({
-      next: response => {
+      next: (response) => {
         this.bookingLoading.set(false);
         window.location.href = response.checkoutUrl;
       },
 
-      error: err => {
+      error: (err) => {
         console.error('Failed to create booking:', err);
         this.bookingError.set('Failed to create booking.');
         this.bookingLoading.set(false);
-      }
+      },
     });
   }
 
@@ -109,56 +104,44 @@ export class FlightDetails implements OnInit {
     this.loading.set(true);
 
     this.flightsService.getFlightById(flightId).subscribe({
-      next: data => {
+      next: (data) => {
         console.log('FLIGHT DETAILS:', data);
         this.flight.set(data);
-        this.weatherFrom.set(data.weatherFrom);
-        this.weatherTo.set(data.weatherTo);
         this.loading.set(false);
       },
 
-      error: err => {
+      error: (err) => {
         console.error(err);
         this.error.set('Failed to load flight details.');
         this.loading.set(false);
-      }
+      },
     });
   }
 
   seatRows = computed(() => {
-  const seats = this.flight()?.seats ?? [];
+    const seats = this.flight()?.seats ?? [];
 
-  const rows = new Map<number, typeof seats>();
+    const rows = new Map<number, typeof seats>();
 
-  for (const seat of seats) {
-    const rowNumber = parseInt(seat.seatNumber, 10);
+    for (const seat of seats) {
+      const rowNumber = parseInt(seat.seatNumber, 10);
 
-    if (!rows.has(rowNumber)) {
-      rows.set(rowNumber, []);
+      if (!rows.has(rowNumber)) {
+        rows.set(rowNumber, []);
+      }
+
+      rows.get(rowNumber)!.push(seat);
     }
 
-    rows.get(rowNumber)!.push(seat);
-  }
+    return [...rows.entries()]
+      .sort(([a], [b]) => a - b)
+      .map(([row, rowSeats]) => ({
+        row,
 
-  return [...rows.entries()]
-    .sort(([a], [b]) => a - b)
-    .map(([row, rowSeats]) => ({
-      row,
+        left: rowSeats.filter((seat) => ['A', 'B', 'C'].includes(seat.seatNumber.slice(-1))),
 
-      left: rowSeats
-        .filter(seat =>
-          ['A', 'B', 'C'].includes(
-            seat.seatNumber.slice(-1)
-          )
-        ),
-
-      right: rowSeats
-        .filter(seat =>
-          ['D', 'E', 'F'].includes(
-            seat.seatNumber.slice(-1)
-          )
-        )
-    }));
+        right: rowSeats.filter((seat) => ['D', 'E', 'F'].includes(seat.seatNumber.slice(-1))),
+      }));
   });
 
   addPassenger() {
@@ -166,16 +149,16 @@ export class FlightDetails implements OnInit {
       new FormGroup({
         firstName: new FormControl('', {
           nonNullable: true,
-          validators: [Validators.required]
+          validators: [Validators.required],
         }),
 
         lastName: new FormControl('', {
           nonNullable: true,
-          validators: [Validators.required]
+          validators: [Validators.required],
         }),
 
         selectedSeatNumber: new FormControl<string | null>(null),
-      })
+      }),
     );
   }
 
@@ -186,6 +169,4 @@ export class FlightDetails implements OnInit {
       passengers.removeAt(index);
     }
   }
-
-  
 }

@@ -3,22 +3,22 @@
 public class Booking
 {
     public int BookingId { get; set; }
-    
+
     public int FlightId { get; set; }
-    
-    public Flight Flight { get; set ;}
-    
+
+    public Flight Flight { get; set; }
+
     public List<Passenger> Passengers { get; set; }
-    
+
     public BookingStatus Status { get; set; }
-    
+
     public string? StripeCheckoutSessionId { get; set; }
-    
+
     public decimal Price { get; set; }
-    
+
     public string? Email { get; set; }
 
-    public int UserId { get; set; }    
+    public int UserId { get; set; }
 
     public static Booking CreateBooking(
     int flightId,
@@ -26,19 +26,19 @@ public class Booking
     string email,
     int userId,
     decimal price)
-{
-    return new Booking
     {
-        BookingId = new Random().Next(),
-        FlightId = flightId,
-        Passengers = passengers,
-        Price = price,
-        Email = email,
-        Status = BookingStatus.Pending,
-        UserId = userId
-    };
-}
-    
+        return new Booking
+        {
+            BookingId = new Random().Next(),
+            FlightId = flightId,
+            Passengers = passengers,
+            Price = price,
+            Email = email,
+            Status = BookingStatus.Pending,
+            UserId = userId
+        };
+    }
+
     public void UpdateBooking(List<Passenger> passengers, string? email)
     {
         Passengers = passengers;

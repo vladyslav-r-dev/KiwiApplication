@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using KiwiApp.Api.Contracts;
+﻿using KiwiApp.Application.Services.Models;
+using System.Text.Json;
 using KiwiApp.Application.Interfaces;
 using KiwiApp.Domain.Entities;
 using KiwiApp.Infrastructure.Persistence;
@@ -16,19 +16,19 @@ public class AviationstackImportService(
     public async Task ImportFlightsAsync()
     {
         var accessKey = configuration["Aviationstack:AccessKey"];
-        
+
         var url = $"{AviaUrl}?access_key={accessKey}&limit=25";
-        
+
         var response = await httpClient.GetAsync(url);
-        
-        var json =  await response.Content.ReadAsStringAsync();
-     
-       var jsonResponse =  JsonSerializer.Deserialize<AviationstackResponse>(json);
-       
-       if (jsonResponse is null)
-       {
-           throw new Exception("Не удалось прочитать ответ от Aviationstack");
-       }
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        var jsonResponse = JsonSerializer.Deserialize<AviationstackResponse>(json);
+
+        if (jsonResponse is null)
+        {
+            throw new Exception("Не удалось прочитать ответ от Aviationstack");
+        }
 
         foreach (var item in jsonResponse.Data)
         {
@@ -43,7 +43,7 @@ public class AviationstackImportService(
             var departureTime = item.Departure.Scheduled;
             var arrivalTime = item.Arrival.Scheduled;
             var status = item.FlightStatus;
-                
+
             if (string.IsNullOrWhiteSpace(departureAirport) ||
                 string.IsNullOrWhiteSpace(arrivalAirport))
             {
@@ -88,10 +88,10 @@ public class AviationstackImportService(
             {
                 seat.IsOccupied = true;
             }
-                
+
             dbContext.Flights.Add(flight);
         }
-        
+
         await unitOfWork.SaveChangesAsync();
     }
 }

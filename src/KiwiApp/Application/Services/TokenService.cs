@@ -9,7 +9,7 @@ namespace KiwiApp.Application.Services;
 public class TokenService(IConfiguration configuration)
 {
     private const int TokenLifetimeMinutes = 30;
-    public string CreateAccesToken(UserEntity user)
+    public string CreateAccessToken(UserEntity user)
     {
         var claims = new List<Claim>
         {
@@ -20,15 +20,15 @@ public class TokenService(IConfiguration configuration)
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(configuration["Token:Key"]!));
-        
+
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            
+
         var token = new JwtSecurityToken(
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(TokenLifetimeMinutes),
             signingCredentials: creds
         );
-            
+
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
         return tokenString;

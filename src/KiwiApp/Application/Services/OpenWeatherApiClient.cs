@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using KiwiApp.Application.Services.Models;
+using System.Net;
 using System.Text.Json;
 
 namespace KiwiApp.Application.Services;
@@ -9,7 +10,7 @@ public class OpenWeatherApiClient(
 {
     private const string WeatherUrl =
         "https://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units=metric";
-    
+
     public async Task<object?> GetWeather(string city)
     {
         var accessKey = configuration["OpenWeather:AccessKey"];
@@ -29,9 +30,9 @@ public class OpenWeatherApiClient(
 
         if (response.StatusCode == HttpStatusCode.NotFound)
             return null;
-        
+
         response.EnsureSuccessStatusCode();
-        
+
         var json = await response.Content.ReadAsStringAsync();
 
         var weatherResponse = JsonSerializer.Deserialize<OpenWeatherResponse>(

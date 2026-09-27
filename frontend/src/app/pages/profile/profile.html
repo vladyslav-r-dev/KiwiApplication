@@ -1,25 +1,16 @@
 <header class="navbar">
-  <a class="navbar__logo" routerLink="/">
-    KiwiApp
-  </a>
+  <a class="navbar__logo" routerLink="/"> KiwiApp </a>
 
   <nav class="navbar__menu">
-    <a class="navbar__link" routerLink="/flights">
-      Flights
-    </a>
+    <a class="navbar__link" routerLink="/flights"> Flights </a>
 
-    <a class="navbar__link" routerLink="/bookings">
-      My bookings
-    </a>
+    <a class="navbar__link" routerLink="/bookings"> My bookings </a>
 
-    <a class="navbar__link" routerLink="/profile">
-      Profile
-    </a>
+    <a class="navbar__link" routerLink="/profile"> Profile </a>
   </nav>
 </header>
 
 <section class="profile-page">
-
   <div class="profile-header">
     <div>
       <h1>Profile</h1>
@@ -27,44 +18,29 @@
     </div>
   </div>
 
-
   @if (loading()) {
-
-    <p class="profile-state">
-      Loading profile...
-    </p>
-
+    <p class="profile-state">Loading profile...</p>
   } @else if (error()) {
-
     <p class="profile-state profile-state--error">
       {{ error() }}
     </p>
-
   } @else if (currentUser(); as user) {
-
     <div class="profile-card">
-
       <div class="profile-card__top">
-
         <div class="profile-avatar">
           {{ user.name.charAt(0) }}
         </div>
 
         <div>
-          <h2>
-            {{ user.name }} {{ user.lastName }}
-          </h2>
+          <h2>{{ user.name }} {{ user.lastName }}</h2>
 
           <p>
             {{ user.email }}
           </p>
         </div>
-
       </div>
 
-
       <div class="profile-info">
-
         <div class="profile-info__item">
           <span>Email</span>
           <strong>{{ user.email }}</strong>
@@ -79,70 +55,31 @@
           <span>User ID</span>
           <strong>{{ user.userId }}</strong>
         </div>
-
       </div>
-
 
       <div class="profile-divider"></div>
 
-
-      <form
-        class="profile-form"
-        [formGroup]="updateProfileForm"
-        (ngSubmit)="saveProfile()"
-      >
-
+      <form class="profile-form" [formGroup]="updateProfileForm" (ngSubmit)="saveProfile()">
         <h3>Personal information</h3>
 
         <div class="profile-form__grid">
-
           <div class="profile-field">
-            <label for="name">
-              Name
-            </label>
+            <label for="name"> Name </label>
 
-            <input
-              id="name"
-              type="text"
-              formControlName="name"
-            >
+            <input id="name" type="text" formControlName="name" />
           </div>
 
-
           <div class="profile-field">
-            <label for="lastName">
-              Last name
-            </label>
+            <label for="lastName"> Last name </label>
 
-            <input
-              id="lastName"
-              type="text"
-              formControlName="lastName"
-            >
+            <input id="lastName" type="text" formControlName="lastName" />
           </div>
-
         </div>
 
+        <button class="profile-submit" type="submit">Save changes</button>
 
-        <button
-          class="profile-submit"
-          type="submit"
-        >
-          Save changes
-        </button>
-
-        <button
-          class="profile-logout"
-          type="button"
-          (click)="logout()"
-        >
-          Log out
-        </button>
-
+        <button class="profile-logout" type="button" (click)="logout()">Log out</button>
       </form>
-
     </div>
-
   }
-
 </section>

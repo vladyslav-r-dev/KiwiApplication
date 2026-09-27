@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { Flights } from "./pages/flights/flights";
-import { Home } from "./pages/home/home";
-import { FlightDetails } from "./pages/flight-details/flight-details";
+import { Flights } from './pages/flights/flights';
+import { Home } from './pages/home/home';
+import { FlightDetails } from './pages/flight-details/flight-details';
 import { Register } from './pages/register/register';
 import { Login } from './pages/login/login';
 import { authGuard } from './guards/auth-guard';
@@ -39,10 +39,10 @@ export const routes: Routes = [
     title: 'Login Page',
   },
   {
-  path: 'bookings',
-  component: MyBookings,
-  canActivate: [authGuard],
-  title: 'My Bookings',
+    path: 'bookings',
+    component: MyBookings,
+    canActivate: [authGuard],
+    title: 'My Bookings',
   },
   {
     path: 'payment-success',
@@ -65,5 +65,5 @@ export const routes: Routes = [
     component: Admin,
     canActivate: [adminGuard],
     title: 'Admin Page',
-  }
+  },
 ];
