@@ -1,4 +1,6 @@
-﻿using KiwiApp.Application.Interfaces;
+using KiwiApp.Application.Mapping;
+using KiwiApp.Application.UseCases.Shared;
+using KiwiApp.Application.Interfaces;
 using KiwiApp.Application.UseCases.Bookings.Create;
 using KiwiApp.Application.UseCases.Bookings.Get;
 using KiwiApp.Application.UseCases.Bookings.Update;
@@ -137,7 +139,8 @@ public class BookingService(
             throw new KeyNotFoundException($"Booking with id {id} was not found");
         }
 
-        booking.UpdateBooking(command.Passengers, command.Email);
+        var passengers = command.Passengers?.Select(new UpdatePassengerMapper().ToEntity).ToList();
+        booking.UpdateBooking(passengers!, command.Email);
 
         await unitOfWork.SaveChangesAsync();
 
@@ -146,7 +149,7 @@ public class BookingService(
 
         return new UpdateBookingResult
         {
-            Passengers = command.Passengers,
+            Passengers = passengers?.Select(new EntityResultMapper().ToResult).ToList()!,
             Email = command.Email,
         };
     }
@@ -196,7 +199,7 @@ public class BookingService(
                 Status = cachedBooking.Status,
                 Price = cachedBooking.Price,
                 Email = cachedBooking.Email,
-                Passengers = cachedBooking.Passengers,
+                Passengers = cachedBooking.Passengers?.Select(new EntityResultMapper().ToResult).ToList()!,
                 UserId = cachedBooking.UserId
             };
         }
@@ -219,7 +222,7 @@ public class BookingService(
             Status = booking.Status,
             Price = booking.Price,
             Email = booking.Email,
-            Passengers = booking.Passengers,
+            Passengers = booking.Passengers?.Select(new EntityResultMapper().ToResult).ToList()!,
             UserId = booking.UserId
         };
     }
@@ -264,8 +267,9 @@ public class BookingService(
         return await bookingRepository.GetPendingBookingsWithStripeSession();
     }
 
-    public async Task<List<Booking>> GetBookingByUserId(int userId)
+    public async Task<List<BookingResult>> GetBookingByUserId(int userId)
     {
-        return await bookingRepository.GetBookingsByUserId(userId);
+        var bookings = await bookingRepository.GetBookingsByUserId(userId);
+        return bookings.Select(new EntityResultMapper().ToResult).ToList();
     }
 }

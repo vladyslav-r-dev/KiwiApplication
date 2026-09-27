@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+using KiwiApp.Api.Mapping;
+using System.Security.Claims;
 using FluentValidation;
 using KiwiApp.Api.Contracts;
 using KiwiApp.Api.Contracts.Booking;
@@ -177,7 +178,7 @@ public static class BookingEndpoints
             var command = new UpdateBookingCommand
             {
                 Email = request.Email,
-                Passengers = request.Passengers
+                Passengers = request.Passengers?.Select(new UpdateBookingRequestMapper().ToCommand).ToList()!
             };
 
             var result = await service.UpdateBooking(id, command);

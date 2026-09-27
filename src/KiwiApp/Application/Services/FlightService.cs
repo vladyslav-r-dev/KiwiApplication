@@ -1,4 +1,6 @@
-﻿using KiwiApp.Application.Interfaces;
+using KiwiApp.Application.Mapping;
+using KiwiApp.Application.UseCases.Shared;
+using KiwiApp.Application.Interfaces;
 using KiwiApp.Application.UseCases.Flights.Create;
 using KiwiApp.Application.UseCases.Flights.Get;
 using KiwiApp.Application.UseCases.Flights.Search;
@@ -55,7 +57,7 @@ public class FlightService(IGenericRepository<Flight> repository,
         };
     }
 
-    public async Task<IEnumerable<Flight>> GetFilteredFlights(
+    public async Task<IEnumerable<FlightResult>> GetFilteredFlights(
         string? from,
         string? to,
         string? status,
@@ -65,7 +67,8 @@ public class FlightService(IGenericRepository<Flight> repository,
         string? airline,
         string? departureDate)
     {
-        return await flightRepository.GetFilteredFlights(from, to, status, minPrice, maxPrice, sortBy, airline, departureDate);
+        var flights = await flightRepository.GetFilteredFlights(from, to, status, minPrice, maxPrice, sortBy, airline, departureDate);
+        return flights.Select(new EntityResultMapper().ToResult).ToList();
     }
 
     public async Task<IEnumerable<Flight>> GetAllFlights()
@@ -157,7 +160,7 @@ public class FlightService(IGenericRepository<Flight> repository,
 
         return new SearchFlightResult
         {
-            Flight = search,
+            Flight = search.Select(new EntityResultMapper().ToResult).ToList(),
             WeatherFrom = weatherFrom,
             WeatherTo = weatherTo
         };
