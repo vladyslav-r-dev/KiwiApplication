@@ -1,3 +1,4 @@
+import { API_URL } from '../config/api.config';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -16,18 +17,18 @@ export class BookingService {
   constructor(private httpClient: HttpClient) {}
 
   getMyBookings(): Observable<Booking[]> {
-    return this.httpClient.get<Booking[]>('http://localhost:5086/bookings');
+    return this.httpClient.get<Booking[]>(`${API_URL}/bookings`);
   }
 
   createBooking(request: CreateBookingRequest): Observable<CreateBookingResponse> {
-    return this.httpClient.post<CreateBookingResponse>('http://localhost:5086/bookings', request);
+    return this.httpClient.post<CreateBookingResponse>(`${API_URL}/bookings`, request);
   }
 
   getAllBookings() {
-    return this.httpClient.get<AdminBooking[]>('http://localhost:5086/admin/bookings');
+    return this.httpClient.get<AdminBooking[]>(`${API_URL}/admin/bookings`);
   }
 
   deleteBooking(id: number) {
-    return this.httpClient.delete(`http://localhost:5086/bookings/${id}`);
+    return this.httpClient.delete(`${API_URL}/bookings/${id}`);
   }
 }

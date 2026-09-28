@@ -1,3 +1,4 @@
+import { API_URL } from '../config/api.config';
 import { LoginResult, LoginRequest, RefreshResult, RegisterRequest } from '../models/auth';
 import { User, AdminUser } from '../models/user';
 import { computed, Injectable, signal } from '@angular/core';
@@ -15,39 +16,39 @@ export class AuthService {
   constructor(private httpClient: HttpClient) {}
 
   register(data: RegisterRequest) {
-    return this.httpClient.post('http://localhost:5086/register', data);
+    return this.httpClient.post(`${API_URL}/register`, data);
   }
 
   login(data: LoginRequest) {
-    return this.httpClient.post<LoginResult>('http://localhost:5086/auth/login', data, {
+    return this.httpClient.post<LoginResult>(`${API_URL}/auth/login`, data, {
       withCredentials: true,
     });
   }
 
   getMe() {
-    return this.httpClient.get<User>('http://localhost:5086/auth/me');
+    return this.httpClient.get<User>(`${API_URL}/auth/me`);
   }
 
   logout() {
-    return this.httpClient.post('http://localhost:5086/auth/logout', {}, { withCredentials: true });
+    return this.httpClient.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
   }
 
   refresh() {
     return this.httpClient.post<RefreshResult>(
-      'http://localhost:5086/auth/refresh',
+      `${API_URL}/auth/refresh`,
       {},
       { withCredentials: true },
     );
   }
 
   updateMe(data: { name: string; lastName: string }) {
-    return this.httpClient.put<User>('http://localhost:5086/auth/me', data, {
+    return this.httpClient.put<User>(`${API_URL}/auth/me`, data, {
       withCredentials: true,
     });
   }
 
   getAllUsers() {
-    return this.httpClient.get<AdminUser[]>('http://localhost:5086/admin/users');
+    return this.httpClient.get<AdminUser[]>(`${API_URL}/admin/users`);
   }
 
   restoreSession() {
@@ -65,7 +66,7 @@ export class AuthService {
 
   googleLogin(idToken: string) {
     return this.httpClient.post<LoginResult>(
-      'http://localhost:5086/auth/google',
+      `${API_URL}/auth/google`,
       { idToken },
       { withCredentials: true },
     );

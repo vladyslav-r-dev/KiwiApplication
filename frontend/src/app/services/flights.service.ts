@@ -1,3 +1,4 @@
+import { API_URL } from '../config/api.config';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -46,11 +47,11 @@ export class FlightsService {
       params.departureDate = departureDate;
     }
 
-    return this.httpClient.get<Flight[]>('http://localhost:5086/flights', { params });
+    return this.httpClient.get<Flight[]>(`${API_URL}/flights`, { params });
   }
 
   public getFlightById(flightId: string): Observable<Flight> {
-    return this.httpClient.get<Flight>(`http://localhost:5086/flights/${flightId}`);
+    return this.httpClient.get<Flight>(`${API_URL}/flights/${flightId}`);
   }
 
   public searchFlights(from: string | null, to: string | null): Observable<SearchFlightResult> {
@@ -62,7 +63,7 @@ export class FlightsService {
       params.to = to;
     }
 
-    return this.httpClient.get<SearchFlightResult>('http://localhost:5086/search/flight', {
+    return this.httpClient.get<SearchFlightResult>(`${API_URL}/search/flight`, {
       params,
     });
   }
