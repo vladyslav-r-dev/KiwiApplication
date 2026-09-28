@@ -11,10 +11,12 @@ public class StripeCheckoutService(IConfiguration configuration)
         string email,
         decimal price)
     {
+        var baseUrl = (configuration["Frontend:BaseUrl"] ?? "http://localhost:4200").TrimEnd('/');
+
         var options = new SessionCreateOptions
         {
-            SuccessUrl = "http://localhost:4200/payment-success",
-            CancelUrl = "http://localhost:4200/payment-cancel",
+            SuccessUrl = $"{baseUrl}/payment-success",
+            CancelUrl = $"{baseUrl}/payment-cancel",
 
             ClientReferenceId = bookingId.ToString(),
 
