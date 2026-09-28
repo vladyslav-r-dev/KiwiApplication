@@ -35,6 +35,15 @@ public class AppDbContext : DbContext
             .WithMany(u => u.RefreshTokens)
             .HasForeignKey(rt => rt.UserId);
 
+        // Flight import and date filters use local/unspecified wall-clock values.
+        modelBuilder.Entity<Flight>()
+            .Property(f => f.DepartureTime)
+            .HasColumnType("timestamp without time zone");
+
+        modelBuilder.Entity<Flight>()
+            .Property(f => f.ArrivalTime)
+            .HasColumnType("timestamp without time zone");
+
         base.OnModelCreating(modelBuilder);
     }
 }

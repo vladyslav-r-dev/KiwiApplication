@@ -53,8 +53,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Flight.Create", policy => policy.RequireRole("Admin"));
 });
 builder.Services.AddAuthentication();
-var dbPath = Path.GetFullPath("app.db");
-Console.WriteLine($"SQLite DB path: {dbPath}");
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidator>();
 
 ServiceBuilder.AddRepositories(builder);
@@ -94,8 +92,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("Configure ConnectionStrings:DefaultConnection (ConnectionStrings__DefaultConnection) with a PostgreSQL connection string.");
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=app.db"));
+    options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
